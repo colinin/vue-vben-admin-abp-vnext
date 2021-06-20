@@ -12,6 +12,7 @@ import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
 import { updateDarkTheme } from '/@/logics/theme/dark';
 import { changeTheme } from '/@/logics/theme';
 
+import { useAbpStore } from '/@/store/modules/abp';
 import { useAppStore } from '/@/store/modules/app';
 import { useLocaleStore } from '/@/store/modules/locale';
 
@@ -81,4 +82,10 @@ export function clearObsoleteStorage() {
       }
     });
   });
+}
+
+export async function initAbpConfigStore() {
+  const abpStore = useAbpStore();
+  await abpStore.initlizeAbpApplication();
+  await abpStore.initlizaAbpApiDefinition();
 }

@@ -15,18 +15,23 @@ export interface RoleInfo {
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  userId: string | number;
-  token: string;
-  role: RoleInfo;
+  /** 访问令牌 */
+  access_token: string;
+  /** 过期时间 */
+  expires_in: number;
+  /** 令牌类型 */
+  token_type: string;
+  /** 刷新令牌 */
+  refresh_token: string;
 }
 
 /**
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {
-  roles: RoleInfo[];
+  roles: string[];
   // 用户id
-  userId: string | number;
+  userId: string | undefined;
   // 用户名
   username: string;
   // 真实名字

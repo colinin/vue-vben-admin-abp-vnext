@@ -4,7 +4,7 @@
       <FramePage
         v-if="frame.meta.frameSrc && hasRenderFrame(frame.name)"
         v-show="showIframe(frame)"
-        :frameSrc="frame.meta.frameSrc"
+        :frameSrc="formatIframeSrc(frame)"
       />
     </template>
   </div>
@@ -19,11 +19,11 @@
     name: 'FrameLayout',
     components: { FramePage },
     setup() {
-      const { getFramePages, hasRenderFrame, showIframe } = useFrameKeepAlive();
+      const { getFramePages, hasRenderFrame, showIframe, formatIframeSrc } = useFrameKeepAlive();
 
       const showFrame = computed(() => unref(getFramePages).length > 0);
 
-      return { getFramePages, hasRenderFrame, showIframe, showFrame };
+      return { getFramePages, hasRenderFrame, showIframe, showFrame, formatIframeSrc };
     },
   });
 </script>

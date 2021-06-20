@@ -11,7 +11,9 @@ import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
 
-import { getUserInfo, loginApi } from '/@/api/sys/user';
+import { loginApi } from '/@/api/sys/user';
+
+import { useAbpStoreWidthOut } from './abp';
 
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -23,6 +25,13 @@ interface UserState {
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
 }
+
+const undefinedUser: UserInfo = {
+  userId: '',
+  username: '',
+  realName: '',
+  avatar: '',
+};
 
 export const useUserStore = defineStore({
   id: 'app-user',
@@ -67,10 +76,12 @@ export const useUserStore = defineStore({
       this.sessionTimeout = flag;
     },
     resetState() {
-      this.userInfo = null;
-      this.token = '';
-      this.roleList = [];
-      this.sessionTimeout = false;
+      this.setUserInfo(undefinedUser);
+      this.setToken('');
+      this.setRoleList([]);
+      this.setSessionTimeout(false);
+      const abpStore = useAbpStoreWidthOut();
+      abpStore.resetSession();
     },
     /**
      * @description: login
@@ -84,10 +95,10 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        const { access_token, token_type } = data;
 
         // save token
-        this.setToken(token);
+        this.setToken(token_type + ' ' + access_token);
         // get user info
         const userInfo = await this.getUserInfoAction();
 
@@ -100,11 +111,20 @@ export const useUserStore = defineStore({
       }
     },
     async getUserInfoAction() {
-      const userInfo = await getUserInfo();
-      const { roles } = userInfo;
-      const roleList = roles.map((item) => item.value) as RoleEnum[];
+      const abpStore = useAbpStoreWidthOut();
+
+      await abpStore.initlizeAbpApplication();
+
+      const currentUser = abpStore.application.currentUser;
+      const userInfo = {
+        userId: currentUser.id!,
+        username: currentUser.userName!,
+        realName: currentUser.surName!,
+        avatar: '',
+        roles: currentUser.roles,
+      };
+
       this.setUserInfo(userInfo);
-      this.setRoleList(roleList);
       return userInfo;
     },
     /**

@@ -7,7 +7,7 @@ import 'virtual:svg-icons-register';
 
 import App from './App.vue';
 import { createApp } from 'vue';
-import { initAppConfigStore } from '/@/logics/initAppConfig';
+import { initAppConfigStore, initAbpConfigStore } from '/@/logics/initAppConfig';
 import { setupErrorHandle } from '/@/logics/error-handle';
 import { router, setupRouter } from '/@/router';
 import { setupRouterGuard } from '/@/router/guard';
@@ -50,6 +50,8 @@ async function bootstrap() {
 
   // Configure global error handling
   setupErrorHandle(app);
+
+  await initAbpConfigStore();
 
   // Mount when the route is ready
   // https://next.router.vuejs.org/api/#isready

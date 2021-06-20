@@ -7,7 +7,7 @@ import { useUserStore } from './user';
 import { useAppStoreWidthOut } from './app';
 import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
-import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { transformRouteToMenu, generateTree, mapMetaBoolean } from '/@/router/helper/menuHelper';
 
 import projectSetting from '/@/settings/projectSetting';
 
@@ -22,6 +22,7 @@ import { getMenuList } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
+import { RouteItem } from '/@/api/sys/model/menuModel';
 
 interface PermissionState {
   // Permission code list
@@ -118,8 +119,10 @@ export const usePermissionStore = defineStore({
         // this function may only need to be executed once, and the actual project can be put at the right time by itself
         let routeList: AppRouteRecordRaw[] = [];
         try {
-          this.changePermissionCode();
-          routeList = (await getMenuList()) as AppRouteRecordRaw[];
+          // this.changePermissionCode();
+          const menuResult = await getMenuList();
+          const menuList = generateTree(menuResult.items) as RouteItem[];
+          routeList = this.filterDynamicRoutes(menuList);
         } catch (error) {
           console.error(error);
         }
@@ -136,6 +139,43 @@ export const usePermissionStore = defineStore({
       }
       routes.push(ERROR_LOG_ROUTE);
       return routes;
+    },
+    filterDynamicRoutes(menus: RouteItem[]) {
+      const routeList: AppRouteRecordRaw[] = [];
+
+      menus.forEach((menu) => {
+        const r: AppRouteRecordRaw = {
+          path: menu.path,
+          name: menu.name!,
+          redirect: menu.redirect,
+          component: menu.component,
+          meta: {
+            affix: mapMetaBoolean('affix', menu.meta),
+            title: menu.meta.title,
+            icon: menu.meta.icon,
+            ignoreAuth: mapMetaBoolean('ignoreAuth', menu.meta),
+            ignoreKeepAlive: mapMetaBoolean('ignoreKeepAlive', menu.meta),
+            frameSrc: menu.meta.frameSrc,
+            frameFormat: menu.meta.frameFormat,
+            transitionName: menu.meta.transitionName,
+            hideBreadcrumb: mapMetaBoolean('hideBreadcrumb', menu.meta),
+            hideChildrenInMenu: mapMetaBoolean('hideChildrenInMenu', menu.meta),
+            carryParam: mapMetaBoolean('carryParam', menu.meta),
+            single: mapMetaBoolean('single', menu.meta),
+            currentActiveMenu: menu.meta.currentActiveMenu,
+            hideTab: mapMetaBoolean('hideTab', menu.meta),
+            hideMenu: mapMetaBoolean('hideMenu', menu.meta),
+            isLink: mapMetaBoolean('isLink', menu.meta),
+            roles: menu.meta.roles,
+          },
+        };
+        if (menu.children) {
+          r.children = this.filterDynamicRoutes(menu.children);
+        }
+        routeList.push(r);
+      });
+
+      return routeList;
     },
   },
 });

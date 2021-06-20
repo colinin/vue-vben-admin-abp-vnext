@@ -1,14 +1,16 @@
-import { defHttp } from '/@/utils/http/axios';
-import { getMenuListResultModel } from './model/menuModel';
-
-enum Api {
-  GetMenuList = '/getMenuList',
-}
+import { defAbpHttp } from '/@/utils/http/abp';
+import { RouteItem } from './model/menuModel';
+import { ListResultDto } from '../model/baseModel';
 
 /**
  * @description: Get user menu based on id
  */
 
 export const getMenuList = () => {
-  return defHttp.get<getMenuListResultModel>({ url: Api.GetMenuList });
+  return defAbpHttp.request<ListResultDto<RouteItem>>({
+    service: 'Platform',
+    controller: 'Menu',
+    action: 'GetCurrentUserMenuListAsync',
+    params: { platformType: 32 },
+  });
 };

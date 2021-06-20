@@ -8,6 +8,9 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
+    <FormItem>
+      <MultiTenancyBox />
+    </FormItem>
     <FormItem name="account" class="enter-x">
       <Input size="large" v-model:value="formData.account" :placeholder="t('sys.login.userName')" />
     </FormItem>
@@ -88,6 +91,7 @@
     TwitterCircleFilled,
   } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
+  import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -110,6 +114,7 @@
       Divider,
       LoginFormTitle,
       InputPassword: Input.Password,
+      MultiTenancyBox,
       GithubFilled,
       WechatFilled,
       AlipayCircleFilled,
@@ -118,7 +123,7 @@
     },
     setup() {
       const { t } = useI18n();
-      const { notification, createErrorModal } = useMessage();
+      const { notification } = useMessage();
       const { prefixCls } = useDesign('login');
       const userStore = useUserStore();
 
@@ -130,8 +135,8 @@
       const rememberMe = ref(false);
 
       const formData = reactive({
-        account: 'vben',
-        password: '123456',
+        account: '',
+        password: '',
       });
 
       const { validForm } = useFormValid(formRef);
@@ -159,12 +164,6 @@
               duration: 3,
             });
           }
-        } catch (error) {
-          createErrorModal({
-            title: t('sys.api.errorTip'),
-            content: error.message || t('sys.api.networkExceptionMsg'),
-            getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-          });
         } finally {
           loading.value = false;
         }

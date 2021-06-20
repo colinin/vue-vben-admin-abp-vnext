@@ -101,4 +101,9 @@ export default {
     smsCode: 'SMS code',
     mobile: 'Mobile',
   },
+  abp: {
+    remoteServiceNotFound: 'Remote Service {name} not found!',
+    controllerNotFound: 'Controller {name} not found!',
+    actionNotFound: 'Action {name} not found!',
+  },
 };

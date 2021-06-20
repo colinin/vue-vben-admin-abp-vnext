@@ -23,6 +23,7 @@ export interface RouteMeta {
   icon?: string;
 
   frameSrc?: string;
+  frameFormat?: string;
 
   // current page transition
   transitionName?: string;

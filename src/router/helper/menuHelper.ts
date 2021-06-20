@@ -64,3 +64,17 @@ export function transformRouteToMenu(routeModList: AppRouteModule[]) {
   joinParentPath(list);
   return cloneDeep(list);
 }
+
+export const mapMetaBoolean = (key: string, meta: any) => {
+  return typeof meta[key] === 'boolean' ? meta[key] : meta[key] === 'true';
+};
+
+export const mapMetaArray = (key: string, meta: any) => {
+  return Array.isArray(meta[key]) ? meta[key] : String(meta[key]).split(',');
+};
+
+export function generateTree(array: any, id = null, parentIdKey = 'parentId') {
+  return array
+    .filter((item: any) => item[parentIdKey] === id)
+    .map((item: any) => ({ ...item, children: generateTree(array, item.id) }));
+}

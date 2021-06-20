@@ -95,4 +95,9 @@ export default {
     smsCode: '短信验证码',
     mobile: '手机号码',
   },
+  abp: {
+    remoteServiceNotFound: '没有找到名为 {name} 的服务定义!',
+    controllerNotFound: '没有找到名为 {name} 的控制器定义!',
+    actionNotFound: '没有找到名为 {name} 的方法定义!',
+  },
 };

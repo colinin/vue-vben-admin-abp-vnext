@@ -10,6 +10,8 @@ import { useMultipleTabSetting } from '/@/hooks/setting/useMultipleTabSetting';
 
 import { useRouter } from 'vue-router';
 
+import { useUserStore } from '/@/store/modules/user';
+
 export function useFrameKeepAlive() {
   const router = useRouter();
   const { currentRoute } = router;
@@ -55,5 +57,16 @@ export function useFrameKeepAlive() {
     return unref(getOpenTabList).includes(name);
   }
 
-  return { hasRenderFrame, getFramePages, showIframe, getAllFramePages };
+  function formatIframeSrc(item: AppRouteRecordRaw) {
+    if (item.meta.frameFormat) {
+      switch (item.meta.frameFormat) {
+        case '{token}':
+          const userStore = useUserStore();
+          return item.meta.frameSrc + '?access_token=' + userStore.getToken;
+      }
+    }
+    return item.meta.frameSrc;
+  }
+
+  return { hasRenderFrame, getFramePages, showIframe, formatIframeSrc, getAllFramePages };
 }
