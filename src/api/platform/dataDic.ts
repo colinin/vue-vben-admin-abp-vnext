@@ -72,7 +72,7 @@ export const get = (id: string) => {
 
 export const getByName = (name: string) => {
   return defHttp.get<Data>({
-    url: format(Api.GetById, { name: name }),
+    url: format(Api.GetByName, { name: name }),
   });
 };
 

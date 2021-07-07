@@ -11,6 +11,7 @@ import { ParameterBindingSources, UrlBuilder } from '/@/utils/helper/abpApiHelpe
 import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
+
 const { t } = useI18n();
 
 export class abpRequest {
