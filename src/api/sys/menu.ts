@@ -11,6 +11,10 @@ export const getMenuList = () => {
     service: 'Platform',
     controller: 'Menu',
     action: 'GetCurrentUserMenuListAsync',
-    params: { platformType: 32 },
+    params: {
+      input: {
+        framework: 'Vue Vben Admin',
+      },
+    },
   });
 };

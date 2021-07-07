@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
+import { useAbpStoreWidthOut } from './abp';
 import { useAppStoreWidthOut } from './app';
 import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
@@ -19,7 +20,6 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { filter } from '/@/utils/helper/treeHelper';
 
 import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RouteItem } from '/@/api/sys/model/menuModel';
@@ -83,8 +83,17 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
+      const abpStore = useAbpStoreWidthOut();
+      const grantedPolicies = abpStore.getApplication.auth.grantedPolicies;
+      const authPermissions = new Array<string>();
+      if (grantedPolicies) {
+        Object.keys(grantedPolicies).forEach((key) => {
+          if (grantedPolicies[key]) {
+            authPermissions.push(key);
+          }
+        });
+      }
+      this.setPermCodeList(authPermissions);
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
@@ -119,7 +128,7 @@ export const usePermissionStore = defineStore({
         // this function may only need to be executed once, and the actual project can be put at the right time by itself
         let routeList: AppRouteRecordRaw[] = [];
         try {
-          // this.changePermissionCode();
+          this.changePermissionCode();
           const menuResult = await getMenuList();
           const menuList = generateTree(menuResult.items) as RouteItem[];
           routeList = this.filterDynamicRoutes(menuList);
