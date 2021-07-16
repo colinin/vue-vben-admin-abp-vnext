@@ -3,6 +3,8 @@
     v-bind="$attrs"
     @register="register"
     :title="title"
+    :width="width"
+    :maskClosable="maskClosable"
     @ok="handleSubmit"
     @visible-change="handleVisible"
   >
@@ -14,8 +16,6 @@
   import { computed, defineComponent, ref } from 'vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
-
-  import { Data } from '/@/api/platform/model/dataModel';
 
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm, FormSchema } from '/@/components/Form/index';
@@ -29,6 +29,9 @@
      *  必须是返回一个Promise类型的函数
      */
     saveChanges: { type: Function as PropType<(data: any) => Promise<any>>, required: true },
+    labelWidth: { type: Number, default: 120 },
+    width: { type: Number, default: 500 },
+    maskClosable: { type: Boolean, default: false },
   } as const;
 
   export default defineComponent({
@@ -40,7 +43,7 @@
     props,
     emits: ['register'],
     setup(props) {
-      const model = ref<Data>();
+      const model = ref({} as Recordable);
       const { t } = useI18n();
 
       const schemas = computed(() => {
@@ -48,7 +51,7 @@
       });
 
       const [registerForm, { validate, getFieldsValue, resetFields }] = useForm({
-        labelWidth: 120,
+        labelWidth: props.labelWidth,
         schemas,
         showActionButtonGroup: false,
         actionColOptions: {
@@ -95,7 +98,6 @@
           confirmLoading: !allow,
           showCancelBtn: allow,
           closable: allow,
-          maskClosable: allow,
         });
       },
     },

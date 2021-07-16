@@ -2,21 +2,19 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">{{
-          t('AppPlatform.Layout:AddNew')
-        }}</a-button>
+        <a-button type="primary" @click="handleAddNew">{{ t('AppPlatform.Menu:AddNew') }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              auth: 'Platform.Layout.Update',
+              auth: 'Platform.Menu.Update',
               label: t('AbpUi.Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'Platform.Layout.Delete',
+              auth: 'Platform.Menu.Delete',
               color: 'error',
               label: t('AbpUi.Delete'),
               icon: 'ant-design:delete-outlined',
@@ -26,44 +24,56 @@
         />
       </template>
     </BasicTable>
-    <LayoutModal @change="reloadTable" @register="registerLayoutModal" :layout-id="layoutId" />
+    <MenuDrawer @register="registerDrawer" @change="handleChange" :framework="useFramework" />
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { Modal } from 'ant-design-vue';
-  import { useModal } from '/@/components/Modal';
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { useDrawer } from '/@/components/Drawer';
+  import MenuDrawer from './MenuDrawer.vue';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import { getList, deleteById } from '/@/api/platform/layout';
-  import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import LayoutModal from './LayoutModal.vue';
+  import { getAll, getById, deleteById } from '/@/api/platform/menu';
+  import { listToTree } from '/@/utils/helper/treeHelper';
   export default defineComponent({
-    name: 'LayoutTable',
+    name: 'MenuTable',
     components: {
       BasicTable,
       TableAction,
-      LayoutModal,
+      MenuDrawer,
     },
     setup() {
       const { t } = useI18n();
-      const layoutId = ref('');
+      const useFramework = ref('');
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'id',
-        title: t('AppPlatform.DisplayName:Layout'),
+        title: t('AppPlatform.DisplayName:Menus'),
         columns: getDataColumns(),
-        api: getList,
-        beforeFetch: formatPagedRequest,
-        bordered: true,
-        canResize: true,
-        showTableSetting: true,
+        api: getAll,
+        beforeFetch: (request) => {
+          // 子组件需要此参数,拦截一下
+          useFramework.value = request.framework;
+          return request;
+        },
+        afterFetch: (result) => {
+          return listToTree(result, {
+            id: 'id',
+            pid: 'parentId',
+          });
+        },
+        pagination: false,
+        striped: false,
         useSearchForm: true,
+        showTableSetting: true,
+        bordered: true,
+        showIndexColumn: false,
+        canResize: false,
         formConfig: getSearchFormSchemas(),
-        rowSelection: { type: 'checkbox' },
         actionColumn: {
           width: 160,
           title: t('table.action'),
@@ -71,23 +81,26 @@
           slots: { customRender: 'action' },
         },
       });
-      const [registerLayoutModal, { openModal: openLayoutModal }] = useModal();
+
+      const [registerDrawer, { openDrawer }] = useDrawer();
 
       return {
         t,
-        layoutId,
-        reloadTable,
         registerTable,
-        openLayoutModal,
-        registerLayoutModal,
+        reloadTable,
+        registerDrawer,
+        openDrawer,
+        useFramework,
       };
     },
     methods: {
       handleAddNew() {
-        this.openLayoutModal(true, {}, true);
+        this.openDrawer(true, {}, true);
       },
       handleEdit(record: Recordable) {
-        this.openLayoutModal(true, record, true);
+        getById(record.id).then((menu) => {
+          this.openDrawer(true, menu, true);
+        });
       },
       handleDelete(record: Recordable) {
         Modal.warning({
@@ -102,6 +115,9 @@
             });
           },
         });
+      },
+      handleChange() {
+        this.reloadTable();
       },
     },
   });

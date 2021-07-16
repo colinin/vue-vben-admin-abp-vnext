@@ -4,11 +4,12 @@
     :form-items="formItems"
     :save-changes="handleSaveChanges"
     :title="title"
+    :width="650"
   />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, computed } from 'vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useModalInner } from '/@/components/Modal';
@@ -31,21 +32,21 @@
         layout.value = dataVal;
       });
 
+      const title = computed(() => {
+        if (layout.value.id) {
+          return t('AppPlatform.Layout:EditByName', [layout.value.displayName] as Recordable);
+        }
+        return t('AppPlatform.Layout:AddNew');
+      });
+
       return {
         t,
         layout,
         register,
         closeModal,
         formItems,
+        title,
       };
-    },
-    computed: {
-      title: function () {
-        if (this.layout.id) {
-          return '编辑';
-        }
-        return '新增';
-      },
     },
     methods: {
       handleSaveChanges(data) {

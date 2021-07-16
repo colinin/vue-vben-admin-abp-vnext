@@ -55,38 +55,52 @@ export function useFormEvents({
       .filter(Boolean);
 
     const validKeys: string[] = [];
+    validKeys.push(..._setFieldsValue(values, fields));
+    validateFields(validKeys);
+  }
+  function _setFieldsValue(values: Recordable, fields: string[]) {
+    const validKeys: string[] = [];
     Object.keys(values).forEach((key) => {
-      const schema = unref(getSchema).find((item) => item.field === key);
       let value = values[key];
+      if (value && typeof value === 'object') {
+        // 增加子属性的字段
+        const sValue: Recordable = {};
+        Object.keys(value).forEach((sk) => {
+          sValue[`${key}.${sk}`] = value[sk];
+        });
+        validKeys.push(..._setFieldsValue(sValue, fields));
+      } else {
+        const schema = unref(getSchema).find((item) => item.field === key);
 
-      const hasKey = Reflect.has(values, key);
+        const hasKey = Reflect.has(values, key);
 
-      value = handleInputNumberValue(schema?.component, value);
-      // 0| '' is allow
-      if (hasKey && fields.includes(key)) {
-        // time type
-        if (itemIsDateType(key)) {
-          if (Array.isArray(value)) {
-            const arr: any[] = [];
-            for (const ele of value) {
-              arr.push(ele ? dateUtil(ele) : null);
+        value = handleInputNumberValue(schema?.component, value);
+        // 0| '' is allow
+        if (hasKey && fields.includes(key)) {
+          // time type
+          if (itemIsDateType(key)) {
+            if (Array.isArray(value)) {
+              const arr: any[] = [];
+              for (const ele of value) {
+                arr.push(ele ? dateUtil(ele) : null);
+              }
+              formModel[key] = arr;
+            } else {
+              const { componentProps } = schema || {};
+              let _props = componentProps as any;
+              if (typeof componentProps === 'function') {
+                _props = _props({ formModel });
+              }
+              formModel[key] = value ? (_props?.valueFormat ? value : dateUtil(value)) : null;
             }
-            formModel[key] = arr;
           } else {
-            const { componentProps } = schema || {};
-            let _props = componentProps as any;
-            if (typeof componentProps === 'function') {
-              _props = _props({ formModel });
-            }
-            formModel[key] = value ? (_props?.valueFormat ? value : dateUtil(value)) : null;
+            formModel[key] = value;
           }
-        } else {
-          formModel[key] = value;
+          validKeys.push(key);
         }
-        validKeys.push(key);
       }
     });
-    validateFields(validKeys);
+    return validKeys;
   }
   /**
    * @description: Delete based on field name

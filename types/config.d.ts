@@ -166,3 +166,15 @@ export interface GlobEnvConfig {
   // Multi-tenancy key
   VITE_GLOB_MULTITENANCY_KEY: string;
 }
+
+export interface OidcConfig {
+  authority: string;
+  client_id: string;
+  client_secret?: string;
+  response_type: string;
+  redirect_uri: string;
+  scope?: string;
+  silentRedirectUrl?: string;
+  post_logout_redirect_uri: string;
+  automaticSilentRenew: boolean;
+}

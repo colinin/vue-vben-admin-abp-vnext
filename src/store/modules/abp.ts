@@ -29,7 +29,7 @@ interface AbpState {
 }
 
 export const useAbpStore = defineStore({
-  id: 'abp-store',
+  id: 'abp',
   state: (): AbpState => ({
     application: lsApplication,
     apidefinition: lsApiDefinition,
