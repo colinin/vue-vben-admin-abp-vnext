@@ -2,22 +2,24 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">新建分组</a-button>
-      </template>
-      <template #active="{ record }">
-        <Switch :checked="record.isActive" disabled />
+        <a-button
+          v-if="hasPermission('ApiGateway.Global.Create')"
+          type="primary"
+          @click="handleAddNew"
+          >新建配置</a-button
+        >
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              auth: 'ApiGateway.RouteGroup.Update',
+              auth: 'ApiGateway.Global.Update',
               label: t('AbpUi.Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'ApiGateway.RouteGroup.Delete',
+              auth: 'ApiGateway.Global.Delete',
               color: 'error',
               label: t('AbpUi.Delete'),
               icon: 'ant-design:delete-outlined',
@@ -27,50 +29,48 @@
         />
       </template>
     </BasicTable>
-    <BasicModalForm
-      @register="registerModal"
-      :save-changes="handleSaveChanges"
-      :form-items="formItems"
-      :title="formTitle"
-    />
+    <GlobalModal @register="registerModal" @change="reloadTable" />
   </div>
 </template>
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref } from 'vue';
   import { cloneDeep } from 'lodash-es';
-  import { Modal, Switch } from 'ant-design-vue';
-  import { useModal } from '/@/components/Modal';
-  import { BasicModalForm } from '/@/components/ModalForm';
+  import { Modal } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import { create, deleteByAppId, getList, update } from '/@/api/api-gateway/group';
+  import { useModal } from '/@/components/Modal';
+  import GlobalModal from './GlobalModal.vue';
+  import { create, deleteByAppId, getList, update } from '/@/api/api-gateway/global';
   import {
-    RouteGroup,
-    CreateRouteGroup,
-    UpdateRouteGroup,
-  } from '/@/api/api-gateway/model/groupModel';
+    CreateGlobalConfiguration,
+    GlobalConfiguration,
+    UpdateGlobalConfiguration,
+  } from '/@/api/api-gateway/model/globalModel';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
+  import { formatPagedRequest } from '/@/utils/http/abp/helper';
   export default defineComponent({
-    name: 'GroupTable',
-    components: { BasicModalForm, BasicTable, Switch, TableAction },
+    name: 'GlobalTable',
+    components: { BasicTable, GlobalModal, TableAction },
     setup() {
       const { t } = useI18n();
-      const formModel = ref<Nullable<RouteGroup>>(null);
+
+      const formModel = ref<Nullable<GlobalConfiguration>>(null);
       const formItems = getModalFormSchemas();
       const formTitle = computed(() => {
         const model = unref(formModel);
-        if (model && model.id) {
-          return t('ApiGateway.Group:EditBy', [model.name] as Recordable);
+        if (model && model.itemId) {
+          return t('ApiGateway.Group:EditBy', [model.appId] as Recordable);
         }
         return t('ApiGateway.Group:AddNew');
       });
+      const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
-        rowKey: 'id',
-        title: '路由分组',
+        rowKey: 'itemId',
+        title: '公共配置',
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -100,21 +100,22 @@
         openModal,
         registerTable,
         reloadTable,
+        hasPermission,
       };
     },
     methods: {
       handleAddNew() {
-        this.formModel = {} as RouteGroup;
+        this.formModel = {} as GlobalConfiguration;
         this.openModal(true, {}, true);
       },
-      handleEdit(record: Recordable) {
-        this.formModel = cloneDeep(record) as RouteGroup;
+      handleEdit(record) {
+        this.formModel = cloneDeep(record) as GlobalConfiguration;
         this.openModal(true, record, true);
       },
       handleDelete(record: Recordable) {
         Modal.warning({
           title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.appId] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteByAppId(record.appId).then(() => {
@@ -124,9 +125,9 @@
         });
       },
       handleSaveChanges(val) {
-        const api: Promise<RouteGroup> = val.id
-          ? update(cloneDeep(val) as UpdateRouteGroup)
-          : create(cloneDeep(val) as CreateRouteGroup);
+        const api: Promise<GlobalConfiguration> = val.id
+          ? update(cloneDeep(val) as UpdateGlobalConfiguration)
+          : create(cloneDeep(val) as CreateGlobalConfiguration);
         return api.then(() => {
           this.reloadTable();
         });
