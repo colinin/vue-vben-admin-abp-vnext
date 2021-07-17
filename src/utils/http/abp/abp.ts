@@ -11,6 +11,8 @@ import { ParameterBindingSources, UrlBuilder } from '/@/utils/helper/abpApiHelpe
 import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
+import { AxiosRequestConfig } from 'axios';
+import { RequestOptions } from '../axios/types';
 
 const { t } = useI18n();
 
@@ -33,6 +35,22 @@ export class abpRequest {
     params?: any;
   }) {
     return this.request<ListResultDto<TResult>>(options);
+  }
+
+  get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    return defHttp.request({ ...config, method: 'GET' }, options);
+  }
+
+  post<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    return defHttp.request({ ...config, method: 'POST' }, options);
+  }
+
+  put<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    return defHttp.request({ ...config, method: 'PUT' }, options);
+  }
+
+  delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    return defHttp.request({ ...config, method: 'DELETE' }, options);
   }
 
   request<TResult>(options: {
