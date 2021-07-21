@@ -9,25 +9,29 @@
     <Row v-bind="{ ...getRow }">
       <slot name="formHeader"></slot>
       <Tabs style="width: 100%">
-        <template v-for="tabSchema in getTabSchema" :key="tabSchema.key">
-          <TabPane :tab="tabSchema.key">
-            <template v-for="schema in tabSchema.schemas" :key="schema.field">
-              <FormItem
-                :tableAction="tableAction"
-                :formActionType="formActionType"
-                :schema="schema"
-                :formProps="getProps"
-                :allDefaultValues="defaultValueRef"
-                :formModel="formModel"
-                :setFormModel="setFormModel"
-              >
-                <template #[item]="data" v-for="item in Object.keys($slots)">
-                  <slot :name="item" v-bind="data"></slot>
-                </template>
-              </FormItem>
-            </template>
-          </TabPane>
-        </template>
+        <!-- fix bug: forceRender 必须强制渲染，否则form验证会失效 -->
+        <TabPane
+          v-for="tabSchema in getTabSchema"
+          :key="tabSchema.key"
+          :tab="tabSchema.key"
+          :forceRender="true"
+        >
+          <template v-for="schema in tabSchema.schemas" :key="schema.field">
+            <FormItem
+              :tableAction="tableAction"
+              :formActionType="formActionType"
+              :schema="schema"
+              :formProps="getProps"
+              :allDefaultValues="defaultValueRef"
+              :formModel="formModel"
+              :setFormModel="setFormModel"
+            >
+              <template #[item]="data" v-for="item in Object.keys($slots)">
+                <slot :name="item" v-bind="data"></slot>
+              </template>
+            </FormItem>
+          </template>
+        </TabPane>
       </Tabs>
 
       <FormAction v-bind="{ ...getProps, ...advanceState }" @toggle-advanced="handleToggleAdvanced">

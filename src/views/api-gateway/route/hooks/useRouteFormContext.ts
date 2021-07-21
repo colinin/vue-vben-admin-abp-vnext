@@ -1,11 +1,7 @@
 import { Ref } from 'vue';
 import { cloneDeep } from 'lodash-es';
-import {
-  CreateGlobalConfiguration,
-  GlobalConfiguration,
-  UpdateGlobalConfiguration,
-} from '/@/api/api-gateway/model/globalModel';
-import { create, update } from '/@/api/api-gateway/global';
+import { CreateRoute, Route, UpdateRoute } from '/@/api/api-gateway/model/routeModel';
+import { create, update } from '/@/api/api-gateway/route';
 import { FormActionType, TabFormSchema } from '/@/components/Form';
 
 import { getModalFormSchemas } from '../components/ModalData';
@@ -13,11 +9,11 @@ import { computed, watch, unref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
 
 interface UseGlobalFormContext {
-  formModel: Ref<Nullable<GlobalConfiguration>>;
+  formModel: Ref<Nullable<Route>>;
   formElRef: Ref<Nullable<FormActionType>>;
 }
 
-export function useGlobalFormContext({ formModel, formElRef }: UseGlobalFormContext) {
+export function useRouteFormContext({ formModel, formElRef }: UseGlobalFormContext) {
   const { t } = useI18n();
   const getFormSchemas = computed((): TabFormSchema[] => {
     return [...getModalFormSchemas()];
@@ -25,16 +21,16 @@ export function useGlobalFormContext({ formModel, formElRef }: UseGlobalFormCont
 
   const getFormTitle = computed(() => {
     const model = unref(formModel);
-    if (model && model.itemId) {
-      return t('ApiGateway.Group:EditBy', [model.appId] as Recordable);
+    if (model && model.reRouteId) {
+      return t('ApiGateway.Route:EditBy', [model.reRouteName] as Recordable);
     }
-    return t('ApiGateway.Group:AddNew');
+    return t('ApiGateway.Route:AddNew');
   });
 
   async function handleFormSubmit(val) {
-    const api: Promise<GlobalConfiguration> = val.itemId
-      ? update(cloneDeep(val) as UpdateGlobalConfiguration)
-      : create(cloneDeep(val) as CreateGlobalConfiguration);
+    const api: Promise<Route> = val.reRouteId
+      ? update(cloneDeep(val) as UpdateRoute)
+      : create(cloneDeep(val) as CreateRoute);
     return api;
   }
 

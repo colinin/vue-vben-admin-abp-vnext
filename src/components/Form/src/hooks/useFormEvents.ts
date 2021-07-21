@@ -62,7 +62,8 @@ export function useFormEvents({
     const validKeys: string[] = [];
     Object.keys(values).forEach((key) => {
       let value = values[key];
-      if (value && typeof value === 'object') {
+      // fix: array are also objects.
+      if (value && !Array.isArray(value) && typeof value === 'object') {
         // 增加子属性的字段
         const sValue: Recordable = {};
         Object.keys(value).forEach((sk) => {

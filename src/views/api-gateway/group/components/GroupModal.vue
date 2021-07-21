@@ -25,7 +25,7 @@
       const formTitle = computed(() => {
         const model = unref(formModel);
         if (model && model.id) {
-          return t('ApiGateway.Group:EditByName', [model.name] as Recordable);
+          return t('ApiGateway.Group:EditBy', [model.name] as Recordable);
         }
         return t('ApiGateway.Group:AddNew');
       });

@@ -26,14 +26,17 @@ export default {
       const { field, order } = sortInfo;
       // 格式化排序对象
       let sorting = field;
-      switch (order) {
-        case 'descend':
-          sorting = field.concat(' DESC');
-          break;
-        default:
-        case 'ascend':
-          sorting = field.concat(' ASC');
-          break;
+      // fix: sorting可能为空
+      if (sorting) {
+        switch (order) {
+          case 'descend':
+            sorting = field.concat(' DESC');
+            break;
+          default:
+          case 'ascend':
+            sorting = field.concat(' ASC');
+            break;
+        }
       }
       return {
         sorting,

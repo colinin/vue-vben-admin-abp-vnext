@@ -1,25 +1,45 @@
 <template>
-  <div>
+  <div class="content">
     <BasicTable @register="registerTable">
       <template #toolbar>
         <a-button
-          v-if="hasPermission('ApiGateway.Global.Create')"
+          v-if="hasPermission('ApiGateway.Route.Create')"
           type="primary"
           @click="handleAddNew"
-          >新建配置</a-button
+          >{{ t('ApiGateway.Route:AddNew') }}</a-button
         >
+      </template>
+      <template #methods="{ record }">
+        <Tag
+          style="margin-right: 10px; margin-bottom: 5px"
+          v-for="method in record.upstreamHttpMethod"
+          :key="method"
+          :color="HttpMethods[method]"
+        >
+          {{ method }}
+        </Tag>
+      </template>
+      <template #hosts="{ record }">
+        <Tag
+          style="margin-bottom: 5px"
+          v-for="host in record.downstreamHostAndPorts"
+          :key="host"
+          color="blue"
+        >
+          {{ `${host.host}:${host.port}` }}
+        </Tag>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              auth: 'ApiGateway.Global.Update',
+              auth: 'ApiGateway.Route.Update',
               label: t('AbpUi.Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'ApiGateway.Global.Delete',
+              auth: 'ApiGateway.Route.Delete',
               color: 'error',
               label: t('AbpUi.Delete'),
               icon: 'ant-design:delete-outlined',
@@ -29,42 +49,37 @@
         />
       </template>
     </BasicTable>
-    <GlobalModal @register="registerModal" @change="reloadTable" />
+    <RouteModal @register="registerModal" @change="reloadTable" />
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { cloneDeep } from 'lodash-es';
-  import { Modal } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { usePermission } from '/@/hooks/web/usePermission';
+  import { Modal, Tag } from 'ant-design-vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import RouteModal from './RouteModal.vue';
   import { useModal } from '/@/components/Modal';
-  import GlobalModal from './GlobalModal.vue';
-  import { create, deleteByAppId, getList, update } from '/@/api/api-gateway/global';
-  import {
-    CreateGlobalConfiguration,
-    GlobalConfiguration,
-    UpdateGlobalConfiguration,
-  } from '/@/api/api-gateway/model/globalModel';
+  import { deleteById, getById, getList } from '/@/api/api-gateway/route';
+  import { HttpMethods } from '/@/api/api-gateway/model/basicModel';
   import { getDataColumns } from './TableData';
-  import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
-  import { formatPagedRequest } from '/@/utils/http/abp/helper';
+  import { getSearchFormSchemas } from './ModalData';
+  // import { formatPagedRequest } from '/@/utils/http/abp/helper';
   export default defineComponent({
-    name: 'GlobalTable',
-    components: { BasicTable, GlobalModal, TableAction },
+    name: 'RouteTable',
+    components: { BasicTable, RouteModal, Tag, TableAction },
     setup() {
       const { t } = useI18n();
-      const formItems = getModalFormSchemas();
+
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
-        rowKey: 'itemId',
-        title: '公共配置',
+        rowKey: 'reRouteId',
+        title: t('ApiGateway.Routes'),
         columns: getDataColumns(),
         api: getList,
-        beforeFetch: formatPagedRequest,
+        // beforeFetch: formatPagedRequest,
         pagination: true,
         striped: false,
         useSearchForm: true,
@@ -72,6 +87,7 @@
         bordered: true,
         showIndexColumn: false,
         canResize: false,
+        immediate: false,
         rowSelection: { type: 'checkbox' },
         formConfig: getSearchFormSchemas(),
         actionColumn: {
@@ -84,12 +100,12 @@
 
       return {
         t,
-        formItems,
-        registerModal,
-        openModal,
         registerTable,
         reloadTable,
+        registerModal,
+        openModal,
         hasPermission,
+        HttpMethods,
       };
     },
     methods: {
@@ -97,26 +113,22 @@
         this.openModal(true, {}, true);
       },
       handleEdit(record) {
-        this.openModal(true, record, true);
+        getById(record.reRouteId).then((route) => {
+          this.openModal(true, route, true);
+        });
       },
-      handleDelete(record: Recordable) {
+      handleDelete(record) {
         Modal.warning({
           title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.appId] as Recordable),
+          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
+            record.reRouteName,
+          ] as Recordable),
           okCancel: true,
           onOk: () => {
-            deleteByAppId(record.appId).then(() => {
+            deleteById(record.reRouteId).then(() => {
               this.reloadTable();
             });
           },
-        });
-      },
-      handleSaveChanges(val) {
-        const api: Promise<GlobalConfiguration> = val.id
-          ? update(cloneDeep(val) as UpdateGlobalConfiguration)
-          : create(cloneDeep(val) as CreateGlobalConfiguration);
-        return api.then(() => {
-          this.reloadTable();
         });
       },
     },

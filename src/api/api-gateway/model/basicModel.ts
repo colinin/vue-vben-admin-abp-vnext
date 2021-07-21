@@ -69,3 +69,12 @@ export class LoadBalancerDescriptor {
   type!: string;
   displayName!: string;
 }
+
+export const HttpMethods: { [key: string]: string } = {
+  ['GET']: 'blue',
+  ['POST']: 'green',
+  ['PUT']: 'orange',
+  ['DELETE']: 'red',
+  ['OPTIONS']: 'cyan',
+  ['PATCH']: 'pink',
+};
