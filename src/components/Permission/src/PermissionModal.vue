@@ -35,6 +35,7 @@
               <BasicTree
                 :checkable="true"
                 :checkStrictly="true"
+                :selectable="false"
                 :disabled="permissionTreeDisabled"
                 :treeData="permission.children"
                 :replaceFields="{

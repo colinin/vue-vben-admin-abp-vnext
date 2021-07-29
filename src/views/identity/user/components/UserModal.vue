@@ -25,7 +25,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { TabForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { useUserEditEvents } from '../hooks/useUserEditEvents';
+  import { useUserForm } from '../hooks/useUserForm';
 
   export default defineComponent({
     name: 'UserModal',
@@ -35,7 +35,7 @@
       const { t } = useI18n();
       const userIdRef = ref<Nullable<string>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
-      const { handleSaveUser, userSchemas, userTitle, warpAssignableRoles } = useUserEditEvents({
+      const { handleSaveUser, userSchemas, userTitle, warpAssignableRoles } = useUserForm({
         userIdRef,
         formElRef,
       });

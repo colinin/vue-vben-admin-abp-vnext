@@ -57,11 +57,12 @@
             {
               auth: 'AbpIdentity.Users.ManageClaims',
               label: t('AbpIdentity.Claim'),
-              divider: false,
+              onClick: handleEditClaim.bind(null, record),
             },
             {
               auth: 'AbpIdentity.Users.Update',
               label: t('AbpIdentity.SetPassword'),
+              onClick: showPasswordModal.bind(null, record.id),
             },
           ]"
         />
@@ -69,6 +70,8 @@
     </BasicTable>
     <UserModal @register="registerModal" @change="reloadTable" />
     <PermissionModal @register="registerPermissionModal" />
+    <PasswordModal @register="registerPasswordModal" />
+    <ClaimModal @register="registerClaimModal" />
   </div>
 </template>
 
@@ -80,19 +83,32 @@
   import { useModal } from '/@/components/Modal';
   import { PermissionModal } from '/@/components/Permission';
   import { BasicTable, TableAction } from '/@/components/Table';
-  import { useUserTable } from '../hooks/useUserTable';
-  import { usePermissionModal } from '../hooks/usePermissionModal';
   import UserModal from './UserModal.vue';
+  import PasswordModal from './PasswordModal.vue';
+  import ClaimModal from './ClaimModal.vue';
+  import { useUserTable } from '../hooks/useUserTable';
+  import { usePassword } from '../hooks/usePassword';
+  import { usePermission as usePermissionModal } from '../hooks/usePermission';
 
   export default defineComponent({
     name: 'UserTable',
-    components: { BasicTable, PermissionModal, TableAction, Tag, UserModal },
+    components: {
+      BasicTable,
+      ClaimModal,
+      PermissionModal,
+      TableAction,
+      Tag,
+      UserModal,
+      PasswordModal,
+    },
     setup() {
       const { t } = useI18n();
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
-      const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
       const { registerTable, reloadTable } = useUserTable();
+      const { registerPasswordModal, showPasswordModal } = usePassword();
+      const [registerClaimModal, { openModal: openClaimModal }] = useModal();
+      const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
 
       return {
         t,
@@ -103,6 +119,10 @@
         openModal,
         registerPermissionModal,
         showPermissionModal,
+        registerPasswordModal,
+        showPasswordModal,
+        registerClaimModal,
+        openClaimModal,
       };
     },
     methods: {
@@ -114,6 +134,9 @@
       },
       handleDelete(record) {
         console.log(record);
+      },
+      handleEditClaim(record) {
+        this.openClaimModal(true, record, true);
       },
     },
   });

@@ -7,12 +7,12 @@ import { CreateUser, User, UpdateUser } from '/@/api/identity/model/userModel';
 import { create, getAssignableRoles, getById, getRoleList, update } from '/@/api/identity/user';
 import { getModalFormSchemas } from '../datas/ModalData';
 
-interface UseUserEditEventContext {
+interface UseUserFormContext {
   userIdRef: Ref<Nullable<string>>;
   formElRef: Ref<Nullable<FormActionType>>;
 }
 
-export function useUserEditEvents({ userIdRef, formElRef }: UseUserEditEventContext) {
+export function useUserForm({ userIdRef, formElRef }: UseUserFormContext) {
   const { t } = useI18n();
   const thisUser = ref<Nullable<User>>(null);
 

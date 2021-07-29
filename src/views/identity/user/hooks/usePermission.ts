@@ -1,7 +1,7 @@
 import { useModal } from '/@/components/Modal';
 import { useUserStoreWidthOut } from '/@/store/modules/user';
 
-export function usePermissionModal() {
+export function usePermission() {
   const [registerModel, { openModal }] = useModal();
 
   function showPermissionModal(userId: string) {

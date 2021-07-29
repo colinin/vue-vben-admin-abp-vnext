@@ -1,6 +1,7 @@
 import {
   ExtensibleObject,
   FullAuditedEntityDto,
+  ListResultDto,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '../../model/baseModel';
@@ -21,6 +22,11 @@ export interface IUser {
   twoFactorEnabled: boolean;
   /** 登录锁定 */
   lockoutEnabled: boolean;
+}
+
+export interface ChangePassword {
+  currentPassword?: string;
+  newPassword: string;
 }
 
 /** 用户对象 */
@@ -85,3 +91,20 @@ export class GetUserPagedRequest extends PagedAndSortedResultRequestDto {
 }
 
 export class UserPagedResult extends PagedResultDto<User> {}
+
+export class UserClaimBase {
+  claimType = '';
+  claimValue = '';
+}
+
+export class CreateUserClaim extends UserClaimBase {}
+
+export class UpdateUserClaim extends UserClaimBase {
+  newClaimValue!: string;
+}
+
+export class UserClaim extends UserClaimBase {
+  id!: string;
+}
+
+export class UserClaimListResult extends ListResultDto<UserClaim> {}

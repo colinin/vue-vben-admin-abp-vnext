@@ -48,3 +48,28 @@ export function getDataColumns(): BasicColumn[] {
     },
   ];
 }
+
+export function getClaimColumns(): BasicColumn[] {
+  return [
+    {
+      title: 'id',
+      dataIndex: 'id',
+      width: 1,
+      ifShow: false,
+    },
+    {
+      title: t('AbpIdentity.DisplayName:ClaimType'),
+      dataIndex: 'claimType',
+      align: 'left',
+      width: 150,
+      sortOrder: true,
+    },
+    {
+      title: t('AbpIdentity.DisplayName:ClaimValue'),
+      dataIndex: 'claimValue',
+      align: 'left',
+      width: 'auto',
+      sortOrder: true,
+    },
+  ];
+}
