@@ -59,7 +59,11 @@ export function checkStatus(status: number, msg: string): void {
 
 export function checkResponse(response: any): void {
   if (response.data && response.data.error) {
-    if (response.data.error_description) {
+    if (response.status === 401) {
+      const userStore = useUserStoreWidthOut();
+      userStore.setToken(undefined);
+      userStore.setSessionTimeout(true);
+    } else if (response.data.error_description) {
       error(response.data.error_description);
     } else if (response.data.error.details) {
       error(response.data.error.details);
