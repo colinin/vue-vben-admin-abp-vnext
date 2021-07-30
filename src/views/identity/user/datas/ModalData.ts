@@ -60,7 +60,7 @@ export function getModalFormSchemas(): TabFormSchema[] {
     },
     {
       tab: t('AbpIdentity.UserInformations'),
-      field: 'surName',
+      field: 'surname',
       component: 'Input',
       label: t('AbpIdentity.DisplayName:Surname'),
       colProps: { span: 24 },

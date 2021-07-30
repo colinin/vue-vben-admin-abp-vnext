@@ -46,18 +46,24 @@
             {
               auth: 'AbpIdentity.Users.Update',
               label: t('AbpIdentity.Lockout'),
-              divider: false,
+              ifShow: lockEnable(record),
+              onClick: showLockModal.bind(null, record.id),
+            },
+            {
+              auth: 'AbpIdentity.Users.Update',
+              label: t('AbpIdentity.UnLock'),
+              ifShow: record.lockoutEnabled && !lockEnable(record),
+              onClick: handleUnlock.bind(null, record),
             },
             {
               auth: 'AbpIdentity.Users.ManagePermissions',
               label: t('AbpIdentity.Permissions'),
-              divider: false,
               onClick: showPermissionModal.bind(null, record.id),
             },
             {
               auth: 'AbpIdentity.Users.ManageClaims',
               label: t('AbpIdentity.Claim'),
-              onClick: handleEditClaim.bind(null, record),
+              onClick: openClaimModal.bind(null, true, record, true),
             },
             {
               auth: 'AbpIdentity.Users.Update',
@@ -72,6 +78,7 @@
     <PermissionModal @register="registerPermissionModal" />
     <PasswordModal @register="registerPasswordModal" />
     <ClaimModal @register="registerClaimModal" />
+    <LockModal @register="registerLockModal" @change="reloadTable" />
   </div>
 </template>
 
@@ -86,8 +93,10 @@
   import UserModal from './UserModal.vue';
   import PasswordModal from './PasswordModal.vue';
   import ClaimModal from './ClaimModal.vue';
+  import LockModal from './LockModal.vue';
   import { useUserTable } from '../hooks/useUserTable';
   import { usePassword } from '../hooks/usePassword';
+  import { useLock } from '../hooks/useLock';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
 
   export default defineComponent({
@@ -100,12 +109,14 @@
       Tag,
       UserModal,
       PasswordModal,
+      LockModal,
     },
-    setup() {
+    setup(_props, { emit }) {
       const { t } = useI18n();
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
-      const { registerTable, reloadTable } = useUserTable();
+      const { lockEnable, registerTable, reloadTable, handleDelete } = useUserTable();
+      const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit });
       const { registerPasswordModal, showPasswordModal } = usePassword();
       const [registerClaimModal, { openModal: openClaimModal }] = useModal();
       const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
@@ -113,6 +124,7 @@
       return {
         t,
         hasPermission,
+        lockEnable,
         registerTable,
         reloadTable,
         registerModal,
@@ -123,6 +135,10 @@
         showPasswordModal,
         registerClaimModal,
         openClaimModal,
+        handleDelete,
+        registerLockModal,
+        showLockModal,
+        handleUnLock,
       };
     },
     methods: {
@@ -132,11 +148,10 @@
       handleEdit(record) {
         this.openModal(true, record, true);
       },
-      handleDelete(record) {
-        console.log(record);
-      },
-      handleEditClaim(record) {
-        this.openClaimModal(true, record, true);
+      handleUnlock(record) {
+        this.handleUnLock(record.id).then(() => {
+          this.reloadTable();
+        });
       },
     },
   });

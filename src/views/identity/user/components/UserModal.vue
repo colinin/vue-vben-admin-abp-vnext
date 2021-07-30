@@ -26,6 +26,7 @@
   import { TabForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useUserForm } from '../hooks/useUserForm';
+  import { User } from '/@/api/identity/model/userModel';
 
   export default defineComponent({
     name: 'UserModal',
@@ -33,15 +34,19 @@
     emits: ['register', 'change'],
     setup() {
       const { t } = useI18n();
-      const userIdRef = ref<Nullable<string>>(null);
+      const userRef = ref<Nullable<User>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
       const { handleSaveUser, userSchemas, userTitle, warpAssignableRoles } = useUserForm({
-        userIdRef,
+        userRef,
         formElRef,
       });
       const [registerModal, { closeModal }] = useModalInner(async (val) => {
-        userIdRef.value = val.id ?? null;
+        userRef.value = val;
         await warpAssignableRoles();
+        const formEl = unref(formElRef);
+        formEl?.setFieldsValue({
+          concurrencyStamp: val.concurrencyStamp,
+        });
       });
 
       return {

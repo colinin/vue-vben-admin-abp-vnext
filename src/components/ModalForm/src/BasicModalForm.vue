@@ -4,6 +4,8 @@
     @register="register"
     :title="title"
     :width="width"
+    :height="height"
+    :minHeight="minHeight"
     :maskClosable="maskClosable"
     @ok="handleSubmit"
     @visible-change="handleVisible"
@@ -31,6 +33,8 @@
     saveChanges: { type: Function as PropType<(data: any) => Promise<any>>, required: true },
     labelWidth: { type: Number, default: 120 },
     width: { type: Number, default: 500 },
+    height: { type: Number, default: 356 },
+    minHeight: { type: Number },
     maskClosable: { type: Boolean, default: false },
   } as const;
 

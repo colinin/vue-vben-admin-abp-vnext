@@ -2,12 +2,13 @@ import type { Ref } from 'vue';
 
 import { useI18n } from '/@/hooks/web/useI18n';
 import { cloneDeep } from 'lodash-es';
+import { Modal } from 'ant-design-vue';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
 import { getActivedList } from '/@/api/identity/claim';
 import { getClaimColumns } from '../datas/TableData';
-import { createClaim, getClaimList, updateClaim } from '/@/api/identity/user';
-import { CreateUserClaim, UpdateUserClaim } from '/@/api/identity/model/userModel';
+import { createClaim, deleteClaim, getClaimList, updateClaim } from '/@/api/identity/user';
+import { CreateUserClaim, UpdateUserClaim, UserClaim } from '/@/api/identity/model/userModel';
 import { useTable } from '/@/components/Table';
 import { computed, unref, watch } from 'vue';
 
@@ -103,6 +104,19 @@ export function useClaim({ userIdRef }: UseClaim) {
     }
   }
 
+  function handleDelete(claim: UserClaim) {
+    Modal.warning({
+      title: t('AbpUi.AreYouSure'),
+      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
+      okCancel: true,
+      onOk: () => {
+        deleteClaim(unref(userIdRef), claim).then(() => {
+          reloadTable();
+        });
+      },
+    });
+  }
+
   function handleSaveChanges(input) {
     const api = input.id
       ? updateClaim(unref(userIdRef), cloneDeep(input) as UpdateUserClaim)
@@ -130,5 +144,6 @@ export function useClaim({ userIdRef }: UseClaim) {
     registerTable,
     reloadTable,
     handleSaveChanges,
+    handleDelete,
   };
 }

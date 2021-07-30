@@ -28,6 +28,8 @@ enum Api {
   GetAssignableRoles = '/api/identity/users/assignable-roles',
   Update = '/api/identity/users/{id}',
   UpdateClaim = '/api/identity/users/{id}/claims',
+  Lock = '/api/identity/users/{id}/lock/{seconds}',
+  UnLock = '/api/identity/users/{id}/unlock',
 }
 
 export const create = (input: CreateUser) => {
@@ -61,13 +63,18 @@ export const deleteById = (id: string) => {
 };
 
 export const deleteClaim = (id: string, input: UserClaim) => {
-  return defAbpHttp.delete<void>({
-    url: format(Api.DeleteClaim, { id: id }),
-    params: {
-      claimType: input.claimType,
-      claimValue: input.claimValue,
+  return defAbpHttp.delete<void>(
+    {
+      url: format(Api.DeleteClaim, { id: id }),
+      params: {
+        claimType: input.claimType,
+        claimValue: input.claimValue,
+      },
     },
-  });
+    {
+      joinParamsToUrl: true,
+    }
+  );
 };
 
 export const getById = (id: string) => {
@@ -112,5 +119,17 @@ export const updateClaim = (id: string, input: UpdateUserClaim) => {
   return defAbpHttp.put<void>({
     url: format(Api.CreateClaim, { id: id }),
     data: input,
+  });
+};
+
+export const lock = (id: string, seconds: number) => {
+  return defAbpHttp.put<void>({
+    url: format(Api.Lock, { id: id, seconds: seconds }),
+  });
+};
+
+export const unlock = (id: string) => {
+  return defAbpHttp.put<void>({
+    url: format(Api.UnLock, { id: id }),
   });
 };

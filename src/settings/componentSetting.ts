@@ -32,9 +32,12 @@ export default {
           case 'descend':
             sorting = field.concat(' DESC');
             break;
-          default:
           case 'ascend':
             sorting = field.concat(' ASC');
+            break;
+          // fix: 取消排序
+          default:
+            sorting = '';
             break;
         }
       }

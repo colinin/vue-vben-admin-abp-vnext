@@ -8,7 +8,7 @@
   >
     <Row v-bind="{ ...getRow }">
       <slot name="formHeader"></slot>
-      <Tabs style="width: 100%">
+      <Tabs v-model="activedTabKey" style="width: 100%">
         <!-- fix bug: forceRender 必须强制渲染，否则form验证会失效 -->
         <TabPane
           v-for="tabSchema in getTabSchema"
@@ -101,6 +101,7 @@
 
       const defaultValueRef = ref<Recordable>({});
       const isInitedDefaultRef = ref(false);
+      const activedTabKey = ref('');
       const propsRef = ref<Partial<FormProps>>({});
       const schemaRef = ref<Nullable<TabFormSchema[]>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -221,6 +222,7 @@
           const { model } = unref(getProps);
           if (!model) return;
           setFieldsValue(model);
+          activedTabKey.value = '';
         },
         {
           immediate: true,
@@ -294,6 +296,7 @@
       return {
         handleToggleAdvanced,
         handleEnterPress,
+        activedTabKey,
         formModel,
         defaultValueRef,
         advanceState,

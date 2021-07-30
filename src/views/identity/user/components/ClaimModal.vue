@@ -62,7 +62,7 @@
         registerClaimForm,
         openClaimForm,
         registerTable,
-        reloadTable,
+        handleDelete,
         handleSaveChanges,
       } = useClaim({ userIdRef });
 
@@ -71,9 +71,9 @@
         formSchemas,
         registerModal,
         registerTable,
-        reloadTable,
         registerClaimForm,
         openClaimForm,
+        handleDelete,
         handleSaveChanges,
       };
     },
@@ -83,9 +83,6 @@
       },
       handleEdit(record) {
         this.openClaimForm(record);
-      },
-      handleDelete(record) {
-        console.log(record);
       },
     },
   });
