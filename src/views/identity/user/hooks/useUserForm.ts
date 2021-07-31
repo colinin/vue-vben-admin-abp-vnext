@@ -27,13 +27,10 @@ export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
   });
 
   function handleSaveUser(val) {
-    console.log(val);
     const api = val.id
       ? update(val.id, cloneDeep(val) as UpdateUser)
       : create(cloneDeep(val) as CreateUser);
-    return api.then((user) => {
-      userRef.value = user;
-    });
+    return api;
   }
 
   async function warpAssignableRoles() {

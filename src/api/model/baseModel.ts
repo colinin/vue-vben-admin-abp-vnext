@@ -240,11 +240,6 @@ export enum HashType {
 export class Claim implements IClaim {
   type = '';
   value = '';
-
-  constructor(type: string, value: string) {
-    this.type = type;
-    this.value = value;
-  }
 }
 
 export class KeyValue<TKey, TValue> {

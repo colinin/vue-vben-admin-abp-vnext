@@ -25,12 +25,9 @@ export class GetRolePagedRequest extends PagedAndSortedResultRequestDto {
 }
 
 export class CreateRole extends RoleBase {
-  constructor() {
-    super();
-    this.isDefault = false;
-    this.isPublic = true;
-    this.name = '';
-  }
+  isDefault = false;
+  isPublic = true;
+  name = '';
 }
 
 export class UpdateRole extends RoleBase {
@@ -41,7 +38,7 @@ export class ChangeRoleOrganizationUnitDto {
   organizationUnitIds: string[] = [];
 }
 
-export class CreateOrUpdateRoleClaim {
+export class RoleClaimBase {
   claimType = '';
   claimValue = '';
 }
@@ -51,6 +48,14 @@ export class DeleteRoleClaim {
   claimValue = '';
 }
 
-export class RoleClaim extends CreateOrUpdateRoleClaim {
+export class CreateRoleClaim extends RoleClaimBase {}
+
+export class UpdateRoleClaim extends RoleClaimBase {
+  newClaimValue!: string;
+}
+
+export class RoleClaim extends RoleClaimBase {
   id!: string;
 }
+
+export class RoleClaimListResult extends ListResultDto<RoleClaim> {}
