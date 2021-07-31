@@ -20,7 +20,7 @@ export default {
     // Number of pages that can be selected
     pageSizeOptions: ['10', '25', '50', '100'],
     // Default display quantity on one page
-    defaultPageSize: 25,
+    defaultPageSize: 10,
     // Custom general sort function
     defaultSortFn: (sortInfo: SorterResult) => {
       const { field, order } = sortInfo;
