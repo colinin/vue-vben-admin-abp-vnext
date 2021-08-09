@@ -26,6 +26,7 @@ enum Api {
   GetClaimList = '/api/identity/roles/{id}/claims',
   GetList = '/api/identity/roles',
   GetActivedList = '/api/ApiGateway/RouteGroups/Actived',
+  RemoveOrganizationUnit = '/api/identity/roles/{id}/organization-units/{ouId}',
 }
 
 export const create = (input: CreateRole) => {
@@ -99,5 +100,11 @@ export const getList = (input: GetRolePagedRequest) => {
   return defAbpHttp.get<RolePagedResult>({
     url: Api.GetList,
     params: input,
+  });
+};
+
+export const removeOrganizationUnit = (id: string, ouId: string) => {
+  return defAbpHttp.delete<void>({
+    url: format(Api.RemoveOrganizationUnit, { id: id, ouId: ouId }),
   });
 };
