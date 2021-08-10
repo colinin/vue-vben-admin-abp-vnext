@@ -150,7 +150,8 @@ export class HttpActionParameterHelper {
 
     let value = methodArguments[methodArgKeys[keyIndex]];
     if (!value) {
-      return null;
+      // fix bug: 请求参数为空时返回空字符串而不是null
+      return '';
     }
 
     if (apiParameter.name === apiParameter.nameOnMethod) {
@@ -161,7 +162,8 @@ export class HttpActionParameterHelper {
     const inputKeyIndex = inputKeys.findIndex(
       (key) => key.toLowerCase() === apiParameter.name.toLowerCase()
     );
-    value = inputKeyIndex < 0 ? null : value[inputKeys[inputKeyIndex]];
+    // fix bug: 请求参数为空时返回空字符串而不是null
+    value = inputKeyIndex < 0 ? '' : value[inputKeys[inputKeyIndex]] ?? '';
 
     return String(value);
   }
