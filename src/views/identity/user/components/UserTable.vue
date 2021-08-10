@@ -70,6 +70,11 @@
               label: t('AbpIdentity.SetPassword'),
               onClick: showPasswordModal.bind(null, record.id),
             },
+            {
+              auth: 'Platform.Menu.ManageUsers',
+              label: t('AppPlatform.Menu:Manage'),
+              onClick: handleSetMenu.bind(null, record),
+            },
           ]"
         />
       </template>
@@ -79,11 +84,17 @@
     <PasswordModal @register="registerPasswordModal" />
     <ClaimModal @register="registerClaimModal" />
     <LockModal @register="registerLockModal" @change="reloadTable" />
+    <MenuModal
+      @register="registerMenuModal"
+      :loading="loadMenuRef"
+      :get-menu-api="getListByUser"
+      @change="handleChangeMenu"
+    />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { Tag } from 'ant-design-vue';
@@ -94,10 +105,12 @@
   import PasswordModal from './PasswordModal.vue';
   import ClaimModal from './ClaimModal.vue';
   import LockModal from './LockModal.vue';
+  import MenuModal from '../../components/MenuModal.vue';
   import { useUserTable } from '../hooks/useUserTable';
   import { usePassword } from '../hooks/usePassword';
   import { useLock } from '../hooks/useLock';
   import { usePermission as usePermissionModal } from '../hooks/usePermission';
+  import { getListByUser, setUserMenu } from '/@/api/platform/menu';
 
   export default defineComponent({
     name: 'UserTable',
@@ -110,19 +123,42 @@
       UserModal,
       PasswordModal,
       LockModal,
+      MenuModal,
     },
     setup(_props, { emit }) {
       const { t } = useI18n();
+      const loadMenuRef = ref(false);
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const { lockEnable, registerTable, reloadTable, handleDelete } = useUserTable();
       const { registerLockModal, showLockModal, handleUnLock } = useLock({ emit });
       const { registerPasswordModal, showPasswordModal } = usePassword();
       const [registerClaimModal, { openModal: openClaimModal }] = useModal();
+      const [registerMenuModal, { openModal: openMenuModal, closeModal: closeMenuModal }] =
+        useModal();
       const { registerModel: registerPermissionModal, showPermissionModal } = usePermissionModal();
+
+      function handleSetMenu(record) {
+        openMenuModal(true, { identity: record.id }, true);
+      }
+
+      function handleChangeMenu(userId, menuIds) {
+        loadMenuRef.value = true;
+        setUserMenu({
+          userId: userId,
+          menuIds: menuIds,
+        })
+          .then(() => {
+            closeMenuModal();
+          })
+          .finally(() => {
+            loadMenuRef.value = false;
+          });
+      }
 
       return {
         t,
+        loadMenuRef,
         hasPermission,
         lockEnable,
         registerTable,
@@ -139,6 +175,10 @@
         registerLockModal,
         showLockModal,
         handleUnLock,
+        registerMenuModal,
+        handleSetMenu,
+        handleChangeMenu,
+        getListByUser,
       };
     },
     methods: {
