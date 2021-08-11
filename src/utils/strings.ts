@@ -20,3 +20,12 @@ export function format(formatted, args: any) {
   }
   return formatted;
 }
+
+export function tryToJson(str: string | undefined) {
+  if (!str || str.length === 0) return {};
+  try {
+    return JSON.parse(str);
+  } catch {
+    return str;
+  }
+}

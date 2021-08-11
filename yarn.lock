@@ -3097,6 +3097,11 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
+codemirror@^5.62.2:
+  version "5.62.2"
+  resolved "https://registry.nlark.com/codemirror/download/codemirror-5.62.2.tgz?cache=0&sync_timestamp=1626868414007&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcodemirror%2Fdownload%2Fcodemirror-5.62.2.tgz#bce6d19c9829e6e788f83886d48ecf5c1e106e65"
+  integrity sha1-vObRnJgp5ueI+DiG1I7PXB4QbmU=
+
 collapse-white-space@^1.0.5:
   version "1.0.6"
   resolved "https://registry.npm.taobao.org/collapse-white-space/download/collapse-white-space-1.0.6.tgz#e63629c0016665792060dbbeb79c42239d2c5287"
@@ -10647,6 +10652,11 @@ vue-i18n@9.1.6:
     "@intlify/shared" "9.1.6"
     "@intlify/vue-devtools" "9.1.6"
     "@vue/devtools-api" "^6.0.0-beta.7"
+
+vue-json-pretty@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.nlark.com/vue-json-pretty/download/vue-json-pretty-1.8.1.tgz?cache=0&sync_timestamp=1628149560224&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-json-pretty%2Fdownload%2Fvue-json-pretty-1.8.1.tgz#538bb57fc718544152105aef659b4c88475365ee"
+  integrity sha1-U4u1f8cYVEFSEFrvZZtMiEdTZe4=
 
 vue-router@^4.0.8:
   version "4.0.10"

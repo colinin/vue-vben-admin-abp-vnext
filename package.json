@@ -37,6 +37,7 @@
     "@zxcvbn-ts/core": "^0.3.0",
     "ant-design-vue": "2.1.2",
     "axios": "^0.21.1",
+    "codemirror": "^5.62.2",
     "crypto-js": "^4.0.0",
     "echarts": "^5.1.2",
     "lodash-es": "^4.17.21",
@@ -48,6 +49,7 @@
     "sortablejs": "^1.13.0",
     "vue": "3.0.11",
     "vue-i18n": "9.1.6",
+    "vue-json-pretty": "^1.8.1",
     "vue-router": "^4.0.8",
     "vue-types": "^3.0.2"
   },
