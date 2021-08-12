@@ -29,7 +29,7 @@ export function useOuTree({ emit }: { emit: EmitType }) {
     {
       field: 'displayName',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName'),
+      label: t('AbpIdentity.OrganizationUnit:DisplayName'),
       colProps: { span: 24 },
       required: true,
     },
@@ -50,7 +50,8 @@ export function useOuTree({ emit }: { emit: EmitType }) {
         {
           label: t('AbpIdentity.OrganizationUnit:AddChildren'),
           handler: () => {
-            openModal(true, { parentId: node.$attrs.id }, true);
+            handleAddNew(node.$attrs.id);
+            // openModal(true, { parentId: node.$attrs.id }, true);
           },
           icon: 'ant-design:plus-outlined',
         },
@@ -85,6 +86,10 @@ export function useOuTree({ emit }: { emit: EmitType }) {
     });
   }
 
+  function handleAddNew(parentId?: string) {
+    openModal(true, { parentId: parentId }, true);
+  }
+
   function handleSelect(selectedKeys) {
     emit('select', selectedKeys[0]);
   }
@@ -115,6 +120,7 @@ export function useOuTree({ emit }: { emit: EmitType }) {
     registerModal,
     formSchemas,
     handleDrop,
+    handleAddNew,
     handleSelect,
     handleSubmit,
   };
