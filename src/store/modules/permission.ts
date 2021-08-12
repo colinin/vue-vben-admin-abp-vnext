@@ -1,4 +1,4 @@
-import type { AppRouteRecordRaw, Menu } from '/@/router/types';
+import type { AppRouteRecordRaw, Menu, RouteMeta } from '/@/router/types';
 
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -151,8 +151,10 @@ export const usePermissionStore = defineStore({
     },
     filterDynamicRoutes(menus: RouteItem[]) {
       const routeList: AppRouteRecordRaw[] = [];
-
       menus.forEach((menu) => {
+        if (!this.validationFeatures(menu.meta)) {
+          return;
+        }
         const r: AppRouteRecordRaw = {
           path: menu.path,
           name: menu.name!,
@@ -185,6 +187,30 @@ export const usePermissionStore = defineStore({
       });
 
       return routeList;
+    },
+    /** 验证功能 */
+    validationFeatures(meta: RouteMeta) {
+      // 如果声明了必须某些功能而系统为启用此功能,则不加入路由中
+      if (meta.requiredFeatures) {
+        let featureHasEnabled = true;
+        const abpStore = useAbpStoreWidthOut();
+        const { features } = abpStore.getApplication;
+        const definedFeatures = features.values;
+        if (definedFeatures === undefined) {
+          return featureHasEnabled;
+        }
+        let requiredFeatures = meta.requiredFeatures;
+        if (!Array.isArray(requiredFeatures)) {
+          requiredFeatures = requiredFeatures.split(',');
+        }
+        requiredFeatures.forEach((feature) => {
+          if (definedFeatures[feature] === 'false') {
+            featureHasEnabled = false;
+          }
+        });
+        return featureHasEnabled;
+      }
+      return true;
     },
   },
 });

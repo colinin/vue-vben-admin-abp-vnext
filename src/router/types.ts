@@ -9,6 +9,8 @@ export type Component<T extends any = any> =
   | (() => Promise<T>);
 
 export interface RouteMeta {
+  // 必要功能
+  requiredFeatures?: string | string[];
   // title
   title: string;
   // Whether to ignore permissions
