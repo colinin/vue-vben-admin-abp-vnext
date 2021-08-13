@@ -203,11 +203,12 @@ export const usePermissionStore = defineStore({
         if (!Array.isArray(requiredFeatures)) {
           requiredFeatures = requiredFeatures.split(',');
         }
-        requiredFeatures.forEach((feature) => {
-          if (definedFeatures[feature] === 'false') {
+        for (const i in requiredFeatures) {
+          if (definedFeatures[requiredFeatures[i]] === 'false') {
             featureHasEnabled = false;
+            continue;
           }
-        });
+        }
         return featureHasEnabled;
       }
       return true;
