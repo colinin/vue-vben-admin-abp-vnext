@@ -112,10 +112,10 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
       ruleString.min = validator.properties.MinLength;
       ruleString.max = validator.properties.MaxLength;
       ruleString.trigger = 'blur';
-      ruleString.message = t('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', {
-        0: validator.properties.MinValue,
-        1: validator.properties.MaxValue,
-      } as Recordable);
+      ruleString.message = t('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', [
+        validator.properties.MinValue,
+        validator.properties.MaxValue,
+      ] as Recordable);
       featureRules.push(ruleString);
     }
     return featureRules;
