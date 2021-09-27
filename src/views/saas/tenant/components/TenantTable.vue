@@ -11,7 +11,7 @@
         <a-button
           v-if="hasPermission('FeatureManagement.ManageHostFeatures')"
           type="primary"
-          @click="handleAddNew"
+          @click="handleManageHostFeature"
           >{{ t('AbpTenantManagement.ManageHostFeatures') }}</a-button
         >
       </template>
@@ -34,14 +34,20 @@
           ]"
           :dropDownActions="[
             {
+              auth: 'FeatureManagement.ManageHostFeatures',
+              label: t('AbpFeatureManagement.ManageFeatures'),
+              onClick: handleManageTenantFeature.bind(null, record),
+            },
+            {
               auth: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
-              label: '连接配置',
+              label: t('AbpTenantManagement.ConnectionStrings'),
               onClick: openConnectModal.bind(null, true, record),
             },
           ]"
         />
       </template>
     </BasicTable>
+    <FeatureModal @register="registerFeatureModal" />
     <TenantModal @register="registerModal" @change="handleReload" />
     <TenantConnectionModal @register="registerConnectModal" />
   </div>
@@ -55,12 +61,14 @@
   import { BasicTable, TableAction, TableActionType } from '/@/components/Table';
   import { useTenantTable } from '../hooks/useTenantTable';
   import { useTenantModal } from '../hooks/useTenantModal';
+  import { useFeatureModal } from '../hooks/useFeatureModal';
   import TenantModal from './TenantModal.vue';
   import TenantConnectionModal from './TenantConnectionModal.vue';
+  import { FeatureModal } from '../../../feature';
 
   export default defineComponent({
     name: 'TenantTable',
-    components: { BasicTable, TableAction, TenantModal, TenantConnectionModal },
+    components: { BasicTable, FeatureModal, TableAction, TenantModal, TenantConnectionModal },
     setup() {
       const { t } = useI18n();
       const { hasPermission } = usePermission();
@@ -68,6 +76,11 @@
       const [registerConnectModal, { openModal: openConnectModal }] = useModal();
       const { registerModal, handleAddNew, handleEdit } = useTenantModal();
       const { registerTable, handleDelete, handleReload } = useTenantTable({ tableElRef });
+      const {
+        registerModal: registerFeatureModal,
+        handleManageHostFeature,
+        handleManageTenantFeature,
+      } = useFeatureModal();
 
       return {
         t,
@@ -81,6 +94,9 @@
         handleEdit,
         handleDelete,
         handleReload,
+        registerFeatureModal,
+        handleManageHostFeature,
+        handleManageTenantFeature,
       };
     },
   });
