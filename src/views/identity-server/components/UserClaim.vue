@@ -22,7 +22,7 @@
     name: 'UserClaim',
     components: { Transfer },
     props: {
-      targetClaims: { type: [Array] as PropType<string[]>, required: true },
+      targetClaims: { type: [Array] as PropType<string[]>, required: true, default: () => [] },
     },
     emits: ['change'],
     setup(_, { emit }) {
