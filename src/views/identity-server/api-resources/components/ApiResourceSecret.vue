@@ -1,0 +1,109 @@
+<template>
+  <div>
+    <BasicTable
+      rowKey="type"
+      :columns="columns"
+      :dataSource="secrets"
+      :pagination="false"
+      :showTableSetting="true"
+      :maxHeight="230"
+      :actionColumn="{
+        width: 100,
+        title: t('table.action'),
+        dataIndex: 'action',
+        slots: { customRender: 'action' },
+      }"
+    >
+      <template #toolbar>
+        <Button type="primary" @click="handleAddNew">{{
+          t('AbpIdentityServer.Secret:New')
+        }}</Button>
+      </template>
+      <template #action="{ record }">
+        <TableAction
+          :actions="[
+            {
+              auth: 'AbpIdentityServer.ApiResources.Delete',
+              color: 'error',
+              icon: 'ant-design:delete-outlined',
+              label: t('AbpIdentityServer.Resource:Delete'),
+              onClick: handleDelete.bind(null, record),
+            },
+          ]"
+        />
+      </template>
+    </BasicTable>
+    <BasicModal v-bind="$attrs" @register="registerModal" @ok="handleSubmit" :title="title">
+      <BasicForm @register="registerForm" />
+    </BasicModal>
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent, ref } from 'vue';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  import { Button } from 'ant-design-vue';
+  import { BasicForm, useForm } from '/@/components/Form';
+  import { BasicModal, useModal } from '/@/components/Modal';
+  import { BasicTable, TableAction } from '/@/components/Table';
+  import { ApiResourceSecret } from '/@/api/identity-server/model/apiResourcesModel';
+  import { getSecretColumns } from '../datas/TableData';
+  import { getSecretFormSchemas } from '../datas/ModalData';
+
+  export default defineComponent({
+    name: 'ApiResourceSecret',
+    components: {
+      BasicForm,
+      BasicModal,
+      BasicTable,
+      Button,
+      TableAction,
+    },
+    props: {
+      secrets: {
+        type: [Array] as PropType<ApiResourceSecret[]>,
+        required: true,
+        default: () => [],
+      },
+    },
+    emits: ['register', 'secrets-new', 'secrets-delete'],
+    setup(_, { emit }) {
+      const { t } = useI18n();
+      const title = ref('');
+      const [registerForm, { validate, resetFields }] = useForm({
+        labelWidth: 120,
+        showActionButtonGroup: false,
+        schemas: getSecretFormSchemas(),
+      });
+      const [registerModal, { openModal, closeModal }] = useModal();
+
+      function handleAddNew() {
+        title.value = t('AbpIdentityServer.Secret:New');
+        openModal(true);
+      }
+
+      function handleDelete(record) {
+        emit('secrets-delete', record);
+      }
+
+      function handleSubmit() {
+        validate().then((input) => {
+          emit('secrets-new', input);
+          resetFields();
+          closeModal();
+        });
+      }
+
+      return {
+        t,
+        title,
+        handleAddNew,
+        handleDelete,
+        handleSubmit,
+        columns: getSecretColumns(),
+        registerForm,
+        registerModal,
+      };
+    },
+  });
+</script>
