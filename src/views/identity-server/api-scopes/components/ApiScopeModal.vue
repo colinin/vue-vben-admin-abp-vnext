@@ -11,7 +11,7 @@
   >
     <Form
       ref="formElRef"
-      :model="resourceRef"
+      :model="modelRef"
       :rules="formRules"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
@@ -19,44 +19,43 @@
       <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
         <!-- Api 资源基本信息 -->
         <TabPane key="basic" :tab="t('AbpIdentityServer.Basics')">
-          <FormItem name="enabled" :label="t('AbpIdentityServer.Resource:Enabled')">
-            <Checkbox v-model:checked="resourceRef.enabled">{{
-              t('AbpIdentityServer.Resource:Enabled')
+          <FormItem name="enabled" :label="t('AbpIdentityServer.Enabled')">
+            <Checkbox v-model:checked="modelRef.enabled">{{
+              t('AbpIdentityServer.Enabled')
+            }}</Checkbox>
+          </FormItem>
+          <FormItem name="required" :label="t('AbpIdentityServer.Required')">
+            <Checkbox v-model:checked="modelRef.required">{{
+              t('AbpIdentityServer.Required')
+            }}</Checkbox>
+          </FormItem>
+          <FormItem name="emphasize" :label="t('AbpIdentityServer.Emphasize')">
+            <Checkbox v-model:checked="modelRef.emphasize">{{
+              t('AbpIdentityServer.Emphasize')
             }}</Checkbox>
           </FormItem>
           <FormItem
             name="showInDiscoveryDocument"
             :label="t('AbpIdentityServer.ShowInDiscoveryDocument')"
           >
-            <Checkbox v-model:checked="resourceRef.showInDiscoveryDocument">{{
+            <Checkbox v-model:checked="modelRef.showInDiscoveryDocument">{{
               t('AbpIdentityServer.ShowInDiscoveryDocument')
             }}</Checkbox>
           </FormItem>
           <FormItem name="name" required :label="t('AbpIdentityServer.Name')">
-            <Input v-model:value="resourceRef.name" :disabled="isEdit" />
+            <Input v-model:value="modelRef.name" :disabled="isEdit" />
           </FormItem>
           <FormItem name="displayName" :label="t('AbpIdentityServer.DisplayName')">
-            <Input v-model:value="resourceRef.displayName" />
+            <Input v-model:value="modelRef.displayName" />
           </FormItem>
           <FormItem name="description" :label="t('AbpIdentityServer.Description')">
-            <Input v-model:value="resourceRef.description" />
-          </FormItem>
-          <FormItem
-            name="allowedAccessTokenSigningAlgorithms"
-            :label="t('AbpIdentityServer.AllowedAccessTokenSigningAlgorithms')"
-          >
-            <Input v-model:value="resourceRef.allowedAccessTokenSigningAlgorithms" />
+            <Input v-model:value="modelRef.description" />
           </FormItem>
         </TabPane>
 
         <!-- Api 资源用户声明 -->
         <TabPane key="claim" :tab="t('AbpIdentityServer.UserClaim')">
           <UserClaim :target-claims="targetClaims" @change="handleClaimChange" />
-        </TabPane>
-
-        <!-- Api 资源范围 -->
-        <TabPane key="scope" :tab="t('AbpIdentityServer.Scope')">
-          <ApiResourceScope :target-scopes="targetScopes" @change="handleScopeChange" />
         </TabPane>
 
         <!-- Api 资源密钥/属性 -->
@@ -69,7 +68,6 @@
               </span>
               <template #overlay>
                 <Menu @click="handleClickMenu">
-                  <MenuItem key="api-resource-secret">{{ t('AbpIdentityServer.Secret') }}</MenuItem>
                   <MenuItem key="properties">{{ t('AbpIdentityServer.Propertites') }}</MenuItem>
                 </Menu>
               </template>
@@ -77,10 +75,7 @@
           </template>
           <component
             :is="advancedComponent"
-            :secrets="resourceRef.secrets"
-            :properties="resourceRef.properties"
-            @secrets-new="handleNewSecret"
-            @secrets-delete="handleDeleteSecret"
+            :properties="modelRef.properties"
             @props-new="handleNewProperty"
             @props-delete="handleDeleteProperty"
           />
@@ -97,21 +92,15 @@
   import { Checkbox, Dropdown, Menu, Tabs, Form, Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useModal } from '../hooks/useModal';
-  import { useSecret } from '../hooks/useSecret';
-  import { useScope } from '../hooks/useScope';
   import { useClaim } from '../hooks/useClaim';
   import { useProperty } from '../hooks/useProperty';
-  import ApiResourceScope from './ApiResourceScope.vue';
-  import ApiResourceSecret from './ApiResourceSecret.vue';
   import UserClaim from '../../components/UserClaim.vue';
   import Properties from '../../components/Properties.vue';
   export default defineComponent({
-    name: 'ApiResourceModal',
+    name: 'ApiScopeModal',
     components: {
       UserClaim,
       Properties,
-      ApiResourceScope,
-      ApiResourceSecret,
       BasicModal,
       DownOutlined,
       Form,
@@ -128,29 +117,27 @@
     setup(_, { emit }) {
       const { t } = useI18n();
       const formElRef = ref<any>(null);
-      const resourceIdRef = ref('');
+      const modelIdRef = ref('');
       const tabActivedKey = ref('basic');
-      const advancedComponent = ref('api-resource-secret');
+      const advancedComponent = ref('properties');
       const [registerModal, { changeOkLoading }] = useModalInner((val) => {
-        resourceIdRef.value = val.id;
+        modelIdRef.value = val.id;
       });
       const {
         isEdit,
-        resourceRef,
+        modelRef,
         formRules,
         formTitle,
         handleChangeTab,
         handleVisibleModal,
         handleSubmit,
       } = useModal({
-        resourceIdRef,
+        modelIdRef,
         formElRef,
         tabActivedKey,
       });
-      const { handleNewSecret, handleDeleteSecret } = useSecret({ resourceRef });
-      const { handleNewProperty, handleDeleteProperty } = useProperty({ resourceRef });
-      const { targetClaims, handleClaimChange } = useClaim({ resourceRef });
-      const { targetScopes, handleScopeChange } = useScope({ resourceRef });
+      const { handleNewProperty, handleDeleteProperty } = useProperty({ modelRef });
+      const { targetClaims, handleClaimChange } = useClaim({ modelRef });
 
       function handleClickMenu(e) {
         tabActivedKey.value = 'advanced';
@@ -176,20 +163,16 @@
         formTitle,
         tabActivedKey,
         registerModal,
-        resourceRef,
+        modelRef,
         advancedComponent,
         labelCol: { span: 6 },
         wrapperCol: { span: 18 },
         handleClickMenu,
-        handleNewSecret,
-        handleDeleteSecret,
         handleNewProperty,
         handleDeleteProperty,
         handleChangeTab,
         handleVisibleModal,
         handleOk,
-        targetScopes,
-        handleScopeChange,
         targetClaims,
         handleClaimChange,
       };

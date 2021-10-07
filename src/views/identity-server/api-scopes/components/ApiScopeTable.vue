@@ -14,23 +14,23 @@
         <TableAction
           :actions="[
             {
-              auth: 'AbpIdentityServer.ApiResources.Update',
+              auth: 'AbpIdentityServer.ApiScopes.Update',
               icon: 'ant-design:edit-outlined',
-              label: t('AbpIdentityServer.Resource:Edit'),
+              label: t('AbpIdentityServer.ApiScopes:Edit'),
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'AbpIdentityServer.ApiResources.Delete',
+              auth: 'AbpIdentityServer.ApiScopes.Delete',
               color: 'error',
               icon: 'ant-design:delete-outlined',
-              label: t('AbpIdentityServer.Resource:Delete'),
+              label: t('AbpIdentityServer.ApiScopes:Delete'),
               onClick: handleDelete.bind(null, record),
             },
           ]"
         />
       </template>
     </BasicTable>
-    <ApiResourceModal @register="registerModal" @change="handleChange" />
+    <ApiScopeModal @register="registerModal" @change="handleChange" />
   </div>
 </template>
 
@@ -42,19 +42,19 @@
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { deleteById, getList } from '/@/api/identity-server/apiResources';
+  import { deleteById, getList } from '/@/api/identity-server/apiScopes';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import ApiResourceModal from './ApiResourceModal.vue';
+  import ApiScopeModal from './ApiScopeModal.vue';
 
   export default defineComponent({
-    name: 'ApiResourceTable',
-    components: { ApiResourceModal, BasicTable, Button, Switch, TableAction },
+    name: 'ApiScopeTable',
+    components: { ApiScopeModal, BasicTable, Button, Switch, TableAction },
     setup() {
       const { t } = useI18n();
       const [registerModal, { openModal, closeModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('AbpIdentityServer.DisplayName:ApiResources'),
+        title: t('AbpIdentityServer.DisplayName:ApiScopes'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,

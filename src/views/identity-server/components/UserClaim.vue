@@ -19,7 +19,7 @@
   import { getActivedList } from '/@/api/identity/claim';
 
   export default defineComponent({
-    name: 'ApiResourceClaim',
+    name: 'UserClaim',
     components: { Transfer },
     props: {
       targetClaims: { type: [Array] as PropType<string[]>, required: true },

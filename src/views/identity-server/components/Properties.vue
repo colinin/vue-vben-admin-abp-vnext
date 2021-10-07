@@ -46,12 +46,12 @@
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
-  import { ApiResourceProperty } from '/@/api/identity-server/model/apiResourcesModel';
-  import { getPropertyColumns } from '../datas/TableData';
-  import { getPropertyFormSchemas } from '../datas/ModalData';
+  import { Property } from '/@/api/identity-server/model/basicModel';
+  import { getDataColumns } from './TableData';
+  import { getFormSchemas } from './ModalData';
 
   export default defineComponent({
-    name: 'ApiResourceProperty',
+    name: 'Properties',
     components: {
       BasicForm,
       BasicModal,
@@ -61,7 +61,7 @@
     },
     props: {
       properties: {
-        type: [Array] as PropType<ApiResourceProperty[]>,
+        type: [Array] as PropType<Property[]>,
         required: true,
         default: () => [],
       },
@@ -73,7 +73,7 @@
       const [registerForm, { validate, resetFields }] = useForm({
         labelWidth: 120,
         showActionButtonGroup: false,
-        schemas: getPropertyFormSchemas(),
+        schemas: getFormSchemas(),
       });
       const [registerModal, { openModal, closeModal }] = useModal();
 
@@ -100,7 +100,7 @@
         handleAddNew,
         handleDelete,
         handleSubmit,
-        columns: getPropertyColumns(),
+        columns: getDataColumns(),
         registerForm,
         registerModal,
       };
