@@ -54,7 +54,7 @@ export function getDataColumns(): BasicColumn[] {
       align: 'left',
       width: 200,
       sorter: true,
-      slots: { customRender: 'enabled' },
+      slots: { customRender: 'emphasize' },
     },
     {
       title: t('AbpIdentityServer.ShowInDiscoveryDocument'),

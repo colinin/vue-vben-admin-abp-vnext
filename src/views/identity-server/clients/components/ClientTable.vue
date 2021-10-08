@@ -4,15 +4,6 @@
       <template #enabled="{ record }">
         <Switch :checked="record.enabled" disabled />
       </template>
-      <template #required="{ record }">
-        <Switch :checked="record.required" disabled />
-      </template>
-      <template #emphasize="{ record }">
-        <Switch :checked="record.emphasize" disabled />
-      </template>
-      <template #discovery="{ record }">
-        <Switch :checked="record.showInDiscoveryDocument" disabled />
-      </template>
       <template #toolbar>
         <Button type="primary" @click="handleAddNew">{{ t('AbpIdentityServer.AddNew') }}</Button>
       </template>
@@ -20,23 +11,37 @@
         <TableAction
           :actions="[
             {
-              auth: 'AbpIdentityServer.IdentityResources.Update',
+              auth: 'AbpIdentityServer.Clients.Update',
               icon: 'ant-design:edit-outlined',
-              label: t('AbpIdentityServer.Resource:Edit'),
+              label: t('AbpIdentityServer.Edit'),
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'AbpIdentityServer.IdentityResources.Delete',
+              auth: 'AbpIdentityServer.Clients.Delete',
               color: 'error',
               icon: 'ant-design:delete-outlined',
-              label: t('AbpIdentityServer.Resource:Delete'),
+              label: t('AbpIdentityServer.Delete'),
               onClick: handleDelete.bind(null, record),
+            },
+          ]"
+          :dropDownActions="[
+            {
+              auth: 'AbpIdentityServer.Clients.ManagePermissions',
+              label: t('AbpIdentityServer.Permissions'),
+              onClick: handlePermission.bind(null, record),
+            },
+            {
+              auth: 'AbpIdentityServer.Clients.Clone',
+              label: t('AbpIdentityServer.Client:Clone'),
+              onClick: handleClone.bind(null, record),
             },
           ]"
         />
       </template>
     </BasicTable>
-    <IdentityResourceModal @register="registerModal" @change="handleChange" />
+    <ClientModal @register="registerModal" @change="handleChange" />
+    <PermissionModal @register="registerPermissionModal" />
+    <ClientClone @register="registerCloneModal" @change="handleChange" />
   </div>
 </template>
 
@@ -48,19 +53,31 @@
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from '../datas/TableData';
   import { getSearchFormSchemas } from '../datas/ModalData';
-  import { deleteById, getList } from '/@/api/identity-server/identityResources';
+  import { deleteById, getList } from '/@/api/identity-server/clients';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import IdentityResourceModal from './IdentityResourceModal.vue';
+  import ClientModal from './ClientModal.vue';
+  import ClientClone from './ClientClone.vue';
+  import { PermissionModal } from '/@/components/Permission';
 
   export default defineComponent({
-    name: 'IdentityResourceTable',
-    components: { IdentityResourceModal, BasicTable, Button, Switch, TableAction },
+    name: 'ApiScopeTable',
+    components: {
+      ClientModal,
+      ClientClone,
+      BasicTable,
+      Button,
+      Switch,
+      TableAction,
+      PermissionModal,
+    },
     setup() {
       const { t } = useI18n();
       const [registerModal, { openModal, closeModal }] = useModal();
+      const [registerCloneModal, { openModal: openCloneModal }] = useModal();
+      const [registerPermissionModal, { openModal: openPermissionModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('AbpIdentityServer.DisplayName:IdentityResources'),
+        title: t('AbpIdentityServer.DisplayName:ApiScopes'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -95,6 +112,18 @@
         reload();
       }
 
+      function handleClone(record) {
+        openCloneModal(true, record);
+      }
+
+      function handlePermission(record) {
+        const props = {
+          providerName: 'C',
+          providerKey: record.clientId,
+        };
+        openPermissionModal(true, props, true);
+      }
+
       function handleDelete(record) {
         Modal.warning({
           title: t('AbpUi.AreYouSure'),
@@ -116,6 +145,10 @@
         handleDelete,
         handleEdit,
         handleChange,
+        handleClone,
+        registerCloneModal,
+        handlePermission,
+        registerPermissionModal,
       };
     },
   });

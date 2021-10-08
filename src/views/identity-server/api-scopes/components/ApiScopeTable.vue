@@ -1,8 +1,14 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
+      <template #required="{ record }">
+        <Switch :checked="record.required" disabled />
+      </template>
       <template #enabled="{ record }">
         <Switch :checked="record.enabled" disabled />
+      </template>
+      <template #emphasize="{ record }">
+        <Switch :checked="record.emphasize" disabled />
       </template>
       <template #discovery="{ record }">
         <Switch :checked="record.showInDiscoveryDocument" disabled />
