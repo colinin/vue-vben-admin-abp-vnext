@@ -3,10 +3,10 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <a-button
-          v-if="hasPermission('LocalizationManagement.Language.Create')"
+          v-if="hasPermission('LocalizationManagement.Resource.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('LocalizationManagement.Language:AddNew') }}</a-button
+          >{{ t('LocalizationManagement.Resource:AddNew') }}</a-button
         >
       </template>
       <template #enable="{ record }">
@@ -17,13 +17,13 @@
           :stop-button-propagation="true"
           :actions="[
             {
-              auth: 'LocalizationManagement.Language.Update',
+              auth: 'LocalizationManagement.Resource.Update',
               label: t('LocalizationManagement.Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
-              auth: 'LocalizationManagement.Language.Delete',
+              auth: 'LocalizationManagement.Resource.Delete',
               color: 'error',
               label: t('LocalizationManagement.Delete'),
               icon: 'ant-design:delete-outlined',
@@ -33,7 +33,7 @@
         />
       </template>
     </BasicTable>
-    <LanguageModal @change="handleChange" @register="registerModal" />
+    <ResourceModal @change="handleChange" @register="registerModal" />
   </div>
 </template>
 
@@ -45,18 +45,18 @@
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
-  import { getList, deleteById } from '/@/api/localization/languages';
+  import { getList, deleteById } from '/@/api/localization/resources';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
-  import LanguageModal from './LanguageModal.vue';
+  import ResourceModal from './ResourceModal.vue';
 
   export default defineComponent({
-    name: 'LanguageTable',
+    name: 'ResourceTable',
     components: {
       BasicTable,
       Switch,
       TableAction,
-      LanguageModal,
+      ResourceModal,
     },
     setup() {
       const { t } = useI18n();
@@ -64,7 +64,7 @@
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('LocalizationManagement.Languages'),
+        title: t('LocalizationManagement.Resources'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,

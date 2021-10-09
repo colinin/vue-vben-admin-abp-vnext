@@ -25,5 +25,4 @@ export class LanguagePagedResult extends PagedResultDto<Language> {}
 
 export class GetLanguagePagedRequest extends PagedAndSortedResultRequestDto {
   filter = '';
-  subjectId = '';
 }

@@ -17,17 +17,17 @@
   import { message } from 'ant-design-vue';
   import { BasicForm, FormActionType, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { Language } from '/@/api/localization/model/languagesModel';
-  import { get, create, update } from '/@/api/localization/languages';
+  import { Resource } from '/@/api/localization/model/resourcesModel';
+  import { get, create, update } from '/@/api/localization/resources';
   import { getModalFormSchemas } from './ModalData';
   export default defineComponent({
-    name: 'LanguageModal',
+    name: 'ResourceModal',
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
       const { t } = useI18n();
       const idRef = ref('');
-      const modelRef = ref<Nullable<Language>>(null);
+      const modelRef = ref<Nullable<Resource>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
       const [registerForm, { resetFields }] = useForm({
         colon: true,
