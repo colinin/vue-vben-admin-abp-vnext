@@ -1,5 +1,6 @@
 import {
   AuditedEntityDto,
+  ListResultDto,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '/@/api/model/baseModel';
@@ -20,6 +21,8 @@ export interface LanguageCreateOrUpdate {
   displayName: string;
   flagIcon: string;
 }
+
+export class LanguageListResult extends ListResultDto<Language> {}
 
 export class LanguagePagedResult extends PagedResultDto<Language> {}
 

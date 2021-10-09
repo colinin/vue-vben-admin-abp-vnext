@@ -48,7 +48,7 @@
             unref(modelRef)?.displayName,
           ] as Recordable);
         }
-        return t('LocalizationManagement.Language:AddNew');
+        return t('LocalizationManagement.Resource:AddNew');
       });
 
       watch(

@@ -3,6 +3,7 @@ import {
   Language,
   LanguageCreateOrUpdate,
   GetLanguagePagedRequest,
+  LanguageListResult,
   LanguagePagedResult,
 } from './model/languagesModel';
 import { format } from '/@/utils/strings';
@@ -12,6 +13,7 @@ enum Api {
   DeleteById = '/api/localization/languages/{id}',
   GetById = '/api/localization/languages/{id}',
   GetList = '/api/localization/languages',
+  GetAllList = '/api/localization/languages/all',
 }
 
 export const get = (id: string) => {
@@ -43,6 +45,12 @@ export const update = (id: string, input: LanguageCreateOrUpdate) => {
 export const getList = (input: GetLanguagePagedRequest) => {
   return defAbpHttp.get<LanguagePagedResult>({
     url: Api.GetList,
-    data: input,
+    params: input,
+  });
+};
+
+export const getAll = () => {
+  return defAbpHttp.get<LanguageListResult>({
+    url: Api.GetAllList,
   });
 };

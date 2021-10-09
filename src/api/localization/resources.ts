@@ -3,6 +3,7 @@ import {
   Resource,
   ResourceCreateOrUpdate,
   GetResourcePagedRequest,
+  ResourceListResult,
   ResourcePagedResult,
 } from './model/resourcesModel';
 import { format } from '/@/utils/strings';
@@ -12,6 +13,7 @@ enum Api {
   DeleteById = '/api/localization/resources/{id}',
   GetById = '/api/localization/resources/{id}',
   GetList = '/api/localization/resources',
+  GetAllList = '/api/localization/resources/all',
 }
 
 export const get = (id: string) => {
@@ -43,6 +45,12 @@ export const update = (id: string, input: ResourceCreateOrUpdate) => {
 export const getList = (input: GetResourcePagedRequest) => {
   return defAbpHttp.get<ResourcePagedResult>({
     url: Api.GetList,
-    data: input,
+    params: input,
+  });
+};
+
+export const getAll = () => {
+  return defAbpHttp.get<ResourceListResult>({
+    url: Api.GetAllList,
   });
 };

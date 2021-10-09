@@ -1,5 +1,6 @@
 import {
   AuditedEntityDto,
+  ListResultDto,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
 } from '/@/api/model/baseModel';
@@ -18,6 +19,8 @@ export interface ResourceCreateOrUpdate {
   displayName: string;
   description: string;
 }
+
+export class ResourceListResult extends ListResultDto<Resource> {}
 
 export class ResourcePagedResult extends PagedResultDto<Resource> {}
 

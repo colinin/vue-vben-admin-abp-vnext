@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpIdentity.Search'),
+        label: t('AbpUi.Search'),
         colProps: { span: 24 },
         defaultValue: '',
       },
