@@ -12,7 +12,7 @@ import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
 import { AxiosRequestConfig } from 'axios';
-import { RequestOptions } from '../axios/types';
+import { RequestOptions, UploadFileParams } from '../axios/types';
 
 const { t } = useI18n();
 
@@ -51,6 +51,10 @@ export class abpRequest {
 
   delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     return defHttp.request({ ...config, method: 'DELETE' }, options);
+  }
+
+  uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
+    return defHttp.uploadFile<T>(config, params);
   }
 
   request<TResult>(options: {
