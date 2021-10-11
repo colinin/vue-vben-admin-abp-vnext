@@ -4,7 +4,11 @@
       <CardGrid style="width: 25%">
         <CardMeta>
           <template #title>
-            <Select style="width: 100%" @change="handleContainerChange">
+            <Select
+              style="width: 100%"
+              placeholder="请选择一个容器"
+              @change="handleContainerChange"
+            >
               <Option
                 v-for="container in containers"
                 :key="container.name"
