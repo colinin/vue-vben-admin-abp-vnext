@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="t('AbpOssManagement.Objects')"
+    :title="t('AbpOssManagement.Objects:Preview')"
     :width="966"
     :min-height="466"
   >
@@ -45,9 +45,9 @@
       function generateOssUrl(bucket: string, path: string, object: string) {
         if (path) {
           // 对 Path部分的 URL 编码
-          let _path = encodeURIComponent(path);
-          if (_path.endsWith('%2F')) {
-            _path = _path.substring(0, _path.length - 3);
+          path = encodeURIComponent(path);
+          if (path.endsWith('%2F')) {
+            path = path.substring(0, path.length - 3);
           }
         }
         return format(downloadUrl, { bucket: bucket, path: path, name: object });

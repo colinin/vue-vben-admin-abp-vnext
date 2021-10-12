@@ -13,14 +13,14 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('名称'),
+      title: t('AbpOssManagement.DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 'auto',
       sorter: true,
     },
     {
-      title: t('创建日期'),
+      title: t('AbpOssManagement.DisplayName:CreationDate'),
       dataIndex: 'creationDate',
       align: 'left',
       width: 150,
@@ -30,7 +30,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('修改日期'),
+      title: t('AbpOssManagement.DisplayName:LastModifiedDate'),
       dataIndex: 'lastModifiedDate',
       align: 'left',
       width: 150,
@@ -40,7 +40,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('大小'),
+      title: t('AbpOssManagement.DisplayName:Size'),
       dataIndex: 'size',
       align: 'left',
       width: 120,

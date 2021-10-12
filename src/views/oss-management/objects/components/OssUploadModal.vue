@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    title="上传文件"
+    :title="t('AbpOssManagement.Objects:UploadFile')"
     :width="660"
     :min-height="300"
   >
@@ -12,6 +12,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref } from 'vue';
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicUpload } from '/@/components/Upload';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { uploadObject } from '/@/api/oss-management/oss';
@@ -31,6 +32,7 @@
     name: 'OssUploadModal',
     components: { BasicModal, BasicUpload },
     setup() {
+      const { t } = useI18n();
       const bucket = ref('');
       const path = ref('');
       const fileList = ref<FileItem[]>([]);
@@ -52,6 +54,7 @@
       }
 
       return {
+        t,
         fileList,
         uploadObject,
         uploadParams,

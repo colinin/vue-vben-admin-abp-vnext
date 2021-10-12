@@ -23,7 +23,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('名称'),
+      label: t('AbpOssManagement.DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },

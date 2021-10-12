@@ -43,6 +43,7 @@
           component: 'ApiSelect',
           label: t('LocalizationManagement.DisplayName:TargetCultureName'),
           colProps: { span: 24 },
+          required: true,
           componentProps: {
             api: () => getLanguages(),
             resultField: 'items',
@@ -80,6 +81,7 @@
           component: 'ApiSelect',
           label: t('LocalizationManagement.DisplayName:ResourceName'),
           colProps: { span: 24 },
+          required: true,
           componentProps: {
             api: () => getResources(),
             resultField: 'items',
@@ -95,12 +97,14 @@
           component: 'Input',
           label: t('LocalizationManagement.DisplayName:Key'),
           colProps: { span: 24 },
+          required: true,
         },
         {
           field: 'value',
           component: 'InputTextArea',
           label: t('LocalizationManagement.DisplayName:Value'),
           colProps: { span: 24 },
+          required: true,
         },
       ];
       const [registerForm] = useForm({
@@ -149,6 +153,7 @@
             .then(() => {
               emit('change');
               message.success(t('AbpUi.Successful'));
+              formEl?.resetFields();
               closeModal();
             })
             .finally(() => {

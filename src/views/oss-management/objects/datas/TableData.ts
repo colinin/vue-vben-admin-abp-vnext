@@ -10,7 +10,7 @@ const gbUnit = mbUnit * 1024;
 export function getDataColumns(): BasicColumn[] {
   return [
     {
-      title: t('名称'),
+      title: t('AbpOssManagement.DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 300,
@@ -20,7 +20,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('创建时间'),
+      title: t('AbpOssManagement.DisplayName:CreationDate'),
       dataIndex: 'creationDate',
       align: 'left',
       width: 160,
@@ -33,7 +33,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('变更时间'),
+      title: t('AbpOssManagement.DisplayName:LastModifiedDate'),
       dataIndex: 'lastModifiedDate',
       align: 'left',
       width: 160,
@@ -46,17 +46,19 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('类型'),
+      title: t('AbpOssManagement.DisplayName:FileType'),
       dataIndex: 'isFolder',
       align: 'left',
       width: 120,
       sorter: true,
       format: (text) => {
-        return Boolean(text) ? '文件夹' : '标准存储';
+        return Boolean(text)
+          ? t('AbpOssManagement.DisplayName:Folder')
+          : t('AbpOssManagement.DisplayName:Standard');
       },
     },
     {
-      title: t('大小'),
+      title: t('AbpOssManagement.DisplayName:Size'),
       dataIndex: 'size',
       align: 'left',
       width: 'auto',

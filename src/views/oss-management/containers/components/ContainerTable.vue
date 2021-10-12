@@ -6,7 +6,7 @@
           v-if="hasPermission('AbpOssManagement.Container.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('创建容器') }}</a-button
+          >{{ t('AbpOssManagement.Containers:Create') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -16,7 +16,7 @@
             {
               auth: 'AbpOssManagement.Container.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: t('AbpOssManagement.Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },

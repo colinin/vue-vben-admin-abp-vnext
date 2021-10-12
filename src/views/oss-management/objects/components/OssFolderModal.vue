@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="t('AbpOssManagement.Objects')"
+    :title="t('AbpOssManagement.Objects:CreateFolder')"
     :width="466"
     :min-height="66"
     @ok="handleSubmit"

@@ -29,7 +29,7 @@
       const idRef = ref('');
       const modelRef = ref<Nullable<Language>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
-      const [registerForm, { resetFields }] = useForm({
+      const [registerForm] = useForm({
         colon: true,
         labelWidth: 120,
         schemas: getModalFormSchemas(),
@@ -40,7 +40,6 @@
       });
       const [registerModal, { closeModal, changeOkLoading }] = useModalInner((val) => {
         idRef.value = val.id;
-        resetFields();
       });
       const formTitle = computed(() => {
         if (unref(modelRef)?.displayName) {
@@ -54,6 +53,8 @@
       watch(
         () => unref(idRef),
         (id) => {
+          const formEl = unref(formElRef);
+          formEl?.resetFields();
           if (id) {
             get(id).then((res) => {
               modelRef.value = res;
@@ -73,6 +74,7 @@
             .then(() => {
               emit('change');
               message.success(t('AbpUi.Successful'));
+              formEl?.resetFields();
               closeModal();
             })
             .finally(() => {

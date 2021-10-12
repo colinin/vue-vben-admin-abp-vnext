@@ -91,7 +91,7 @@
       }
 
       function handleAddNew() {
-        openModal(true, {});
+        openModal(true, { id: null });
       }
 
       function handleEdit(record) {

@@ -1,12 +1,12 @@
 <template>
   <div class="content">
-    <Card title="文件管理">
+    <Card :title="t('AbpOssManagement.Objects:FileSystem')">
       <CardGrid style="width: 25%">
         <CardMeta>
           <template #title>
             <Select
               style="width: 100%"
-              placeholder="请选择一个容器"
+              :placeholder="t('AbpOssManagement.Containers:Select')"
               @change="handleContainerChange"
             >
               <Option
@@ -25,7 +25,7 @@
               ghost
               type="primary"
               @click="handleNewFolder"
-              >{{ t('创建文件夹') }}</a-button
+              >{{ t('AbpOssManagement.Objects:CreateFolder') }}</a-button
             >
             <DirectoryTree
               v-if="!lockTree"
@@ -45,7 +45,7 @@
               :disabled="lockTree"
               type="primary"
               @click="handleUpload"
-              >{{ t('上传文件') }}</a-button
+              >{{ t('AbpOssManagement.Objects:UploadFile') }}</a-button
             >
           </template>
           <template #action="{ record }">
@@ -54,21 +54,21 @@
               :actions="[
                 {
                   color: 'success',
-                  label: t('详情'),
+                  label: t('AbpOssManagement.Objects:Preview'),
                   icon: 'ant-design:search-outlined',
                   onClick: handlePreview.bind(null, record),
                 },
                 {
                   auth: 'AbpOssManagement.OssObject.Delete',
                   color: 'error',
-                  label: t('LocalizationManagement.Delete'),
+                  label: t('AbpOssManagement.Delete'),
                   icon: 'ant-design:delete-outlined',
                   onClick: handleDelete.bind(null, record),
                 },
                 {
                   auth: 'AbpOssManagement.OssObject.Download',
                   ifShow: !record.isFolder,
-                  label: t('下载'),
+                  label: t('AbpOssManagement.Objects:Download'),
                   icon: 'ant-design:download-outlined',
                   onClick: handleDownload.bind(null, record),
                 },
@@ -121,7 +121,7 @@
       const { t } = useI18n();
       const rootFolder: TreeDataItem = {
         key: './',
-        title: '所有文件',
+        title: t('AbpOssManagement.Objects:Root'),
         path: '',
         children: [],
       };
@@ -191,7 +191,7 @@
       function handleContainerChange(container) {
         rootFolder.value = {
           key: './',
-          title: '所有文件',
+          title: t('AbpOssManagement.Objects:Root'),
           path: '',
           isLeaf: false,
           children: [],
@@ -281,9 +281,9 @@
       function generateOssUrl(bucket: string, path: string, object: string) {
         if (path) {
           // 对 Path部分的 URL 编码
-          let _path = encodeURIComponent(path);
-          if (_path.endsWith('%2F')) {
-            _path = _path.substring(0, _path.length - 3);
+          path = encodeURIComponent(path);
+          if (path.endsWith('%2F')) {
+            path = path.substring(0, path.length - 3);
           }
         }
         return format(downloadUrl, { bucket: bucket, path: path, name: object });
