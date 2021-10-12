@@ -42,6 +42,7 @@
           <template #toolbar>
             <a-button
               v-if="hasPermission('AbpOssManagement.OssObject.Create')"
+              v-feature="'AbpOssManagement.OssObject.UploadFile'"
               :disabled="lockTree"
               type="primary"
               @click="handleUpload"
