@@ -6,7 +6,12 @@
     :width="660"
     :min-height="300"
   >
-    <BasicUpload :maxSize="20" :maxNumber="10" :api="uploadObject" :upload-params="uploadParams" />
+    <BasicUpload
+      :max-size="maxSize"
+      :max-number="10"
+      :api="uploadObject"
+      :upload-params="uploadParams"
+    />
   </BasicModal>
 </template>
 
@@ -16,17 +21,7 @@
   import { BasicUpload } from '/@/components/Upload';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { uploadObject } from '/@/api/oss-management/oss';
-
-  interface FileItem {
-    uid: string;
-    name?: string;
-    status?: string;
-    response?: string;
-    url?: string;
-    preview?: string;
-    originFileObj?: any;
-    file: string | Blob;
-  }
+  import { useAbpStoreWidthOut } from '/@/store/modules/abp';
 
   export default defineComponent({
     name: 'OssUploadModal',
@@ -35,7 +30,6 @@
       const { t } = useI18n();
       const bucket = ref('');
       const path = ref('');
-      const fileList = ref<FileItem[]>([]);
       const [registerModal] = useModalInner((data) => {
         path.value = data.path;
         bucket.value = data.bucket;
@@ -44,22 +38,25 @@
       const uploadParams = computed(() => {
         return {
           bucket: unref(bucket),
-          path: unref(path),
+          path: unref(path.value),
         };
       });
 
-      function beforeUpload(file: FileItem) {
-        fileList.value = [...fileList.value, file];
-        return false;
-      }
+      const maxSize = computed(() => {
+        const abpStore = useAbpStoreWidthOut();
+        const { values } = abpStore.getApplication.setting;
+        if (values && values['Abp.OssManagement.FileLimitLength']) {
+          return Number(values['Abp.OssManagement.FileLimitLength']);
+        }
+        return 20;
+      });
 
       return {
         t,
-        fileList,
+        maxSize,
         uploadObject,
         uploadParams,
         registerModal,
-        beforeUpload,
       };
     },
   });

@@ -50,7 +50,7 @@
   import { useUploadType } from './useUpload';
   import { useMessage } from '/@/hooks/web/useMessage';
   //   types
-  import { FileItem, UploadResultStatus } from './types';
+  import { FileItem, UploadResultStatus } from './typing';
   import { basicProps } from './props';
   import { createTableColumns, createActionColumn } from './data';
   // utils
@@ -58,8 +58,7 @@
   import { buildUUID } from '/@/utils/uuid';
   import { isFunction } from '/@/utils/is';
   import { warn } from '/@/utils/log';
-  import FileList from './FileList';
-
+  import FileList from './FileList.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     components: { BasicModal, Upload, Alert, FileList },
@@ -70,36 +69,30 @@
         default: () => [],
       },
     },
-    emits: ['change', 'register'],
+    emits: ['change', 'register', 'delete'],
     setup(props, { emit }) {
-      const { t } = useI18n();
-
-      //   是否正在上传
-      const isUploadingRef = ref(false);
-      const fileListRef = ref<FileItem[]>([]);
       const state = reactive<{ fileList: FileItem[] }>({
         fileList: [],
       });
-
-      const [register, { closeModal }] = useModalInner();
-
+      //   是否正在上传
+      const isUploadingRef = ref(false);
+      const fileListRef = ref<FileItem[]>([]);
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
+      const { t } = useI18n();
+      const [register, { closeModal }] = useModalInner();
       const { getAccept, getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
         helpTextRef: helpText,
         maxNumberRef: maxNumber,
         maxSizeRef: maxSize,
       });
-
       const { createMessage } = useMessage();
-
       const getIsSelectFile = computed(() => {
         return (
           fileListRef.value.length > 0 &&
           !fileListRef.value.every((item) => item.status === UploadResultStatus.SUCCESS)
         );
       });
-
       const getOkButtonProps = computed(() => {
         const someSuccess = fileListRef.value.some(
           (item) => item.status === UploadResultStatus.SUCCESS
@@ -108,7 +101,6 @@
           disabled: isUploadingRef.value || fileListRef.value.length === 0 || !someSuccess,
         };
       });
-
       const getUploadBtnText = computed(() => {
         const someError = fileListRef.value.some(
           (item) => item.status === UploadResultStatus.ERROR
@@ -119,18 +111,17 @@
           ? t('component.upload.reUploadFailed')
           : t('component.upload.startUpload');
       });
-
       // 上传前校验
       function beforeUpload(file: File) {
         const { size, name } = file;
         const { maxSize } = props;
         const accept = unref(getAccept);
         // 设置最大值，则判断
+        console.log(file.size);
         if (maxSize && file.size / 1024 / 1024 >= maxSize) {
           createMessage.error(t('component.upload.maxSizeMultiple', [maxSize]));
           return false;
         }
-
         // 设置类型,则判断
         if (accept.length > 0 && !checkFileType(file, accept)) {
           createMessage.error!(t('component.upload.acceptUpload', [accept.join(',')]));
@@ -166,8 +157,8 @@
       function handleRemove(record: FileItem) {
         const index = fileListRef.value.findIndex((item) => item.uuid === record.uuid);
         index !== -1 && fileListRef.value.splice(index, 1);
+        emit('delete', record);
       }
-
       // 预览
       // function handlePreview(record: FileItem) {
       //   const { thumbUrl = '' } = record;
@@ -175,7 +166,6 @@
       //     imageList: [thumbUrl],
       //   });
       // }
-
       async function uploadApiByItem(item: FileItem) {
         const { api } = props;
         if (!api || !isFunction(api)) {
@@ -208,7 +198,6 @@
           };
         }
       }
-
       // 点击开始上传
       async function handleStartUpload() {
         const { maxNumber } = props;
@@ -234,11 +223,9 @@
           throw e;
         }
       }
-
       //   点击保存
       function handleOk() {
         const { maxNumber } = props;
-
         if (fileListRef.value.length > maxNumber) {
           return createMessage.warning(t('component.upload.maxNumber', [maxNumber]));
         }
@@ -246,7 +233,6 @@
           return createMessage.warning(t('component.upload.saveWarn'));
         }
         const fileList: string[] = [];
-
         for (const item of fileListRef.value) {
           const { status, responseData } = item;
           if (status === UploadResultStatus.SUCCESS && responseData) {
@@ -261,9 +247,8 @@
         closeModal();
         emit('change', fileList);
       }
-
       // 点击关闭：则所有操作不保存，包括上传的
-      function handleCloseFunc() {
+      async function handleCloseFunc() {
         if (!isUploadingRef.value) {
           fileListRef.value = [];
           return true;
@@ -272,10 +257,9 @@
           return false;
         }
       }
-
       return {
-        columns: createTableColumns(),
-        actionColumn: createActionColumn(handleRemove),
+        columns: createTableColumns() as any[],
+        actionColumn: createActionColumn(handleRemove) as any,
         register,
         closeModal,
         getHelpText,
