@@ -1,19 +1,63 @@
-import { Ref } from 'vue';
+import type { Ref } from 'vue';
+
 import { cloneDeep } from 'lodash-es';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { computed, watch, unref } from 'vue';
-import { FormActionType } from '/@/components/Form';
-import { CreateUser, User, UpdateUser } from '/@/api/identity/model/userModel';
-import { create, getAssignableRoles, getById, getRoleList, update } from '/@/api/identity/user';
-import { getModalFormSchemas } from '../datas/ModalData';
+import { computed, reactive, ref, unref, onMounted } from 'vue';
+import { CreateUser, UpdateUser } from '/@/api/identity/model/userModel';
+import { create, getById, getRoleList, update } from '/@/api/identity/user';
+import { getAssignableRoles } from '/@/api/identity/user';
+import { Role } from '/@/api/identity/model/roleModel';
 
 interface UseUserFormContext {
-  userRef: Ref<Nullable<User>>;
-  formElRef: Ref<Nullable<FormActionType>>;
+  userRef: Ref<Recordable>;
+  formElRef: Ref<any>;
 }
 
 export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
   const { t } = useI18n();
+  const assignableRoles = ref<Role[]>([]);
+
+  onMounted(() => {
+    getAssignableRoles().then((res) => {
+      assignableRoles.value = res.items;
+    });
+  });
+
+  const formRules = reactive({
+    userName: [
+      {
+        trigger: 'blur',
+        required: true,
+        message: `${t('common.inputText')} ${t('AbpIdentity.UserName')}`,
+      },
+    ],
+    password: [
+      {
+        trigger: 'blur',
+        required: true,
+        message: `${t('common.inputText')} ${t('AbpIdentity.Password')}`,
+      },
+    ],
+    email: [
+      {
+        trigger: 'blur',
+        required: true,
+        message: `${t('common.inputText')} ${t('AbpIdentity.DisplayName:Email')}`,
+      },
+    ],
+  });
+
+  const roleDataSource = computed(() => {
+    const roles = unref(assignableRoles);
+    return roles.map((role) => {
+      return {
+        key: role.name,
+        title: role.name,
+        description: role.name,
+        disabled: false,
+      };
+    });
+  });
 
   const userTitle = computed(() => {
     if (unref(userRef)?.id) {
@@ -22,58 +66,70 @@ export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
     return t('AbpIdentity.NewUser');
   });
 
-  const userSchemas = computed(() => {
-    return [...getModalFormSchemas()];
-  });
-
-  function handleSaveUser(val) {
-    const api = val.id
-      ? update(val.id, cloneDeep(val) as UpdateUser)
-      : create(cloneDeep(val) as CreateUser);
-    return api;
-  }
-
-  async function warpAssignableRoles() {
-    const { items } = await getAssignableRoles();
-    const roleOptions = items.map((role) => {
-      return {
-        key: role.name,
-        label: role.name,
-        value: role.name,
-      };
-    });
-    const formEl = unref(formElRef);
-    formEl?.updateSchema({
-      field: 'roleNames',
-      componentProps: {
-        options: roleOptions,
-      },
-    });
-  }
-
-  watch(
-    () => unref(userRef)?.id,
-    async (id) => {
-      const formEl = unref(formElRef);
-      formEl?.resetFields();
-      if (id) {
-        const user = await getById(id);
-        const userRoles = await getRoleList(id);
-        const roleNames = userRoles.items.map((role) => role.name);
-        userRef.value = user;
-        formEl?.setFieldsValue(
-          Object.assign(user, {
-            roleNames: roleNames,
-          })
-        );
-      }
+  async function getUser(id) {
+    userRef.value = {
+      roleNames: [],
+    };
+    if (id) {
+      const user = await getById(id);
+      const userRoles = await getRoleList(id);
+      const roleNames = userRoles.items.map((role) => role.name);
+      user.roleNames = roleNames;
+      userRef.value = user;
     }
-  );
+  }
+
+  function handleRoleChange(_, direction, moveRoles: string[]) {
+    const user = unref(userRef);
+    user.roleNames = user.roleNames ?? [];
+    switch (direction) {
+      case 'left':
+        moveRoles.forEach((key) => {
+          const index = user.roleNames.findIndex((role) => role === key);
+          if (index >= 0) {
+            user.roleNames.splice(index, 1);
+          }
+        });
+        break;
+      case 'right':
+        moveRoles.forEach((key) => {
+          user.roleNames.push(key);
+        });
+        break;
+    }
+  }
+
+  function handleSubmit() {
+    return new Promise((resolve, reject) => {
+      const formEl = unref(formElRef);
+      formEl
+        .validate()
+        .then(() => {
+          const user = unref(userRef);
+          const api = user.id
+            ? update(user.id, cloneDeep(user) as UpdateUser)
+            : create(cloneDeep(user) as CreateUser);
+          api
+            .then((res) => {
+              userRef.value = {};
+              resolve(res);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
   return {
     userTitle,
-    userSchemas,
-    handleSaveUser,
-    warpAssignableRoles,
+    formRules,
+    roleDataSource,
+    getUser,
+    handleRoleChange,
+    handleSubmit,
   };
 }
