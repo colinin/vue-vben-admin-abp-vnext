@@ -23,7 +23,8 @@ export class UrlBuilder {
     methodArguments: any,
     apiVersion: ApiVersionInfo
   ) {
-    let urlBuilder = action.url;
+    // fix: 需要前缀，可能引起api调用错误
+    let urlBuilder = action.url.startsWith('/') ? action.url : `/${action.url}`;
     urlBuilder = this.replacePathVariables(
       urlBuilder,
       action.parameters,
