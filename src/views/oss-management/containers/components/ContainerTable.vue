@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
+  import { defineComponent } from 'vue';
   import { Modal, message } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { usePermission } from '/@/hooks/web/usePermission';
@@ -47,6 +47,7 @@
   import { createContainer, deleteContainer, getContainers } from '/@/api/oss-management/oss';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
+  import { formatPagedRequest } from '/@/utils/http/abp/helper';
 
   export default defineComponent({
     name: 'ContainerTable',
@@ -58,7 +59,6 @@
     },
     setup() {
       const { t } = useI18n();
-      const marker = ref('');
       const { hasPermission } = usePermission();
       const [registerModal, { openModal, closeModal }] = useModal();
       const [registerForm, { validate, resetFields }] = useForm({
@@ -80,13 +80,7 @@
           listField: 'containers',
           totalField: 'maxKeys',
         },
-        beforeFetch: (request) => {
-          request.marker = request.skipCount === 1 ? '' : unref(marker);
-        },
-        beforeResponse: (res) => {
-          marker.value = res.nextMarker;
-          return res;
-        },
+        beforeFetch: formatPagedRequest,
         pagination: true,
         striped: false,
         useSearchForm: true,

@@ -31,7 +31,7 @@
               v-if="!lockTree"
               :tree-data="folders"
               :expandedKeys="expandedKeys"
-              @expand="handleFolderExpand"
+              @expand="fetchFolders"
               @select="handleSelectFolder"
             />
           </template>
@@ -86,17 +86,16 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, onMounted, ref, unref } from 'vue';
+  import { computed, defineComponent, unref } from 'vue';
   import { Card, Modal, Tree, Select } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { getContainers, getObjects, deleteObject, downloadUrl } from '/@/api/oss-management/oss';
-  import { OssContainer, OssObject } from '/@/api/oss-management/model/ossModel';
+  import { getObjects, deleteObject, downloadUrl } from '/@/api/oss-management/oss';
   import { getDataColumns } from '../datas/TableData';
-  import { TreeDataItem } from 'ant-design-vue/es/tree/Tree';
   import { format } from '/@/utils/strings';
+  import { useObjects } from '../hooks/useObjects';
   import OssUploadModal from './OssUploadModal.vue';
   import OssFolderModal from './OssFolderModal.vue';
   import OssPreviewModal from './OssPreviewModal.vue';
@@ -120,24 +119,21 @@
       // 暂时不将逻辑代码移动到hooks，也不算太复杂 Orz...
 
       const { t } = useI18n();
-      const rootFolder: TreeDataItem = {
-        key: './',
-        title: t('AbpOssManagement.Objects:Root'),
-        path: '',
-        children: [],
-      };
-      const folders = ref<TreeDataItem[]>([rootFolder]);
-      const objects = ref<OssObject[]>([]);
-      const containers = ref<OssContainer[]>([]);
-      const bucket = ref('');
-      const path = ref('');
-      const marker = ref('');
-      const expandedKeys = ref<string[]>([]);
       const { hasPermission } = usePermission();
       const [registerFolderModal, { openModal: openFolderModal }] = useModal();
       const [registerUploadModal, { openModal: openUploadModal }] = useModal();
       const [registerPreviewModal, { openModal: openPreviewModal }] = useModal();
-      const [registerTable, { reload, setPagination, setTableData }] = useTable({
+      const {
+        path,
+        bucket,
+        folders,
+        containers,
+        expandedKeys,
+        fetchFolders,
+        beforeFetch,
+        handleContainerChange,
+      } = useObjects();
+      const [registerTable, { reload, setPagination }] = useTable({
         rowKey: 'name',
         title: t('AbpOssManagement.DisplayName:OssObject'),
         columns: getDataColumns(),
@@ -148,16 +144,7 @@
           listField: 'objects',
           totalField: 'maxKeys',
         },
-        beforeFetch: (request) => {
-          request.marker = request.skipCount === 1 ? '' : unref(marker);
-          request.bucket = unref(bucket);
-          request.prefix = unref(path);
-          request.delimiter = '/';
-        },
-        beforeResponse: (res) => {
-          marker.value = res.nextMarker;
-          return res;
-        },
+        beforeFetch: beforeFetch,
         pagination: true,
         striped: false,
         useSearchForm: false,
@@ -181,80 +168,12 @@
         return unref(bucket) ? false : true;
       });
 
-      onMounted(() => {
-        getContainers({
-          prefix: '',
-          marker: '',
-          sorting: '',
-          skipCount: 1,
-          maxResultCount: 100,
-        }).then((res) => {
-          containers.value = res.containers;
-        });
-      });
-
-      function handleContainerChange(container) {
-        rootFolder.value = {
-          key: './',
-          title: t('AbpOssManagement.Objects:Root'),
-          path: '',
-          isLeaf: false,
-          children: [],
-        };
-        bucket.value = container;
-        folders.value = [rootFolder];
-        marker.value = '';
-        expandedKeys.value = [];
-      }
-
-      function handleFolderExpand(keys, e) {
-        expandedKeys.value = keys;
-        path.value = e.node.dataRef.path + e.node.eventKey;
-        getObjects({
-          bucket: unref(bucket),
-          prefix: unref(path),
-          delimiter: '/',
-          marker: '',
-          encodingType: '',
-          sorting: '',
-          skipCount: 1,
-          maxResultCount: 10,
-        }).then((res) => {
-          const fs = res.objects
-            .filter((item) => item.isFolder)
-            .map((item) => {
-              return {
-                key: item.name,
-                title: item.name,
-                createDate: item.creationTime,
-                path: item.path,
-                children: [],
-              } as TreeDataItem;
-            });
-          e.node.dataRef.children = [...fs];
-        });
-      }
-
       function handleSelectFolder(folders, e) {
-        marker.value = '';
         path.value = e.node.dataRef.path + folders[0];
-        getObjects({
-          bucket: unref(bucket),
-          prefix: unref(path),
-          marker: unref(marker),
-          delimiter: '/',
-          encodingType: '',
-          sorting: '',
-          skipCount: 1,
-          maxResultCount: 10,
-        }).then((res) => {
-          objects.value = res.objects;
-          marker.value = res.nextMarker;
-          setTableData(res.objects);
-          setPagination({
-            total: res.maxKeys,
-          });
+        setPagination({
+          current: 1,
         });
+        reload();
       }
 
       function handleDelete(record) {
@@ -321,7 +240,7 @@
         folders,
         lockTree,
         expandedKeys,
-        handleFolderExpand,
+        fetchFolders,
         handleSelectFolder,
         containers,
         handleContainerChange,
