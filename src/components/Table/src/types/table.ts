@@ -160,6 +160,8 @@ export interface BasicTableProps<T = any> {
   api?: (...arg: any) => Promise<any>;
   // 请求之前处理参数
   beforeFetch?: Fn;
+  // 响应之前处理结果
+  beforeResponse?: Fn;
   // 自定义处理接口返回参数
   afterFetch?: Fn;
   // 查询条件请求之前处理

@@ -83,6 +83,10 @@
         beforeFetch: (request) => {
           request.marker = request.skipCount === 1 ? '' : unref(marker);
         },
+        beforeResponse: (res) => {
+          marker.value = res.nextMarker;
+          return res;
+        },
         pagination: true,
         striped: false,
         useSearchForm: true,

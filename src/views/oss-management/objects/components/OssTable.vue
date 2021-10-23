@@ -154,6 +154,10 @@
           request.prefix = unref(path);
           request.delimiter = '/';
         },
+        beforeResponse: (res) => {
+          marker.value = res.nextMarker;
+          return res;
+        },
         pagination: true,
         striped: false,
         useSearchForm: false,

@@ -174,8 +174,16 @@ export function useDataSource(
   }
 
   async function fetch(opt?: FetchParams) {
-    const { api, searchInfo, fetchSetting, beforeFetch, afterFetch, useSearchForm, pagination } =
-      unref(propsRef);
+    const {
+      api,
+      searchInfo,
+      fetchSetting,
+      beforeFetch,
+      beforeResponse,
+      afterFetch,
+      useSearchForm,
+      pagination,
+    } = unref(propsRef);
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);
@@ -207,7 +215,12 @@ export function useDataSource(
         params = beforeFetch(params) || params;
       }
 
-      const res = await api(params);
+      let res = await api(params);
+
+      // 增加用户自定义的返回数据处理函数
+      if (beforeResponse && isFunction(beforeResponse)) {
+        res = beforeResponse(res);
+      }
 
       const isArrayResult = Array.isArray(res);
 
