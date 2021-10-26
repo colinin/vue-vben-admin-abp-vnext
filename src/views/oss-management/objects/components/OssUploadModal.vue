@@ -86,14 +86,14 @@
             ifShow: false,
           },
           {
-            title: '文件名',
+            title: t('AbpOssManagement.DisplayName:Name'),
             dataIndex: 'name',
             align: 'left',
             width: 300,
             sorter: true,
           },
           {
-            title: '大小',
+            title: t('AbpOssManagement.DisplayName:Size'),
             dataIndex: 'size',
             align: 'left',
             width: 100,
@@ -103,7 +103,7 @@
             },
           },
           {
-            title: '状态',
+            title: t('AbpOssManagement.DisplayName:Status'),
             dataIndex: 'status',
             align: 'left',
             width: 'auto',
