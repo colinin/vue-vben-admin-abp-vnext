@@ -173,12 +173,15 @@
       function _filesSubmitted(_, files) {
         files.forEach((f) => {
           f.paused = true;
+          f.progress = '0 %';
         });
         fileList.value.push(...files);
       }
 
       function _fileProgress(_, file) {
-        file.progress = `${Math.floor((file._prevUploadedSize / file.size) * 100)} %`;
+        if (file._prevUploadedSize) {
+          file.progress = `${Math.floor((file._prevUploadedSize / file.size) * 100)} %`;
+        }
       }
 
       function _fileError(_, file, message) {
