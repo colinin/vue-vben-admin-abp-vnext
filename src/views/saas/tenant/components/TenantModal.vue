@@ -7,8 +7,8 @@
     :showCancelBtn="!loading"
     :maskClosable="!loading"
     :closable="!loading"
-    :height="330"
-    :min-height="66"
+    :width="800"
+    :height="500"
     @register="registerModal"
     @ok="handleSubmit"
   >
