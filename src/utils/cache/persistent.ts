@@ -2,6 +2,7 @@ import type { LockInfo, UserInfo } from '/#/store';
 import type { ProjectConfig } from '/#/config';
 import type { RouteLocationNormalized } from 'vue-router';
 
+import { del as delCookie } from '/@/utils/cookie';
 import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
 import {
@@ -51,6 +52,7 @@ function initPersistentMemory() {
 
 export class Persistent {
   static setTenant(value: string | '') {
+    delCookie('__tenant');
     ls.set(ABP_TENANT_KEY, value);
   }
 

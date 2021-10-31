@@ -52,6 +52,27 @@ export function getModalFormSchemas(): FormSchema[] {
         return values.id ? false : true;
       },
     },
+    {
+      field: 'useSharedDatabase',
+      component: 'Checkbox',
+      label: '',
+      colProps: { span: 24 },
+      defaultValue: true,
+      renderComponentContent: t('AbpTenantManagement.DisplayName:UseSharedDatabase'),
+    },
+    {
+      field: 'defaultConnectionString',
+      component: 'InputTextArea',
+      label: t('AbpTenantManagement.DisplayName:DefaultConnectionString'),
+      colProps: { span: 24 },
+      required: true,
+      ifShow: ({ values }) => {
+        return !values.useSharedDatabase;
+      },
+      componentProps: {
+        rows: 4,
+      },
+    },
   ];
 }
 

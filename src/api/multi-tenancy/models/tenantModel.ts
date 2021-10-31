@@ -14,6 +14,10 @@ export class TenantCreateOrEdit {
   adminPassword = '';
   /** 租户名称 */
   name = '';
+  /** 使用共享数据库 */
+  useSharedDatabase = true;
+  /** 默认连接字符串 */
+  defaultConnectionString = '';
 }
 
 /** 租户对象 */
