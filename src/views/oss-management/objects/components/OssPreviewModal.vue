@@ -10,13 +10,12 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, unref } from 'vue';
+  import { defineComponent, ref, unref, watch } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { ImagePreview } from '/@/components/Preview';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
-  import { downloadUrl } from '/@/api/oss-management/oss';
-  import { format } from '/@/utils/strings';
+  import { downloadBlob } from '/@/api/oss-management/oss';
 
   export default defineComponent({
     name: 'OssPreviewModal',
@@ -25,33 +24,28 @@
       const { t } = useI18n();
       const bucket = ref('');
       const objects = ref<OssObject[]>([]);
+      const previewImages = ref<any[]>([]);
       const [registerModal] = useModalInner((data) => {
         bucket.value = data.bucket;
         objects.value = data.objects;
       });
-      const previewImages = computed(() => {
-        const objs = unref(objects);
-        return objs
-          .filter((obj) => !obj.isFolder)
-          .map((obj) => {
-            return {
-              src: generateOssUrl(unref(bucket), obj.path, obj.name),
+
+      watch(
+        () => unref(objects),
+        async (objs) => {
+          previewImages.value = [];
+          const images: any[] = [];
+          for (let i = 0; i < objs.length; i++) {
+            const blob = await downloadBlob(unref(bucket), objs[i].path, objs[i].name);
+            images.push({
+              src: URL.createObjectURL(blob),
               width: '100%',
               height: '100%',
-            };
-          });
-      });
-
-      function generateOssUrl(bucket: string, path: string, object: string) {
-        if (path) {
-          // 对 Path部分的 URL 编码
-          path = encodeURIComponent(path);
-          if (path.endsWith('%2F')) {
-            path = path.substring(0, path.length - 3);
+            });
           }
+          previewImages.value = images;
         }
-        return format(downloadUrl, { bucket: bucket, path: path, name: object });
-      }
+      );
 
       return {
         t,

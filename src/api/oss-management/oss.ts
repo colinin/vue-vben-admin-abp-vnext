@@ -29,6 +29,28 @@ enum Api {
 
 export const uploadUrl = Api.UploadObject;
 export const downloadUrl = Api.DownloadObject;
+
+export function generateOssUrl(bucket: string, path: string, object: string) {
+  if (path) {
+    // 对 Path部分的 URL 编码
+    path = encodeURIComponent(path);
+    if (path !== '.%2F' && path.endsWith('%2F')) {
+      path = path.substring(0, path.length - 3);
+    }
+  }
+  return format(downloadUrl, { bucket: bucket, path: path, name: object });
+}
+
+export const downloadBlob = (bucket: string, path: string, object: string) => {
+  return defAbpHttp.get<Blob>({
+    url: generateOssUrl(bucket, path, object),
+    headers: {
+      accept: 'application/json',
+    },
+    responseType: 'blob',
+  });
+};
+
 /**
  * 分片上传文件
  * @param params 文件参数

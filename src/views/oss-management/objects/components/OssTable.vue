@@ -92,9 +92,8 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { getObjects, deleteObject, downloadUrl } from '/@/api/oss-management/oss';
+  import { getObjects, deleteObject, generateOssUrl } from '/@/api/oss-management/oss';
   import { getDataColumns } from '../datas/TableData';
-  import { format } from '/@/utils/strings';
   import { useObjects } from '../hooks/useObjects';
   import OssUploadModal from './OssUploadModal.vue';
   import OssFolderModal from './OssFolderModal.vue';
@@ -200,17 +199,6 @@
         link.setAttribute('download', record.name);
         document.body.appendChild(link);
         link.click();
-      }
-
-      function generateOssUrl(bucket: string, path: string, object: string) {
-        if (path) {
-          // 对 Path部分的 URL 编码
-          path = encodeURIComponent(path);
-          if (path.endsWith('%2F')) {
-            path = path.substring(0, path.length - 3);
-          }
-        }
-        return format(downloadUrl, { bucket: bucket, path: path, name: object });
       }
 
       function handleUpload() {
