@@ -58,6 +58,9 @@ export function getModalFormSchemas(): FormSchema[] {
       label: '',
       colProps: { span: 24 },
       defaultValue: true,
+      ifShow: ({ values }) => {
+        return values.id ? false : true;
+      },
       renderComponentContent: t('AbpTenantManagement.DisplayName:UseSharedDatabase'),
     },
     {
