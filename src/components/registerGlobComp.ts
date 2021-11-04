@@ -1,9 +1,9 @@
 import { Icon } from './Icon';
 import { Button } from './Button';
+import { Input } from './Input';
 import {
   // Need
   Button as AntButton,
-  Input,
 } from 'ant-design-vue';
 
 import { App } from 'vue';

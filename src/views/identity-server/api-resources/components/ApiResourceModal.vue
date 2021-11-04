@@ -94,7 +94,8 @@
   import { defineComponent, ref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { DownOutlined } from '@ant-design/icons-vue';
-  import { Checkbox, Dropdown, Menu, Tabs, Form, Input } from 'ant-design-vue';
+  import { Checkbox, Dropdown, Menu, Tabs, Form } from 'ant-design-vue';
+  import { Input } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useModal } from '../hooks/useModal';
   import { useSecret } from '../hooks/useSecret';

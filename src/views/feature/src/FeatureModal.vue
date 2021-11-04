@@ -53,7 +53,8 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { Checkbox, Form, Input, InputNumber, Select, Tabs } from 'ant-design-vue';
+  import { Checkbox, Form, InputNumber, Select, Tabs } from 'ant-design-vue';
+  import { Input } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useFeature } from '../hooks/useFeature';
   export default defineComponent({

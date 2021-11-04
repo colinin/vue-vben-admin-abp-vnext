@@ -33,10 +33,10 @@
             }}</Checkbox>
           </FormItem>
           <FormItem name="clientId" required :label="t('AbpIdentityServer.Client:Id')">
-            <Input v-model:value="modelRef.clientId" :disabled="isEdit" />
+            <BInput v-model:value="modelRef.clientId" :disabled="isEdit" />
           </FormItem>
           <FormItem name="clientName" required :label="t('AbpIdentityServer.Name')">
-            <Input v-model:value="modelRef.clientName" />
+            <BInput v-model:value="modelRef.clientName" />
           </FormItem>
           <FormItem name="description" :label="t('AbpIdentityServer.Description')">
             <TextArea v-model:value="modelRef.description" />
@@ -50,7 +50,7 @@
             name="allowedIdentityTokenSigningAlgorithms"
             :label="t('AbpIdentityServer.Client:AllowedIdentityTokenSigningAlgorithms')"
           >
-            <Input v-model:value="modelRef.allowedIdentityTokenSigningAlgorithms" />
+            <BInput v-model:value="modelRef.allowedIdentityTokenSigningAlgorithms" />
           </FormItem>
           <FormItem name="requirePkce" :label="t('AbpIdentityServer.Client:RequiredPkce')">
             <Checkbox v-model:checked="modelRef.requirePkce">{{
@@ -131,7 +131,7 @@
             name="frontChannelLogoutUri"
             :label="t('AbpIdentityServer.Client:FrontChannelLogoutUri')"
           >
-            <Input v-model:value="modelRef.frontChannelLogoutUri" />
+            <BInput v-model:value="modelRef.frontChannelLogoutUri" />
           </FormItem>
           <FormItem
             name="enabled"
@@ -146,7 +146,7 @@
             name="backChannelLogoutUri"
             :label="t('AbpIdentityServer.Client:BackChannelLogoutUri')"
           >
-            <Input v-model:value="modelRef.backChannelLogoutUri" />
+            <BInput v-model:value="modelRef.backChannelLogoutUri" />
           </FormItem>
         </TabPane>
 
@@ -248,13 +248,13 @@
             name="clientClaimsPrefix"
             :label="t('AbpIdentityServer.Client:ClientClaimsPrefix')"
           >
-            <Input v-model:value="modelRef.clientClaimsPrefix" />
+            <BInput v-model:value="modelRef.clientClaimsPrefix" />
           </FormItem>
           <FormItem
             name="pairWiseSubjectSalt"
             :label="t('AbpIdentityServer.Client:PairWiseSubjectSalt')"
           >
-            <Input v-model:value="modelRef.pairWiseSubjectSalt" />
+            <BInput v-model:value="modelRef.pairWiseSubjectSalt" />
           </FormItem>
         </TabPane>
 
@@ -274,17 +274,17 @@
             }}</Checkbox>
           </FormItem>
           <FormItem name="clientUri" :label="t('AbpIdentityServer.Client:ClientUri')">
-            <Input v-model:value="modelRef.clientUri" />
+            <BInput v-model:value="modelRef.clientUri" />
           </FormItem>
           <FormItem name="logoUri" :label="t('AbpIdentityServer.Client:LogoUri')">
-            <Input v-model:value="modelRef.logoUri" />
+            <BInput v-model:value="modelRef.logoUri" />
           </FormItem>
         </TabPane>
 
         <!-- 设备流程 -->
         <TabPane key="deviceFlow" :tab="t('AbpIdentityServer.DeviceFlow')">
           <FormItem name="userCodeType" :label="t('AbpIdentityServer.Client:UserCodeType')">
-            <Input v-model:value="modelRef.userCodeType" />
+            <BInput v-model:value="modelRef.userCodeType" />
           </FormItem>
           <FormItem
             name="deviceCodeLifetime"
@@ -331,6 +331,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form, Input, InputNumber, Select } from 'ant-design-vue';
+  import { Input as BInput } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useModal } from '../hooks/useModal';
   import ClientCallback from './ClientCallback.vue';
@@ -365,7 +366,7 @@
       MenuItem: Menu.Item,
       Tabs,
       TabPane: Tabs.TabPane,
-      Input,
+      BInput,
       InputNumber,
       TextArea: Input.TextArea,
       Checkbox,

@@ -24,7 +24,7 @@
   >
     <Form layout="vertical" :model="formModelRef">
       <FormItem :label="t('AbpUiMultiTenancy.SwitchTenantHint')">
-        <Input :allowClear="true" v-model:value="formModelRef.tenantName" />
+        <BInput :allowClear="true" v-model:value="formModelRef.tenantName" />
       </FormItem>
     </Form>
   </BasicModal>
@@ -33,6 +33,7 @@
 <script lang="ts">
   import { defineComponent, ref, unref, onMounted } from 'vue';
   import { Button, Form, Input } from 'ant-design-vue';
+  import { Input as BInput } from '/@/components/Input';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { Persistent } from '/@/utils/cache/persistent';
 
@@ -50,7 +51,7 @@
       Button,
       Form,
       FormItem: Form.Item,
-      Input,
+      BInput,
       InputSearch: Input.Search,
     },
     setup() {

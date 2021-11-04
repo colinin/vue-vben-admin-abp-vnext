@@ -26,10 +26,11 @@ import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
+import { Input as BInput } from '/@/components/Input';
 
 const componentMap = new Map<ComponentType, Component>();
 
-componentMap.set('Input', Input);
+componentMap.set('Input', BInput);
 componentMap.set('InputGroup', Input.Group);
 componentMap.set('InputPassword', Input.Password);
 componentMap.set('InputSearch', Input.Search);

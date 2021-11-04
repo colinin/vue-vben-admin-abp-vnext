@@ -26,14 +26,14 @@
                     :placeholder="detail.description"
                     @input="handleValueChange(detail)"
                   />
-                  <Input
+                  <BInput
                     v-if="detail.valueType === 0 && !detail.isEncrypted"
                     v-model:value="detail.value"
                     :placeholder="detail.description"
                     type="text"
                     @input="handleValueChange(detail)"
                   />
-                  <Input
+                  <BInput
                     v-if="detail.valueType === 1"
                     v-model:value="detail.value"
                     :placeholder="detail.description"
@@ -90,6 +90,7 @@
   import { defineComponent, ref, toRaw } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col } from 'ant-design-vue';
+  import { Input as BInput } from '/@/components/Input';
 
   import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
 
@@ -106,7 +107,7 @@
       CollapsePanel: Collapse.Panel,
       Form: Form,
       FormItem: Form.Item,
-      Input,
+      BInput,
       Select,
       SelectOption: Select.Option,
       Tabs: Tabs,

@@ -12,7 +12,11 @@
       <MultiTenancyBox />
     </FormItem>
     <FormItem name="account" class="enter-x">
-      <Input size="large" v-model:value="formData.account" :placeholder="t('sys.login.userName')" />
+      <BInput
+        size="large"
+        v-model:value="formData.account"
+        :placeholder="t('sys.login.userName')"
+      />
     </FormItem>
     <FormItem name="password" class="enter-x">
       <InputPassword
@@ -83,6 +87,7 @@
   import { defineComponent, reactive, ref, toRaw, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
+  import { Input as BInput } from '/@/components/Input';
   import {
     GithubFilled,
     WechatFilled,
@@ -110,7 +115,7 @@
       Button,
       Form,
       FormItem: Form.Item,
-      Input,
+      BInput,
       Divider,
       LoginFormTitle,
       InputPassword: Input.Password,

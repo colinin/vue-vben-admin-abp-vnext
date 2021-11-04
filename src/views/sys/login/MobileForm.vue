@@ -27,7 +27,8 @@
 <script lang="ts">
   import { defineComponent, reactive, ref, computed, unref } from 'vue';
 
-  import { Form, Input, Button } from 'ant-design-vue';
+  import { Form, Button } from 'ant-design-vue';
+  import { Input } from '/@/components/Input';
   import { CountdownInput } from '/@/components/CountDown';
   import LoginFormTitle from './LoginFormTitle.vue';
 

@@ -17,22 +17,22 @@
       <Tabs v-model:activeKey="activedTab">
         <TabPane key="info" :tab="t('AbpIdentity.UserInformations')">
           <FormItem name="userName" :label="t('AbpIdentity.UserName')">
-            <Input v-model:value="userRef.userName" />
+            <BInput v-model:value="userRef.userName" />
           </FormItem>
           <FormItem v-if="!userRef.id" name="password" :label="t('AbpIdentity.Password')">
             <InputPassword v-model:value="userRef.password" />
           </FormItem>
           <FormItem name="surname" :label="t('AbpIdentity.DisplayName:Surname')">
-            <Input v-model:value="userRef.surname" />
+            <BInput v-model:value="userRef.surname" />
           </FormItem>
           <FormItem name="name" :label="t('AbpIdentity.DisplayName:Name')">
-            <Input v-model:value="userRef.name" />
+            <BInput v-model:value="userRef.name" />
           </FormItem>
           <FormItem name="email" :label="t('AbpIdentity.DisplayName:Email')">
-            <Input v-model:value="userRef.email" />
+            <BInput v-model:value="userRef.email" />
           </FormItem>
           <FormItem name="phoneNumber" :label="t('AbpIdentity.DisplayName:PhoneNumber')">
-            <Input v-model:value="userRef.phoneNumber" />
+            <BInput v-model:value="userRef.phoneNumber" />
           </FormItem>
           <FormItem :label="t('AbpIdentity.LockoutEnabled')">
             <Checkbox v-model:checked="userRef.lockoutEnabled">{{
@@ -62,7 +62,8 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { message, Checkbox, Form, Tabs, Input, Transfer } from 'ant-design-vue';
+  import { message, Checkbox, Input, Form, Tabs, Transfer } from 'ant-design-vue';
+  import { Input as BInput } from '/@/components/Input';
   import { FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useUserForm } from '../hooks/useUserForm';
@@ -76,7 +77,7 @@
       FormItem: Form.Item,
       Tabs,
       TabPane: Tabs.TabPane,
-      Input,
+      BInput,
       InputPassword: Input.Password,
       Transfer,
     },
