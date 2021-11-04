@@ -9,7 +9,7 @@
   import { defineComponent, ref } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+  import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
   import SettingForm from './SettingForm.vue';
   import { SettingGroup } from '/@/api/settings/model/settingModel';
@@ -26,7 +26,7 @@
     },
     setup() {
       const group = ref<SettingGroup[]>();
-      const abpStore = useAbpStoreWidthOut();
+      const abpStore = useAbpStoreWithOut();
       const providerName = ref('G');
       const providerKey = ref<string | undefined>('');
       const hasChangeSetting = ref(false);

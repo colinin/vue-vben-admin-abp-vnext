@@ -17,7 +17,7 @@ import {
   updateChildrenGrant,
   toPermissionList,
 } from '../utils/helper';
-import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 interface UsePermission {
   getPropsRef: Ref<PermissionProps>;
@@ -53,7 +53,7 @@ export function usePermissions({ getPropsRef }: UsePermission) {
 
   /** 是否禁用所有权限复选框 */
   const permissionTreeDisabled = computed(() => {
-    const abpStore = useAbpStoreWidthOut();
+    const abpStore = useAbpStoreWithOut();
     const props = unref(getPropsRef);
     const { currentUser } = abpStore.getApplication;
     // if (props.providerName === 'R') {
@@ -147,7 +147,7 @@ export function usePermissions({ getPropsRef }: UsePermission) {
       permissionTree.value = [];
       const props = unref(getPropsRef);
       handleGetPermission(props.providerName, key);
-    }
+    },
   );
 
   return {

@@ -147,7 +147,7 @@
           {
             parentId: parentId,
           } as Data,
-          true
+          true,
         );
       },
       handleSaveChanges(val) {

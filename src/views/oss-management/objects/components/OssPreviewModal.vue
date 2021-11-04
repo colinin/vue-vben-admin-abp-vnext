@@ -44,7 +44,7 @@
             });
           }
           previewImages.value = images;
-        }
+        },
       );
 
       return {

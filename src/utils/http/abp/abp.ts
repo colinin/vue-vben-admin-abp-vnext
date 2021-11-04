@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 
-import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import {
   ActionApiDescriptionModel,
   ApiVersionInfo,
@@ -12,7 +12,7 @@ import { ListResultDto, PagedResultDto } from '/@/api/model/baseModel';
 
 import { useI18n } from '/@/hooks/web/useI18n';
 import { AxiosRequestConfig } from 'axios';
-import { RequestOptions, UploadFileParams } from '../axios/types';
+import { RequestOptions, UploadFileParams } from '/#/axios';
 
 const { t } = useI18n();
 
@@ -64,7 +64,7 @@ export class abpRequest {
     data?: any;
     params?: any;
   }) {
-    const abpStore = useAbpStoreWidthOut();
+    const abpStore = useAbpStoreWithOut();
     const module = this.getModule(options.service, abpStore.apidefinition.modules);
     const controller = this.getController(options.controller, module.controllers);
     const action = this.getAction(options.action, controller.actions);
@@ -94,7 +94,7 @@ export class abpRequest {
 
   private getController(
     controllerName: string,
-    controllers: { [key: string]: ControllerApiDescriptionModel }
+    controllers: { [key: string]: ControllerApiDescriptionModel },
   ) {
     const controllerKeys = Object.keys(controllers);
     const index = controllerKeys.findIndex((key) => {
@@ -127,10 +127,10 @@ export class abpRequest {
     const apiVersion = this.findBestApiVersion(action);
     const versionParam =
       action.parameters.find(
-        (p) => p.name === 'apiVersion' || p.bindingSourceId === ParameterBindingSources.path
+        (p) => p.name === 'apiVersion' || p.bindingSourceId === ParameterBindingSources.path,
       ) ??
       action.parameters.find(
-        (p) => p.name === 'api-version' || p.bindingSourceId === ParameterBindingSources.query
+        (p) => p.name === 'api-version' || p.bindingSourceId === ParameterBindingSources.query,
       );
     return new ApiVersionInfo(apiVersion, versionParam?.bindingSourceId);
   }

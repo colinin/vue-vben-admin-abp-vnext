@@ -1,8 +1,8 @@
 import type { App, Directive, DirectiveBinding } from 'vue';
-import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 function isFeature(el: Element, binding: any) {
-  const abpStore = useAbpStoreWidthOut();
+  const abpStore = useAbpStoreWithOut();
   const { features } = abpStore.getApplication;
   const definedFeatures = features.values;
   if (!definedFeatures) return;

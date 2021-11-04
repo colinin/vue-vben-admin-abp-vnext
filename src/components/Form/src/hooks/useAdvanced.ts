@@ -2,10 +2,8 @@ import type { ColEx } from '../types';
 import type { AdvanceState } from '../types/hooks';
 import type { ComputedRef, Ref } from 'vue';
 import type { FormProps, FormSchema } from '../types/form';
-
 import { computed, unref, watch } from 'vue';
 import { isBoolean, isFunction, isNumber, isObject } from '/@/utils/is';
-
 import { useBreakpoint } from '/@/hooks/event/useBreakpoint';
 import { useDebounceFn } from '@vueuse/core';
 
@@ -60,7 +58,7 @@ export default function ({
         debounceUpdateAdvanced();
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   function getAdvanced(itemCol: Partial<ColEx>, itemColSum = 0, isLastAction = false) {
@@ -105,7 +103,7 @@ export default function ({
       }
       return { isAdvanced: advanceState.isAdvanced, itemColSum };
     }
-    if (itemColSum > BASIC_COL_LEN) {
+    if (itemColSum > BASIC_COL_LEN * (unref(getProps).alwaysShowLines || 1)) {
       return { isAdvanced: advanceState.isAdvanced, itemColSum };
     } else {
       // The first line is always displayed
@@ -141,7 +139,7 @@ export default function ({
       if (isShow && (colProps || baseColProps)) {
         const { itemColSum: sum, isAdvanced } = getAdvanced(
           { ...baseColProps, ...colProps },
-          itemColSum
+          itemColSum,
         );
 
         itemColSum = sum || 0;

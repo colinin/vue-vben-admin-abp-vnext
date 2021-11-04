@@ -106,7 +106,7 @@
               dataSource.value = res.reRouteKeysConfig;
             });
           }
-        }
+        },
       );
 
       return {
@@ -128,7 +128,7 @@
           {
             routeId: this.$props.routeId,
           },
-          true
+          true,
         );
       },
       handleEdit(record) {

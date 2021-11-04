@@ -60,14 +60,14 @@ export const useAbpStore = defineStore({
     mergeLocaleMessage(localization: Localization) {
       if (localization.languagesMap['vben-admin-ui']) {
         const transferCulture = localization.languagesMap['vben-admin-ui'].filter(
-          (x) => x.value === localization.currentCulture.cultureName
+          (x) => x.value === localization.currentCulture.cultureName,
         );
         if (transferCulture && transferCulture.length > 0) {
           i18n.global.mergeLocaleMessage(transferCulture[0].name, localization.values);
         } else {
           i18n.global.mergeLocaleMessage(
             localization.currentCulture.cultureName,
-            localization.values
+            localization.values,
           );
         }
       }
@@ -86,6 +86,6 @@ export const useAbpStore = defineStore({
   },
 });
 
-export function useAbpStoreWidthOut() {
+export function useAbpStoreWithOut() {
   return useAbpStore(store);
 }

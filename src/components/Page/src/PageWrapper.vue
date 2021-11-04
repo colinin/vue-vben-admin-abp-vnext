@@ -1,9 +1,9 @@
 <template>
-  <div :class="getClass">
+  <div :class="getClass" ref="wrapperRef">
     <PageHeader
       :ghost="ghost"
       :title="title"
-      v-bind="$attrs"
+      v-bind="omit($attrs, 'class')"
       ref="headerRef"
       v-if="content || $slots.headerContent || title || getHeaderSlots.length"
     >
@@ -14,11 +14,11 @@
         <slot name="headerContent" v-else></slot>
       </template>
       <template #[item]="data" v-for="item in getHeaderSlots">
-        <slot :name="item" v-bind="data"></slot>
+        <slot :name="item" v-bind="data || {}"></slot>
       </template>
     </PageHeader>
 
-    <div class="overflow-hidden" :class="getContentClass" :style="getContentStyle">
+    <div class="overflow-hidden" :class="getContentClass" :style="getContentStyle" ref="contentRef">
       <slot></slot>
     </div>
 
@@ -33,17 +33,18 @@
   </div>
 </template>
 <script lang="ts">
-  import type { CSSProperties, PropType } from 'vue';
+  import { CSSProperties, PropType, provide } from 'vue';
 
-  import { defineComponent, computed, watch, nextTick, ref, unref } from 'vue';
+  import { defineComponent, computed, watch, ref, unref } from 'vue';
   import PageFooter from './PageFooter.vue';
-  import { usePageContext } from '/@/hooks/component/usePageContext';
 
   import { useDesign } from '/@/hooks/web/useDesign';
   import { propTypes } from '/@/utils/propTypes';
   import { omit } from 'lodash-es';
   import { PageHeader } from 'ant-design-vue';
-  import { onMountedOrActivated } from '/@/hooks/core/onMountedOrActivated';
+  import { useContentHeight } from '/@/hooks/web/useContentHeight';
+  import { PageWrapperFixedHeightKey } from '..';
+
   export default defineComponent({
     name: 'PageWrapper',
     components: { PageFooter, PageHeader },
@@ -60,13 +61,33 @@
       contentFullHeight: propTypes.bool,
       contentClass: propTypes.string,
       fixedHeight: propTypes.bool,
+      upwardSpace: propTypes.oneOfType([propTypes.number, propTypes.string]).def(0),
     },
-    setup(props, { slots }) {
-      const headerRef = ref<ComponentRef>(null);
-      const footerRef = ref<ComponentRef>(null);
-      const footerHeight = ref(0);
-      const { prefixCls, prefixVar } = useDesign('page-wrapper');
-      const { contentHeight, setPageHeight, pageHeight } = usePageContext();
+    setup(props, { slots, attrs }) {
+      const wrapperRef = ref(null);
+      const headerRef = ref(null);
+      const contentRef = ref(null);
+      const footerRef = ref(null);
+      const { prefixCls } = useDesign('page-wrapper');
+
+      provide(
+        PageWrapperFixedHeightKey,
+        computed(() => props.fixedHeight),
+      );
+
+      const getIsContentFullHeight = computed(() => {
+        return props.contentFullHeight;
+      });
+
+      const getUpwardSpace = computed(() => props.upwardSpace);
+      const { redoHeight, setCompensation, contentHeight } = useContentHeight(
+        getIsContentFullHeight,
+        wrapperRef,
+        [headerRef, footerRef],
+        [contentRef],
+        getUpwardSpace,
+      );
+      setCompensation({ useLayoutFooter: true, elements: [footerRef] });
 
       const getClass = computed(() => {
         return [
@@ -74,6 +95,7 @@
           {
             [`${prefixCls}--dense`]: props.dense,
           },
+          attrs.class ?? {},
         ];
       });
 
@@ -88,12 +110,12 @@
         if (!contentFullHeight) {
           return { ...contentStyle };
         }
-        const height = `${unref(pageHeight)}px`;
+
+        const height = `${unref(contentHeight)}px`;
         return {
           ...contentStyle,
           minHeight: height,
           ...(fixedHeight ? { height } : {}),
-          paddingBottom: `${unref(footerHeight)}px`,
         };
       });
 
@@ -109,72 +131,26 @@
       });
 
       watch(
-        () => [contentHeight?.value, getShowFooter.value],
+        () => [getShowFooter.value],
         () => {
-          calcContentHeight();
+          redoHeight();
         },
         {
           flush: 'post',
           immediate: true,
-        }
+        },
       );
-
-      onMountedOrActivated(() => {
-        nextTick(() => {
-          calcContentHeight();
-        });
-      });
-
-      function calcContentHeight() {
-        if (!props.contentFullHeight) {
-          return;
-        }
-        //fix:in contentHeight mode: delay getting footer and header dom element to get the correct height
-        const footer = unref(footerRef);
-        const header = unref(headerRef);
-        footerHeight.value = 0;
-        const footerEl = footer?.$el;
-
-        if (footerEl) {
-          footerHeight.value += footerEl?.offsetHeight ?? 0;
-        }
-        let headerHeight = 0;
-        const headerEl = header?.$el;
-        if (headerEl) {
-          headerHeight += headerEl?.offsetHeight ?? 0;
-        }
-        // fix:subtract content's marginTop and marginBottom value
-        let subtractHeight = 0;
-        const ZERO_PX = '0px';
-        let marginBottom = ZERO_PX;
-        let marginTop = ZERO_PX;
-        const classElments = document.querySelectorAll(`.${prefixVar}-page-wrapper-content`);
-        if (classElments && classElments.length > 0) {
-          const contentEl = classElments[0];
-          const cssStyle = getComputedStyle(contentEl);
-          marginBottom = cssStyle?.marginBottom ?? ZERO_PX;
-          marginTop = cssStyle?.marginTop ?? ZERO_PX;
-        }
-        if (marginBottom) {
-          const contentMarginBottom = Number(marginBottom.replace(/[^\d]/g, ''));
-          subtractHeight += contentMarginBottom;
-        }
-        if (marginTop) {
-          const contentMarginTop = Number(marginTop.replace(/[^\d]/g, ''));
-          subtractHeight += contentMarginTop;
-        }
-        setPageHeight?.(unref(contentHeight) - unref(footerHeight) - headerHeight - subtractHeight);
-      }
 
       return {
         getContentStyle,
-        footerRef,
+        wrapperRef,
         headerRef,
+        contentRef,
+        footerRef,
         getClass,
         getHeaderSlots,
         prefixCls,
         getShowFooter,
-        pageHeight,
         omit,
         getContentClass,
       };

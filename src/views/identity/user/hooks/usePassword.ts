@@ -4,7 +4,7 @@
  */
 import { createVNode } from 'vue';
 import { Button } from 'ant-design-vue';
-import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
@@ -26,7 +26,7 @@ export function usePassword() {
             {
               type: 'primary',
             },
-            () => 'Random'
+            () => 'Random',
           ),
           onSearch: () => {
             formModel.password = generatePassword();
@@ -62,7 +62,7 @@ export function usePassword() {
   }
 
   function generatePassword() {
-    const abpStore = useAbpStoreWidthOut();
+    const abpStore = useAbpStoreWithOut();
     const { setting } = abpStore.getApplication;
     const settings = setting.values;
     // 根据配置项生成随机密码
@@ -81,7 +81,7 @@ export function usePassword() {
 
     let generatedPassword = '';
     const typesArr = [{ lower }, { upper }, { number }, { symbol }, { defaultNumber }].filter(
-      (item) => Object.values(item)[0]
+      (item) => Object.values(item)[0],
     );
     for (let i = 0; i < length; i++) {
       typesArr.forEach((type) => {

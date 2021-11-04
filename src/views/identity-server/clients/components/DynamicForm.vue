@@ -106,7 +106,7 @@
         },
         {
           deep: true,
-        }
+        },
       );
 
       function handleSubmit(input) {

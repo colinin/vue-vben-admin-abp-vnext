@@ -1,11 +1,11 @@
 import { useModal } from '/@/components/Modal';
-import { useUserStoreWidthOut } from '/@/store/modules/user';
+import { useUserStoreWithOut } from '/@/store/modules/user';
 
 export function usePermission() {
   const [registerModel, { openModal }] = useModal();
 
   function showPermissionModal(userId: string) {
-    const userStore = useUserStoreWidthOut();
+    const userStore = useUserStoreWithOut();
     const props = {
       providerName: 'U',
       providerKey: userId,

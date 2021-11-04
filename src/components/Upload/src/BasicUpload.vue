@@ -73,7 +73,7 @@
         (value = []) => {
           fileList.value = isArray(value) ? value : [];
         },
-        { immediate: true }
+        { immediate: true },
       );
       // 上传modal保存操作
       function handleChange(urls: string[]) {
@@ -87,9 +87,11 @@
         emit('update:value', fileList.value);
         emit('change', fileList.value);
       }
+
       function handleDelete(record: Recordable) {
         emit('delete', record);
       }
+
       function handlePreviewDelete(url: string) {
         emit('preview-delete', url);
       }

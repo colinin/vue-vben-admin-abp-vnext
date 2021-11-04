@@ -140,7 +140,7 @@
           } else {
             modelRef.value = null;
           }
-        }
+        },
       );
 
       function handleSubmit() {

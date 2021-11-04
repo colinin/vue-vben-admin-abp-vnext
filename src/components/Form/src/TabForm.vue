@@ -226,14 +226,14 @@
         },
         {
           immediate: true,
-        }
+        },
       );
 
       watch(
         () => unref(getProps).schemas,
         (schemas) => {
           resetSchema(schemas ?? []);
-        }
+        },
       );
 
       watch(
@@ -250,7 +250,7 @@
             initDefault();
             isInitedDefaultRef.value = true;
           }
-        }
+        },
       );
 
       async function setProps(formProps: Partial<FormProps>): Promise<void> {

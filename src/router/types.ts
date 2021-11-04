@@ -1,14 +1,16 @@
 import type { RouteRecordRaw } from 'vue-router';
 import { RoleEnum } from '/@/enums/roleEnum';
-
 import { defineComponent } from 'vue';
 
-export type Component<T extends any = any> =
+export type Component<T = any> =
   | ReturnType<typeof defineComponent>
   | (() => Promise<typeof import('*.vue')>)
   | (() => Promise<T>);
 
 export interface RouteMeta {
+  orderNo?: number;
+  // only build for Menu
+  ignoreRoute?: boolean;
   // 必要功能
   requiredFeatures?: string | string[];
   // title
@@ -64,6 +66,7 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   props?: Recordable;
   fullPath?: string;
 }
+
 export interface MenuTag {
   type?: 'primary' | 'error' | 'warn' | 'success';
   content?: string;
@@ -76,6 +79,9 @@ export interface Menu {
   icon?: string;
 
   path: string;
+
+  // path contains param, auto assignment.
+  paramPath?: string;
 
   disabled?: boolean;
 

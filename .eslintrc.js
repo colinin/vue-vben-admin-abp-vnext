@@ -22,8 +22,10 @@ module.exports = defineConfig({
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:jest/recommended',
   ],
   rules: {
+    'vue/script-setup-uses-vars': 'error',
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -53,6 +55,8 @@ module.exports = defineConfig({
     'space-before-function-paren': 'off',
 
     'vue/attributes-order': 'off',
+    'vue/v-on-event-hyphenation': 'off',
+    'vue/multi-word-component-names': 'off',
     'vue/one-component-per-file': 'off',
     'vue/html-closing-bracket-newline': 'off',
     'vue/max-attributes-per-line': 'off',
@@ -60,6 +64,8 @@ module.exports = defineConfig({
     'vue/singleline-html-element-content-newline': 'off',
     'vue/attribute-hyphenation': 'off',
     'vue/require-default-prop': 'off',
+    'jest/no-commented-out-tests': 'warn',
+    'function-url-quotes': 'off',
     'vue/html-self-closing': [
       'error',
       {

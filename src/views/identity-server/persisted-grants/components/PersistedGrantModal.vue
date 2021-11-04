@@ -50,7 +50,7 @@
           get(id).then((res) => {
             persistedGrantRef.value = res;
           });
-        }
+        },
       );
 
       return {

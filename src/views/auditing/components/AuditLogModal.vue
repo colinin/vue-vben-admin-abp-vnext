@@ -238,7 +238,7 @@
               modelRef.value = res;
             });
           }
-        }
+        },
       );
 
       return {

@@ -9,7 +9,7 @@
       :disabled="disabled"
     >
       <template #[item]="data" v-for="item in Object.keys($slots)">
-        <slot :name="item" v-bind="data"></slot>
+        <slot :name="item" v-bind="data || {}"></slot>
       </template>
     </InputPassword>
     <div :class="`${prefixCls}-bar`">
@@ -20,10 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, ref, watch, unref, watchEffect } from 'vue';
-
   import { Input } from 'ant-design-vue';
-
-  // @ts-ignore
   import { zxcvbn } from '@zxcvbn-ts/core';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { propTypes } from '/@/utils/propTypes';
@@ -62,7 +59,7 @@
         () => unref(innerValueRef),
         (val) => {
           emit('change', val);
-        }
+        },
       );
 
       return {
@@ -95,7 +92,7 @@
         background-color: transparent;
         border-color: @white;
         border-style: solid;
-        border-width: 0 5px 0 5px;
+        border-width: 0 5px;
         content: '';
       }
 

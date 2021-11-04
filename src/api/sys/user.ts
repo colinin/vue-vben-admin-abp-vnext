@@ -1,13 +1,13 @@
 import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
-
 import { useGlobSetting } from '/@/hooks/setting';
-
-import { ErrorMessageMode } from '/@/utils/http/axios/types';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
+
+import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
   Login = '/connect/token',
+  Logout = '/logout',
   GetUserInfo = '/connect/userinfo',
   GetPermCode = '/getPermCode',
 }
@@ -35,7 +35,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     {
       errorMessageMode: mode,
       apiUrl: '/connect',
-    }
+    },
   );
 }
 
@@ -43,9 +43,13 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo });
+  return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
 }
 
 export function getPermCode() {
   return defHttp.get<string[]>({ url: Api.GetPermCode });
+}
+
+export function doLogout() {
+  return defHttp.get({ url: Api.Logout });
 }

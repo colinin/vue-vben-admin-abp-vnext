@@ -1,6 +1,5 @@
 import type { BasicTableProps, FetchParams, SorterResult } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
-
 import {
   ref,
   unref,
@@ -12,13 +11,10 @@ import {
   Ref,
   watchEffect,
 } from 'vue';
-
 import { useTimeoutFn } from '/@/hooks/core/useTimeout';
-
 import { buildUUID } from '/@/utils/uuid';
 import { isFunction, isBoolean } from '/@/utils/is';
 import { get, cloneDeep } from 'lodash-es';
-
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../const';
 
 interface ActionType {
@@ -44,13 +40,14 @@ export function useDataSource(
     clearSelectedRowKeys,
     tableData,
   }: ActionType,
-  emit: EmitType
+  emit: EmitType,
 ) {
   const searchState = reactive<SearchState>({
     sortInfo: {},
     filterInfo: {},
   });
   const dataSourceRef = ref<Recordable[]>([]);
+  const rawDataSourceRef = ref<Recordable>({});
 
   watchEffect(() => {
     tableData.value = unref(dataSourceRef);
@@ -64,13 +61,13 @@ export function useDataSource(
     },
     {
       immediate: true,
-    }
+    },
   );
 
   function handleTableChange(
     pagination: PaginationProps,
     filters: Partial<Recordable<string[]>>,
-    sorter: SorterResult
+    sorter: SorterResult,
   ) {
     const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef);
     if (clearSelectOnPageChange) {
@@ -117,7 +114,7 @@ export function useDataSource(
   const getDataSourceRef = computed(() => {
     const dataSource = unref(dataSourceRef);
     if (!dataSource || dataSource.length === 0) {
-      return [];
+      return unref(dataSourceRef);
     }
     if (unref(getAutoCreateKey)) {
       const firstItem = dataSource[0];
@@ -151,20 +148,10 @@ export function useDataSource(
 
   function updateTableDataRecord(
     rowKey: string | number,
-    record: Recordable
+    record: Recordable,
   ): Recordable | undefined {
-    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
-    const rowKeyName = unref(getRowKey);
-    if (!rowKeyName) {
-      return;
-    }
-    const row = dataSourceRef.value.find((r) => {
-      if (typeof rowKeyName === 'function') {
-        return (rowKeyName(r) as string) === rowKey;
-      } else {
-        return Reflect.has(r, rowKeyName) && r[rowKeyName] === rowKey;
-      }
-    });
+    const row = findTableDataRecord(rowKey);
+
     if (row) {
       for (const field in row) {
         if (Reflect.has(record, field)) row[field] = record[field];
@@ -173,10 +160,91 @@ export function useDataSource(
     }
   }
 
+  function deleteTableDataRecord(rowKey: string | number | string[] | number[]) {
+    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
+    const rowKeyName = unref(getRowKey);
+    if (!rowKeyName) return;
+    const rowKeys = !Array.isArray(rowKey) ? [rowKey] : rowKey;
+    for (const key of rowKeys) {
+      let index: number | undefined = dataSourceRef.value.findIndex((row) => {
+        let targetKeyName: string;
+        if (typeof rowKeyName === 'function') {
+          targetKeyName = rowKeyName(row);
+        } else {
+          targetKeyName = rowKeyName as string;
+        }
+        return row[targetKeyName] === key;
+      });
+      if (index >= 0) {
+        dataSourceRef.value.splice(index, 1);
+      }
+      index = unref(propsRef).dataSource?.findIndex((row) => {
+        let targetKeyName: string;
+        if (typeof rowKeyName === 'function') {
+          targetKeyName = rowKeyName(row);
+        } else {
+          targetKeyName = rowKeyName as string;
+        }
+        return row[targetKeyName] === key;
+      });
+      if (typeof index !== 'undefined' && index !== -1)
+        unref(propsRef).dataSource?.splice(index, 1);
+    }
+    setPagination({
+      total: unref(propsRef).dataSource?.length,
+    });
+  }
+
+  function insertTableDataRecord(record: Recordable, index: number): Recordable | undefined {
+    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
+    index = index ?? dataSourceRef.value?.length;
+    unref(dataSourceRef).splice(index, 0, record);
+    unref(propsRef).dataSource?.splice(index, 0, record);
+    return unref(propsRef).dataSource;
+  }
+
+  function findTableDataRecord(rowKey: string | number) {
+    if (!dataSourceRef.value || dataSourceRef.value.length == 0) return;
+
+    const rowKeyName = unref(getRowKey);
+    if (!rowKeyName) return;
+
+    const { childrenColumnName = 'children' } = unref(propsRef);
+
+    const findRow = (array: any[]) => {
+      let ret;
+      array.some(function iter(r) {
+        if (typeof rowKeyName === 'function') {
+          if ((rowKeyName(r) as string) === rowKey) {
+            ret = r;
+            return true;
+          }
+        } else {
+          if (Reflect.has(r, rowKeyName) && r[rowKeyName] === rowKey) {
+            ret = r;
+            return true;
+          }
+        }
+        return r[childrenColumnName] && r[childrenColumnName].some(iter);
+      });
+      return ret;
+    };
+
+    // const row = dataSourceRef.value.find(r => {
+    //   if (typeof rowKeyName === 'function') {
+    //     return (rowKeyName(r) as string) === rowKey
+    //   } else {
+    //     return Reflect.has(r, rowKeyName) && r[rowKeyName] === rowKey
+    //   }
+    // })
+    return findRow(dataSourceRef.value);
+  }
+
   async function fetch(opt?: FetchParams) {
     const {
       api,
       searchInfo,
+      defSort,
       fetchSetting,
       beforeFetch,
       beforeResponse,
@@ -187,7 +255,11 @@ export function useDataSource(
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);
-      const { pageField, sizeField, listField, totalField } = fetchSetting || FETCH_SETTING;
+      const { pageField, sizeField, listField, totalField } = Object.assign(
+        {},
+        FETCH_SETTING,
+        fetchSetting,
+      );
       let pageParams: Recordable = {};
 
       const { current = 1, pageSize = PAGE_SIZE } = unref(getPaginationInfo) as PaginationProps;
@@ -206,13 +278,14 @@ export function useDataSource(
         ...(useSearchForm ? getFieldsValue() : {}),
         ...searchInfo,
         ...(opt?.searchInfo ?? {}),
+        ...defSort,
         ...sortInfo,
         ...filterInfo,
         ...(opt?.sortInfo ?? {}),
         ...(opt?.filterInfo ?? {}),
       };
       if (beforeFetch && isFunction(beforeFetch)) {
-        params = beforeFetch(params) || params;
+        params = (await beforeFetch(params)) || params;
       }
 
       let res = await api(params);
@@ -221,6 +294,7 @@ export function useDataSource(
       if (beforeResponse && isFunction(beforeResponse)) {
         res = beforeResponse(res);
       }
+      rawDataSourceRef.value = res;
 
       const isArrayResult = Array.isArray(res);
 
@@ -234,12 +308,12 @@ export function useDataSource(
           setPagination({
             current: currentTotalPage,
           });
-          fetch(opt);
+          return await fetch(opt);
         }
       }
 
       if (afterFetch && isFunction(afterFetch)) {
-        resultItems = afterFetch(resultItems) || resultItems;
+        resultItems = (await afterFetch(resultItems)) || resultItems;
       }
       dataSourceRef.value = resultItems;
       setPagination({
@@ -254,6 +328,7 @@ export function useDataSource(
         items: unref(resultItems),
         total: resultTotal,
       });
+      return resultItems;
     } catch (error) {
       emit('fetch-error', error);
       dataSourceRef.value = [];
@@ -273,8 +348,12 @@ export function useDataSource(
     return getDataSourceRef.value as T[];
   }
 
+  function getRawDataSource<T = Recordable>() {
+    return rawDataSourceRef.value as T;
+  }
+
   async function reload(opt?: FetchParams) {
-    await fetch(opt);
+    return await fetch(opt);
   }
 
   onMounted(() => {
@@ -286,6 +365,7 @@ export function useDataSource(
   return {
     getDataSourceRef,
     getDataSource,
+    getRawDataSource,
     getRowKey,
     setTableData,
     getAutoCreateKey,
@@ -293,6 +373,9 @@ export function useDataSource(
     reload,
     updateTableData,
     updateTableDataRecord,
+    deleteTableDataRecord,
+    insertTableDataRecord,
+    findTableDataRecord,
     handleTableChange,
   };
 }

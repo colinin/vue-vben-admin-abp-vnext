@@ -25,7 +25,7 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
 
   /**
    * Callback executed when select/deselect one row
-   * @type FunctionT
+   * @type Function
    */
   onSelect?: (record: T, selected: boolean, selectedRows: Object[], nativeEvent: Event) => any;
 
@@ -95,9 +95,13 @@ export interface TableActionType {
   setPagination: (info: Partial<PaginationProps>) => void;
   setTableData: <T = Recordable>(values: T[]) => void;
   updateTableDataRecord: (rowKey: string | number, record: Recordable) => Recordable | void;
+  deleteTableDataRecord: (rowKey: string | number | string[] | number[]) => void;
+  insertTableDataRecord: (record: Recordable, index?: number) => Recordable | void;
+  findTableDataRecord: (rowKey: string | number) => Recordable | void;
   getColumns: (opt?: GetColumnsParams) => BasicColumn[];
   setColumns: (columns: BasicColumn[] | string[]) => void;
   getDataSource: <T = Recordable>() => T[];
+  getRawDataSource: <T = Recordable>() => T;
   setLoading: (loading: boolean) => void;
   setProps: (props: Partial<BasicTableProps>) => void;
   redoHeight: () => void;
@@ -167,13 +171,15 @@ export interface BasicTableProps<T = any> {
   // 查询条件请求之前处理
   handleSearchInfoFn?: Fn;
   // 请求接口配置
-  fetchSetting?: FetchSetting;
+  fetchSetting?: Partial<FetchSetting>;
   // 立即请求接口
   immediate?: boolean;
   // 在开起搜索表单的时候，如果没有数据是否显示表格
   emptyDataIsShowTable?: boolean;
   // 额外的请求参数
   searchInfo?: Recordable;
+  // 默认的排序参数
+  defSort?: Recordable;
   // 使用搜索表单
   useSearchForm?: boolean;
   // 表单配置
@@ -289,7 +295,7 @@ export interface BasicTableProps<T = any> {
    * Row's className
    * @type Function
    */
-  rowClassName?: (record: TableCustomRecord<T>) => string;
+  rowClassName?: (record: TableCustomRecord<T>, index: number) => string;
 
   /**
    * Row selection config
@@ -361,6 +367,18 @@ export interface BasicTableProps<T = any> {
    * @version 1.5.4
    */
   transformCellText?: Function;
+
+  /**
+   * Callback executed before editable cell submit value, not for row-editor
+   *
+   * The cell will not submit data while callback return false
+   */
+  beforeEditSubmit?: (data: {
+    record: Recordable;
+    index: number;
+    key: string | number;
+    value: any;
+  }) => Promise<any>;
 
   /**
    * Callback executed when pagination, filters or sorter is changed

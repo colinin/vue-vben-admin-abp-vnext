@@ -9,6 +9,7 @@ export default defineComponent({
   name: 'Modal',
   inheritAttrs: false,
   props: basicProps,
+  emits: ['cancel'],
   setup(props, { slots }) {
     const { visible, draggable, destroyOnClose } = toRefs(props);
     const attrs = useAttrs();
@@ -20,7 +21,6 @@ export default defineComponent({
 
     return () => {
       const propsData = { ...unref(attrs), ...props } as Recordable;
-
       return <Modal {...propsData}>{extendSlots(slots)}</Modal>;
     };
   },

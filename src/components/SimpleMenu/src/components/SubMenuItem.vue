@@ -77,7 +77,7 @@
   import Icon from '/@/components/Icon';
   import { Popover } from 'ant-design-vue';
   import { isBoolean, isObject } from '/@/utils/is';
-  import Mitt from '/@/utils/mitt';
+  import mitt from '/@/utils/mitt';
 
   const DELAY = 200;
   export default defineComponent({
@@ -114,7 +114,7 @@
 
       const { prefixCls } = useDesign('menu');
 
-      const subMenuEmitter = new Mitt();
+      const subMenuEmitter = mitt();
 
       const { rootMenuEmitter } = useSimpleRootMenuContext();
 
@@ -273,8 +273,7 @@
               state.opened = data;
               return;
             }
-
-            if (isObject(data)) {
+            if (isObject(data) && rootProps.accordion) {
               const { opend, parent, uidList } = data as Recordable;
               if (parent === instance?.parent) {
                 state.opened = opend;
@@ -287,7 +286,7 @@
             if (props.name && Array.isArray(data)) {
               state.opened = (data as (string | number)[]).includes(props.name);
             }
-          }
+          },
         );
 
         rootMenuEmitter.on('on-update-active-name:submenu', (data: number[]) => {

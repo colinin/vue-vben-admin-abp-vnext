@@ -1,12 +1,12 @@
 <template>
   <Form
-    v-bind="{ ...$attrs, ...$props, ...getProps }"
+    v-bind="getBindValue"
     :class="getFormClass"
     ref="formElRef"
     :model="formModel"
     @keypress.enter="handleEnterPress"
   >
-    <Row v-bind="{ ...getRow }">
+    <Row v-bind="getRow">
       <slot name="formHeader"></slot>
       <template v-for="schema in getSchema" :key="schema.field">
         <FormItem
@@ -19,17 +19,17 @@
           :setFormModel="setFormModel"
         >
           <template #[item]="data" v-for="item in Object.keys($slots)">
-            <slot :name="item" v-bind="data"></slot>
+            <slot :name="item" v-bind="data || {}"></slot>
           </template>
         </FormItem>
       </template>
 
-      <FormAction v-bind="{ ...getProps, ...advanceState }" @toggle-advanced="handleToggleAdvanced">
+      <FormAction v-bind="getFormActionBindProps" @toggle-advanced="handleToggleAdvanced">
         <template
           #[item]="data"
           v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']"
         >
-          <slot :name="item" v-bind="data"></slot>
+          <slot :name="item" v-bind="data || {}"></slot>
         </template>
       </FormAction>
       <slot name="formFooter"></slot>
@@ -39,7 +39,7 @@
 <script lang="ts">
   import type { FormActionType, FormProps, FormSchema } from './types/form';
   import type { AdvanceState } from './types/hooks';
-  import type { CSSProperties, Ref } from 'vue';
+  import type { Ref } from 'vue';
 
   import { defineComponent, reactive, ref, computed, unref, onMounted, watch, nextTick } from 'vue';
   import { Form, Row } from 'ant-design-vue';
@@ -62,14 +62,12 @@
   import { basicProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
 
-  import type { RowProps } from 'ant-design-vue/lib/grid/Row';
-
   export default defineComponent({
     name: 'BasicForm',
     components: { FormItem, Form, Row, FormAction },
     props: basicProps,
     emits: ['advanced-change', 'reset', 'submit', 'register'],
-    setup(props, { emit }) {
+    setup(props, { emit, attrs }) {
       const formModel = reactive<Recordable>({});
       const modalFn = useModalContext();
 
@@ -103,13 +101,17 @@
       });
 
       // Get uniform row style and Row configuration for the entire form
-      const getRow = computed((): CSSProperties | RowProps => {
+      const getRow = computed((): Recordable => {
         const { baseRowStyle = {}, rowProps } = unref(getProps);
         return {
           style: baseRowStyle,
           ...rowProps,
         };
       });
+
+      const getBindValue = computed(
+        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
+      );
 
       const getSchema = computed((): FormSchema[] => {
         const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
@@ -128,7 +130,11 @@
             }
           }
         }
-        return schemas as FormSchema[];
+        if (unref(getProps).showAdvancedButton) {
+          return schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[];
+        } else {
+          return schemas as FormSchema[];
+        }
       });
 
       const { handleToggleAdvanced } = useAdvanced({
@@ -192,14 +198,14 @@
         },
         {
           immediate: true,
-        }
+        },
       );
 
       watch(
         () => unref(getProps).schemas,
         (schemas) => {
           resetSchema(schemas ?? []);
-        }
+        },
       );
 
       watch(
@@ -216,7 +222,7 @@
             initDefault();
             isInitedDefaultRef.value = true;
           }
-        }
+        },
       );
 
       async function setProps(formProps: Partial<FormProps>): Promise<void> {
@@ -225,6 +231,10 @@
 
       function setFormModel(key: string, value: any) {
         formModel[key] = value;
+        const { validateTrigger } = unref(getBindValue);
+        if (!validateTrigger || validateTrigger === 'change') {
+          validateFields([key]).catch((_) => {});
+        }
       }
 
       function handleEnterPress(e: KeyboardEvent) {
@@ -260,6 +270,7 @@
       });
 
       return {
+        getBindValue,
         handleToggleAdvanced,
         handleEnterPress,
         formModel,
@@ -269,10 +280,12 @@
         getProps,
         formElRef,
         getSchema,
-        formActionType,
+        formActionType: formActionType as any,
         setFormModel,
-        prefixCls,
         getFormClass,
+        getFormActionBindProps: computed(
+          (): Recordable => ({ ...getProps.value, ...advanceState }),
+        ),
         ...formActionType,
       };
     },

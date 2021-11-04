@@ -21,6 +21,7 @@
   import { createPreviewColumns, createPreviewActionColumn } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { isArray } from '/@/utils/is';
+
   export default defineComponent({
     components: { BasicModal, FileList },
     props: previewProps,
@@ -43,7 +44,7 @@
               };
             });
         },
-        { immediate: true }
+        { immediate: true },
       );
       // 删除
       function handleRemove(record: PreviewFileItem) {
@@ -53,7 +54,7 @@
           emit('delete', removed[0].url);
           emit(
             'list-change',
-            fileListRef.value.map((item) => item.url)
+            fileListRef.value.map((item) => item.url),
           );
         }
       }

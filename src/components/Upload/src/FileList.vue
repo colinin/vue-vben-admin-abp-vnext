@@ -3,6 +3,7 @@
   import { fileListProps } from './props';
   import { isFunction } from '/@/utils/is';
   import { useModalContext } from '/@/components/Modal/src/hooks/useModalContext';
+
   export default defineComponent({
     name: 'FileList',
     props: fileListProps,
@@ -14,7 +15,7 @@
           nextTick(() => {
             modalFn?.redoModalHeight?.();
           });
-        }
+        },
       );
       return () => {
         const { columns, actionColumn, dataSource } = props;

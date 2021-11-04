@@ -24,7 +24,7 @@
       <template v-for="(img, index) in imgList" :key="img">
         <Image
           :width="size"
-          :style="{ 'margin-left': index === 0 ? 0 : margin }"
+          :style="{ marginLeft: index === 0 ? 0 : margin }"
           :src="srcPrefix + img"
         />
       </template>
@@ -35,7 +35,6 @@
   import type { CSSProperties } from 'vue';
   import { defineComponent, computed } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-
   import { Image, Badge } from 'ant-design-vue';
   import { propTypes } from '/@/utils/propTypes';
 

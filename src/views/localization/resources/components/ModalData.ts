@@ -40,12 +40,14 @@ export function getModalFormSchemas(): FormSchema[] {
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:Name'),
       colProps: { span: 24 },
+      required: true,
     },
     {
       field: 'displayName',
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:DisplayName'),
       colProps: { span: 24 },
+      required: true,
     },
     {
       field: 'description',

@@ -1,14 +1,17 @@
 <template>
-  <section class="full-loading" :class="{ absolute }" v-show="loading">
+  <section
+    class="full-loading"
+    :class="{ absolute, [theme]: !!theme }"
+    :style="[background ? `background-color: ${background}` : '']"
+    v-show="loading"
+  >
     <Spin v-bind="$attrs" :tip="tip" :size="size" :spinning="loading" />
   </section>
 </template>
 <script lang="ts">
   import { PropType } from 'vue';
-
   import { defineComponent } from 'vue';
   import { Spin } from 'ant-design-vue';
-
   import { SizeEnum } from '/@/enums/sizeEnum';
 
   export default defineComponent({
@@ -37,6 +40,9 @@
       background: {
         type: String as PropType<string>,
       },
+      theme: {
+        type: String as PropType<'dark' | 'light'>,
+      },
     },
   });
 </script>
@@ -51,7 +57,7 @@
     height: 100%;
     justify-content: center;
     align-items: center;
-    background-color: rgba(240, 242, 245, 0.4);
+    background-color: rgb(240 242 245 / 40%);
 
     &.absolute {
       position: absolute;
@@ -62,8 +68,12 @@
   }
 
   html[data-theme='dark'] {
-    .full-loading {
+    .full-loading:not(.light) {
       background-color: @modal-mask-bg;
     }
+  }
+
+  .full-loading.dark {
+    background-color: @modal-mask-bg;
   }
 </style>

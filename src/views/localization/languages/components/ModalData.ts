@@ -40,18 +40,21 @@ export function getModalFormSchemas(): FormSchema[] {
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:CultureName'),
       colProps: { span: 24 },
+      required: true,
     },
     {
       field: 'uiCultureName',
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:UiCultureName'),
       colProps: { span: 24 },
+      required: true,
     },
     {
       field: 'displayName',
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:DisplayName'),
       colProps: { span: 24 },
+      required: true,
     },
     {
       field: 'flagIcon',

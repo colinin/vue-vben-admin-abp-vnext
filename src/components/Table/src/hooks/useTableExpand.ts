@@ -1,13 +1,12 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { BasicTableProps } from '../types/table';
-
 import { computed, unref, ref, toRaw } from 'vue';
 import { ROW_KEY } from '../const';
 
 export function useTableExpand(
   propsRef: ComputedRef<BasicTableProps>,
   tableData: Ref<Recordable[]>,
-  emit: EmitType
+  emit: EmitType,
 ) {
   const expandedRowKeys = ref<string[]>([]);
 

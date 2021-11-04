@@ -119,7 +119,7 @@
           content: createVNode(
             'div',
             { style: 'color:red;' },
-            this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable)
+            this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
           ),
           onOk: () => {
             removeItem(this.dataId!, record.name).then(() => {

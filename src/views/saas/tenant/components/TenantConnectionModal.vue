@@ -126,7 +126,7 @@
         () => unref(tenantIdRef),
         () => {
           handleReloadTable();
-        }
+        },
       );
 
       return {

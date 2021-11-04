@@ -101,7 +101,7 @@
           loading.value = true;
           addRoles(
             props.ouId!,
-            selectRows.map((x) => x.id)
+            selectRows.map((x) => x.id),
           )
             .then(() => {
               emit('change');

@@ -59,7 +59,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { uploadUrl } from '/@/api/oss-management/oss';
-  import { useUserStoreWidthOut } from '/@/store/modules/user';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
   import Uploader from 'simple-uploader.js';
 
   export default defineComponent({
@@ -131,7 +131,7 @@
       });
 
       onMounted(() => {
-        const userStore = useUserStoreWidthOut();
+        const userStore = useUserStoreWithOut();
         uploader = new Uploader({
           target: uploadUrl,
           testChunks: false,
@@ -141,7 +141,8 @@
           successStatuses: [200, 201, 202, 204, 205],
           permanentErrors: [400, 401, 403, 404, 415, 500, 501],
           headers: {
-            Authorization: userStore.getToken,
+            // TODO: 使用缓存存储令牌类型?
+            Authorization: `Bearer ${userStore.getToken}`,
           },
           processParams: (params: any) => {
             params.bucket = unref(bucket);
@@ -167,7 +168,7 @@
         () => unref(btnRef),
         (btn) => {
           uploader.assignBrowse(btn);
-        }
+        },
       );
 
       function _filesSubmitted(_, files) {

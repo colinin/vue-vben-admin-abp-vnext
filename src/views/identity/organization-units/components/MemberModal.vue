@@ -108,7 +108,7 @@
           loading.value = true;
           addMembers(
             props.ouId!,
-            selectRows.map((x) => x.id)
+            selectRows.map((x) => x.id),
           )
             .then(() => {
               emit('change');

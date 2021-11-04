@@ -24,7 +24,7 @@
       const resources = ref<{ key: string; title: string }[]>([]);
       const targetResources = computed(() => {
         const targetScopes = resources.value.filter((item) =>
-          props.modelRef.allowedScopes.some((scope) => scope.scope === item.key)
+          props.modelRef.allowedScopes.some((scope) => scope.scope === item.key),
         );
 
         return targetScopes.map((item) => item.key);

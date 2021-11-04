@@ -8,12 +8,11 @@
 <script lang="ts">
   import type { PropType } from 'vue';
   import type { BasicColumn } from '../types/table';
-
   import { defineComponent, computed } from 'vue';
   import BasicHelp from '/@/components/Basic/src/BasicHelp.vue';
   import EditTableHeaderCell from './EditTableHeaderIcon.vue';
-
   import { useDesign } from '/@/hooks/web/useDesign';
+
   export default defineComponent({
     name: 'TableHeaderCell',
     components: {
@@ -43,7 +42,7 @@
   .@{prefix-cls} {
     &__help {
       margin-left: 8px;
-      color: rgba(0, 0, 0, 0.65) !important;
+      color: rgb(0 0 0 / 65%) !important;
     }
   }
 </style>

@@ -162,7 +162,7 @@
       handleSaveChanges(val) {
         const api: Promise<AggregateRoute> = val.reRouteId
           ? update(
-              cloneDeep(Object.assign(val, { routeId: val.reRouteId })) as UpdateAggregateRoute
+              cloneDeep(Object.assign(val, { routeId: val.reRouteId })) as UpdateAggregateRoute,
             )
           : create(cloneDeep(val) as CreateAggregateRoute);
         return api.then(() => {

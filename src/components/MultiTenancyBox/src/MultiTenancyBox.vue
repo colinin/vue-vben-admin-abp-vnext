@@ -42,7 +42,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
 
-  import { useAbpStoreWidthOut } from '/@/store/modules/abp';
+  import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
   export default defineComponent({
     name: 'MultiTenancyBox',
@@ -81,11 +81,11 @@
           Persistent.setTenant(result.tenantId);
           if (!result.success) {
             createMessage.warn(
-              t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [formModel.tenantName])
+              t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [formModel.tenantName]),
             );
           }
         }
-        const abpStore = useAbpStoreWidthOut();
+        const abpStore = useAbpStoreWithOut();
         await abpStore.initlizeAbpApplication();
         closeModal();
       }

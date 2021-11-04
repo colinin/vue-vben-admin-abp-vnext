@@ -1,4 +1,7 @@
-import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-export const MarkDown = createAsyncComponent(() => import('./src/Markdown.vue'));
+import { withInstall } from '/@/utils';
+import markDown from './src/Markdown.vue';
+import markDownViewer from './src/MarkdownViewer.vue';
 
-export * from './src/types';
+export const MarkDown = withInstall(markDown);
+export const MarkdownViewer = withInstall(markDownViewer);
+export * from './src/typing';

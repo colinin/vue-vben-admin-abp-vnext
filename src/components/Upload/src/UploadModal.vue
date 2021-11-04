@@ -60,6 +60,7 @@
   import { warn } from '/@/utils/log';
   import FileList from './FileList.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
+
   export default defineComponent({
     components: { BasicModal, Upload, Alert, FileList },
     props: {
@@ -74,12 +75,15 @@
       const state = reactive<{ fileList: FileItem[] }>({
         fileList: [],
       });
+
       //   是否正在上传
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
+
       const { t } = useI18n();
       const [register, { closeModal }] = useModalInner();
+
       const { getAccept, getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
         helpTextRef: helpText,
@@ -95,7 +99,7 @@
       });
       const getOkButtonProps = computed(() => {
         const someSuccess = fileListRef.value.some(
-          (item) => item.status === UploadResultStatus.SUCCESS
+          (item) => item.status === UploadResultStatus.SUCCESS,
         );
         return {
           disabled: isUploadingRef.value || fileListRef.value.length === 0 || !someSuccess,
@@ -103,7 +107,7 @@
       });
       const getUploadBtnText = computed(() => {
         const someError = fileListRef.value.some(
-          (item) => item.status === UploadResultStatus.ERROR
+          (item) => item.status === UploadResultStatus.ERROR,
         );
         return isUploadingRef.value
           ? t('component.upload.uploading')
@@ -153,6 +157,7 @@
         }
         return false;
       }
+
       // 删除
       function handleRemove(record: FileItem) {
         const index = fileListRef.value.findIndex((item) => item.uuid === record.uuid);
@@ -175,13 +180,17 @@
           item.status = UploadResultStatus.UPLOADING;
           const { data } = await props.api?.(
             {
-              ...(props.uploadParams || {}),
+              data: {
+                ...(props.uploadParams || {}),
+              },
               file: item.file,
+              name: props.name,
+              filename: props.filename,
             },
             function onUploadProgress(progressEvent: ProgressEvent) {
               const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
               item.percent = complete;
-            }
+            },
           );
           item.status = UploadResultStatus.SUCCESS;
           item.responseData = data;
@@ -212,7 +221,7 @@
           const data = await Promise.all(
             uploadFileList.map((item) => {
               return uploadApiByItem(item);
-            })
+            }),
           );
           isUploadingRef.value = false;
           // 生产环境:抛出错误

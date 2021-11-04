@@ -16,6 +16,7 @@
         size="large"
         v-model:value="formData.account"
         :placeholder="t('sys.login.userName')"
+        class="fix-auto-fill"
       />
     </FormItem>
     <FormItem name="password" class="enter-x">
@@ -55,7 +56,7 @@
       </Button> -->
     </FormItem>
     <ARow class="enter-x">
-      <ACol :xs="24" :md="8">
+      <ACol :md="8" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
@@ -83,8 +84,8 @@
     </div>
   </Form>
 </template>
-<script lang="ts">
-  import { defineComponent, reactive, ref, toRaw, unref, computed } from 'vue';
+<script lang="ts" setup>
+  import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
@@ -106,89 +107,58 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   //import { onKeyStroke } from '@vueuse/core';
 
-  export default defineComponent({
-    name: 'LoginForm',
-    components: {
-      [Col.name]: Col,
-      [Row.name]: Row,
-      Checkbox,
-      Button,
-      Form,
-      FormItem: Form.Item,
-      BInput,
-      Divider,
-      LoginFormTitle,
-      InputPassword: Input.Password,
-      MultiTenancyBox,
-      GithubFilled,
-      WechatFilled,
-      AlipayCircleFilled,
-      GoogleCircleFilled,
-      TwitterCircleFilled,
-    },
-    setup() {
-      const { t } = useI18n();
-      const { notification } = useMessage();
-      const { prefixCls } = useDesign('login');
-      const userStore = useUserStore();
+  const ACol = Col;
+  const ARow = Row;
+  const FormItem = Form.Item;
+  const InputPassword = Input.Password;
+  const { t } = useI18n();
+  const { notification, createErrorModal } = useMessage();
+  const { prefixCls } = useDesign('login');
+  const userStore = useUserStore();
 
-      const { setLoginState, getLoginState } = useLoginState();
-      const { getFormRules } = useFormRules();
+  const { setLoginState, getLoginState } = useLoginState();
+  const { getFormRules } = useFormRules();
 
-      const formRef = ref();
-      const loading = ref(false);
-      const rememberMe = ref(false);
+  const formRef = ref();
+  const loading = ref(false);
+  const rememberMe = ref(false);
 
-      const formData = reactive({
-        account: '',
-        password: '',
-      });
-
-      const { validForm } = useFormValid(formRef);
-
-      //onKeyStroke('Enter', handleLogin);
-
-      const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
-
-      async function handleLogin() {
-        const data = await validForm();
-        if (!data) return;
-        try {
-          loading.value = true;
-          const userInfo = await userStore.login(
-            toRaw({
-              password: data.password,
-              username: data.account,
-              mode: 'none', //不要默认的错误提示
-            })
-          );
-          if (userInfo) {
-            notification.success({
-              message: t('sys.login.loginSuccessTitle'),
-              description: `${t('sys.login.loginSuccessDesc')}: ${
-                userInfo.realName ?? userInfo.username
-              }`,
-              duration: 3,
-            });
-          }
-        } finally {
-          loading.value = false;
-        }
-      }
-
-      return {
-        t,
-        prefixCls,
-        formRef,
-        formData,
-        getFormRules,
-        rememberMe,
-        handleLogin,
-        loading,
-        setLoginState,
-        LoginStateEnum,
-        getShow,
-      };
-    },
+  const formData = reactive({
+    account: '',
+    password: '',
   });
+
+  const { validForm } = useFormValid(formRef);
+
+  //onKeyStroke('Enter', handleLogin);
+
+  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
+
+  async function handleLogin() {
+    const data = await validForm();
+    if (!data) return;
+    try {
+      loading.value = true;
+      const userInfo = await userStore.login({
+        password: data.password,
+        username: data.account,
+        mode: 'none', //不要默认的错误提示
+      });
+      if (userInfo) {
+        notification.success({
+          message: t('sys.login.loginSuccessTitle'),
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          duration: 3,
+        });
+      }
+    } catch (error) {
+      createErrorModal({
+        title: t('sys.api.errorTip'),
+        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
+        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      });
+    } finally {
+      loading.value = false;
+    }
+  }
 </script>
