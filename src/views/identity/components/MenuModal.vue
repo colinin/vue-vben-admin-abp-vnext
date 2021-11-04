@@ -5,9 +5,7 @@
     :width="660"
     :height="500"
     :title="t('AppPlatform.Menu:Manage')"
-    :loading="loading"
-    :show-ok-btn="!loading"
-    :show-cancel-btn="!loading"
+    :show-ok-btn="menuTreeRef.length > 0"
     @ok="handleSubmit"
   >
     <Card>
@@ -31,7 +29,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
+  import { defineComponent, ref, unref, watch } from 'vue';
   import { Card, Form, Select } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -85,7 +83,7 @@
           value: string;
         }[]
       >([]);
-      const [registerModal] = useModalInner((record) => {
+      const [registerModal, { changeOkLoading }] = useModalInner((record) => {
         identityRef.value = record.identity;
         optionsRef.value = [];
         frameworkRef.value = '';
@@ -93,6 +91,13 @@
         defaultCheckedRef.value = [];
         menuTreeRef.value = [];
       });
+
+      watch(
+        () => unref(props).loading,
+        (busy) => {
+          changeOkLoading(busy);
+        },
+      );
 
       function handleSelect(value) {
         getAll({
@@ -103,7 +108,8 @@
           menuTreeRef.value = listToTree(res.items, { id: 'id', pid: 'parentId' });
         });
         props.getMenuApi(unref(identityRef), value).then((res) => {
-          defaultCheckedRef.value = res.items.map((item) => item.id);
+          checkedRef.value = res.items.map((item) => item.id);
+          defaultCheckedRef.value = checkedRef.value;
         });
       }
 
