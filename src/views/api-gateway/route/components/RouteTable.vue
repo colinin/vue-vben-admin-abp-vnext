@@ -49,7 +49,7 @@
         />
       </template>
     </BasicTable>
-    <RouteModal @register="registerModal" @change="reloadTable" />
+    <RouteModal @register="registerModal" @change="handleChange" />
   </div>
 </template>
 
@@ -61,7 +61,7 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import RouteModal from './RouteModal.vue';
   import { useModal } from '/@/components/Modal';
-  import { deleteById, getById, getList } from '/@/api/api-gateway/route';
+  import { deleteById, getList } from '/@/api/api-gateway/route';
   import { HttpMethods } from '/@/api/api-gateway/model/basicModel';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
@@ -98,6 +98,33 @@
         },
       });
 
+      function handleChange(route) {
+        reloadTable({ searchInfo: { appId: route.appId } });
+      }
+
+      function handleAddNew() {
+        openModal(true, {}, true);
+      }
+
+      function handleEdit(record) {
+        openModal(true, record, true);
+      }
+
+      function handleDelete(record) {
+        Modal.warning({
+          title: t('AbpUi.AreYouSure'),
+          content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
+            record.reRouteName,
+          ] as Recordable),
+          okCancel: true,
+          onOk: () => {
+            deleteById(record.reRouteId).then(() => {
+              reloadTable({ searchInfo: { appId: record.appId } });
+            });
+          },
+        });
+      }
+
       return {
         t,
         registerTable,
@@ -106,31 +133,11 @@
         openModal,
         hasPermission,
         HttpMethods,
+        handleAddNew,
+        handleEdit,
+        handleDelete,
+        handleChange,
       };
-    },
-    methods: {
-      handleAddNew() {
-        this.openModal(true, {}, true);
-      },
-      handleEdit(record) {
-        getById(record.reRouteId).then((route) => {
-          this.openModal(true, route, true);
-        });
-      },
-      handleDelete(record) {
-        Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
-            record.reRouteName,
-          ] as Recordable),
-          okCancel: true,
-          onOk: () => {
-            deleteById(record.reRouteId).then(() => {
-              this.reloadTable();
-            });
-          },
-        });
-      },
     },
   });
 </script>

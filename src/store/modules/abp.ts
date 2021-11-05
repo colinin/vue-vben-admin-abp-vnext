@@ -35,11 +35,11 @@ export const useAbpStore = defineStore({
     apidefinition: lsApiDefinition,
   }),
   getters: {
-    getApplication() {
-      return this.application ?? defaultApp;
+    getApplication(state) {
+      return state.application ?? defaultApp;
     },
-    getApiDefinition() {
-      return this.apidefinition ?? defaultApi;
+    getApiDefinition(state) {
+      return state.apidefinition ?? defaultApi;
     },
   },
   actions: {
@@ -62,12 +62,30 @@ export const useAbpStore = defineStore({
         const transferCulture = localization.languagesMap['vben-admin-ui'].filter(
           (x) => x.value === localization.currentCulture.cultureName,
         );
+        function transformAbpLocaleMessageDicToI18n(abpLocaleMessageDic) {
+          const i18nLocaleMessageDic = {};
+          Object.keys(abpLocaleMessageDic).forEach((vKey) => {
+            i18nLocaleMessageDic[vKey] = {};
+            Object.keys(abpLocaleMessageDic[vKey]).forEach((mKey) => {
+              let msgKey = mKey;
+              // 处理最后一个字符以适配 i18n
+              if (msgKey.endsWith('.')) {
+                msgKey = msgKey.substring(0, msgKey.length - 1);
+              }
+              i18nLocaleMessageDic[vKey][msgKey] = abpLocaleMessageDic[vKey][mKey];
+            });
+          });
+          return i18nLocaleMessageDic;
+        }
         if (transferCulture && transferCulture.length > 0) {
-          i18n.global.mergeLocaleMessage(transferCulture[0].name, localization.values);
+          i18n.global.mergeLocaleMessage(
+            transferCulture[0].name,
+            transformAbpLocaleMessageDicToI18n(localization.values),
+          );
         } else {
           i18n.global.mergeLocaleMessage(
             localization.currentCulture.cultureName,
-            localization.values,
+            transformAbpLocaleMessageDicToI18n(localization.values),
           );
         }
       }

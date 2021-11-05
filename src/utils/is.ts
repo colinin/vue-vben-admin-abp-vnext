@@ -97,3 +97,15 @@ export function isUrl(path: string): boolean {
     /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
   return reg.test(path);
 }
+
+export function isSortUrl(path: string) {
+  const reg1 = /^[a-zA-Z]+:\d{1,5}$/;
+  const reg2 = /^([a-zA-Z\-\d+]+\.){1,}[a-z\-\d]+:\d{1,5}$/;
+  return reg1.test(path) || reg2.test(path);
+}
+
+export function isIpPort(path: string): boolean {
+  const regIpPort =
+    /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}:([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+  return regIpPort.test(path);
+}
