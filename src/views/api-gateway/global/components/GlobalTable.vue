@@ -49,14 +49,13 @@
     UpdateGlobalConfiguration,
   } from '/@/api/api-gateway/model/globalModel';
   import { getDataColumns } from './TableData';
-  import { getSearchFormSchemas, getModalFormSchemas } from './ModalData';
+  import { getSearchFormSchemas } from './ModalData';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   export default defineComponent({
     name: 'GlobalTable',
     components: { BasicTable, GlobalModal, TableAction },
     setup() {
       const { t } = useI18n();
-      const formItems = getModalFormSchemas();
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
@@ -84,7 +83,6 @@
 
       return {
         t,
-        formItems,
         registerModal,
         openModal,
         registerTable,
