@@ -146,6 +146,7 @@ export const useUserStore = defineStore({
         avatar: '',
         roles: currentUser.roles,
       };
+      this.setUserInfo(userInfo);
 
       return userInfo;
     },
