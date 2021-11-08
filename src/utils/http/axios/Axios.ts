@@ -144,7 +144,7 @@ export class VAxios {
       });
     }
 
-    return this.axiosInstance.request<T>({
+    return this.axiosInstance.request<T, AxiosResponse<any>>({
       ...config,
       method: 'POST',
       data: formData,
@@ -209,8 +209,8 @@ export class VAxios {
 
     return new Promise((resolve, reject) => {
       this.axiosInstance
-        .request<any, AxiosResponse<Result>>(conf)
-        .then((res: AxiosResponse<Result>) => {
+        .request<any, AxiosResponse<any>>(conf)
+        .then((res: AxiosResponse<any>) => {
           if (transformRequestHook && isFunction(transformRequestHook)) {
             try {
               const ret = transformRequestHook(res, opt);

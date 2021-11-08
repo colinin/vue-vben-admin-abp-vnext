@@ -10,9 +10,9 @@ import {
   OssContainersResult,
 } from './model/ossModel';
 import { format } from '/@/utils/strings';
-import { UploadFileParams } from '/@/utils/http/axios/types';
 import { AxiosResponse } from 'axios';
 import { isFunction } from '/@/utils/is';
+import { UploadFileParams } from '/#/axios';
 
 enum Api {
   CreateObject = '/api/oss-management/objects',
@@ -94,7 +94,7 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
         // 超时时间设置长时间
         timeout: 600000,
       };
-      const requestParams = {
+      const requestData = {
         file: fileData,
         chunkNumber: num,
         chunkSize: chunkSize,
@@ -106,7 +106,10 @@ export const uploadObject = (params: UploadFileParams, event: any) => {
         fileName: fileName,
       };
       return defAbpHttp
-        .uploadFile<void>(requestConfig, requestParams)
+        .uploadFile<void>(requestConfig, {
+          data: requestData,
+          file: fileData,
+        })
         .then((res) => {
           // 当前进度
           loadedSize += currentChunksSize;
@@ -170,7 +173,7 @@ export const deleteObject = (input: GetOssObjectRequest) => {
     },
     {
       joinParamsToUrl: true,
-    }
+    },
   );
 };
 
