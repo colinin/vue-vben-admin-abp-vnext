@@ -20,6 +20,14 @@ export function format(formatted, args: any) {
   }
   return formatted;
 }
+/**
+ *
+ * @param str 字符串是否为空或空格
+ * @returns
+ */
+export function isNullOrWhiteSpace(str?: string) {
+  return str === undefined || str === null || str === '' || str === ' ';
+}
 
 export function tryToJson(str: string | undefined) {
   if (!str || str.length === 0) return {};

@@ -6,58 +6,88 @@
       </Badge>
       <template #content>
         <Tabs>
-          <template v-for="item in listData" :key="item.key">
-            <TabPane>
-              <template #tab>
-                {{ item.name }}
-                <span v-if="item.list.length !== 0">({{ item.list.length }})</span>
+          <TabPane :key="notifierRef.key" :tab="notifierRef.name">
+            <NoticeList :list="notifierRef.list" @title-click="readNotifer" />
+          </TabPane>
+          <TabPane :key="messageRef.key" :tab="messageRef.name">
+            <NoticeList :list="messageRef.list">
+              <template #footer>
+                <ButtonGroup style="width: 100%">
+                  <Button
+                    :disabled="messageRef.list.length === 0"
+                    style="width: 50%"
+                    type="link"
+                    @click="clearMessage"
+                    >清空消息</Button
+                  >
+                  <Button style="width: 50%" type="link" @click="handleShowMessages"
+                    >查看更多</Button
+                  >
+                </ButtonGroup>
               </template>
-              <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
-              <NoticeList :list="item.list" v-if="item.key === '1'" @title-click="onNoticeClick" />
-              <NoticeList :list="item.list" v-else />
-            </TabPane>
-          </template>
+            </NoticeList>
+          </TabPane>
+          <TabPane :key="tasksRef.key" :tab="tasksRef.name">
+            <NoticeList :list="tasksRef.list" />
+          </TabPane>
         </Tabs>
       </template>
     </Popover>
   </div>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, ref } from 'vue';
-  import { Popover, Tabs, Badge } from 'ant-design-vue';
+  import { computed, defineComponent } from 'vue';
+  import { Button, Popover, Tabs, Badge } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
-  import { tabListData, ListItem } from './data';
   import NoticeList from './NoticeList.vue';
+  import { useGo } from '/@/hooks/web/usePage';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useTasks } from './useTasks';
+  import { useMessages } from './useMessages';
+  import { useNotifications } from './useNotifications';
 
   export default defineComponent({
-    components: { Popover, BellOutlined, Tabs, TabPane: Tabs.TabPane, Badge, NoticeList },
+    components: {
+      Button,
+      ButtonGroup: Button.Group,
+      Popover,
+      BellOutlined,
+      Tabs,
+      TabPane: Tabs.TabPane,
+      Badge,
+      NoticeList,
+    },
     setup() {
       const { prefixCls } = useDesign('header-notify');
-      const { createMessage } = useMessage();
-      const listData = ref(tabListData);
+      const go = useGo();
+      const { tasksRef } = useTasks();
+      const { messageRef, clearMessage } = useMessages();
+      const { notifierRef, readNotifer } = useNotifications();
+      // const listData = ref(tabListData);
 
       const count = computed(() => {
         let count = 0;
-        for (let i = 0; i < tabListData.length; i++) {
-          count += tabListData[i].list.length;
-        }
+        count += notifierRef.value.list.length;
+        count += messageRef.value.list.length;
+        count += tasksRef.value.list.length;
         return count;
       });
 
-      function onNoticeClick(record: ListItem) {
-        createMessage.success('你点击了通知，ID=' + record.id);
-        // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-        record.titleDelete = !record.titleDelete;
+      function handleShowMessages() {
+        console.log('handleShowMessages');
+        go('/sys/chat');
       }
 
       return {
         prefixCls,
-        listData,
         count,
-        onNoticeClick,
         numberStyle: {},
+        notifierRef,
+        readNotifer,
+        messageRef,
+        clearMessage,
+        tasksRef,
+        handleShowMessages,
       };
     },
   });

@@ -93,17 +93,6 @@ export class ListResultDto<T> implements IListResult<T> {
 
 export class ExtensibleObject implements IHasExtraProperties {
   extraProperties!: { [key: string]: any };
-
-  public setProperty(key: string, value: any) {
-    this.extraProperties[key] = value;
-  }
-
-  public getProperty(key: string) {
-    if (this.extraProperties[key]) {
-      return this.extraProperties[key];
-    }
-    return null;
-  }
 }
 
 export class ExtensibleEntity<TKey> extends ExtensibleObject {

@@ -51,6 +51,9 @@
         </a-list-item-meta>
       </a-list-item>
     </template>
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
   </a-list>
 </template>
 <script lang="ts">
