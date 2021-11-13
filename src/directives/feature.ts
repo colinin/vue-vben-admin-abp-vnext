@@ -1,16 +1,12 @@
 import type { App, Directive, DirectiveBinding } from 'vue';
-import { useAbpStoreWithOut } from '/@/store/modules/abp';
+import { useFeatures } from '/@/hooks/abp/useFeatures';
 
 function isFeature(el: Element, binding: any) {
-  const abpStore = useAbpStoreWithOut();
-  const { features } = abpStore.getApplication;
-  const definedFeatures = features.values;
-  if (!definedFeatures) return;
+  const { featureChecker } = useFeatures();
 
   const value = binding.value;
   if (!value) return;
-  console.log(value, definedFeatures);
-  if (definedFeatures[value] === 'false') {
+  if (!featureChecker.isEnabled(value)) {
     el.parentNode?.removeChild(el);
   }
 }

@@ -9,6 +9,7 @@ export enum LoginStateEnum {
   RESET_PASSWORD,
   MOBILE,
   QR_CODE,
+  MOBILE_REGISTER,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);
@@ -40,31 +41,30 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
 
 export function useFormRules(formData?: Recordable) {
   const { t } = useI18n();
+  const { t: abpAccount } = useI18n('AbpAccount');
 
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
+  const getEmailFormRule = computed(() =>
+    createRule(abpAccount('The {0} field is required', [abpAccount('EmailAddress')])),
+  );
+  const getEmailCodeFormRule = computed(() =>
+    createRule(
+      abpAccount('The {0} field is required', [abpAccount('DisplayName:EmailVerifyCode')]),
+    ),
+  );
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
 
   const validatePolicy = async (_: RuleObject, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
   };
 
-  const validateConfirmPassword = (password: string) => {
-    return async (_: RuleObject, value: string) => {
-      if (!value) {
-        return Promise.reject(t('sys.login.passwordPlaceholder'));
-      }
-      if (value !== password) {
-        return Promise.reject(t('sys.login.diffPwd'));
-      }
-      return Promise.resolve();
-    };
-  };
-
   const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
     const accountFormRule = unref(getAccountFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
+    const emailFormRule = unref(getEmailFormRule);
+    const emailCodeFormRule = unref(getEmailCodeFormRule);
     const smsFormRule = unref(getSmsFormRule);
     const mobileFormRule = unref(getMobileFormRule);
 
@@ -78,11 +78,9 @@ export function useFormRules(formData?: Recordable) {
         return {
           account: accountFormRule,
           password: passwordFormRule,
-          confirmPassword: [
-            { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
-          ],
+          email: emailFormRule,
+          emailCode: emailCodeFormRule,
           policy: [{ validator: validatePolicy, trigger: 'change' }],
-          ...mobileRule,
         };
 
       // reset password form rules

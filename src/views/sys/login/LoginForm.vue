@@ -23,6 +23,7 @@
       <InputPassword
         size="large"
         visibilityToggle
+        autocomplete="off"
         v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
       />
@@ -51,37 +52,27 @@
       <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
       </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
-        {{ t('sys.login.registerButton') }}
-      </Button> -->
     </FormItem>
-    <ARow class="enter-x">
-      <ACol :md="8" :xs="24">
+    <!-- <ARow class="enter-x">
+      <ACol :md="12" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-        <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
-          {{ t('sys.login.qrSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="7" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
-          {{ t('sys.login.registerButton') }}
+    </ARow> -->
+
+    <ARow class="enter-x">
+      <ACol :md="24" :xs="24">
+        <span>{{ t('AbpAccount.AreYouANewUser') }}</span>
+        <Button type="link" @click="setLoginState(LoginStateEnum.REGISTER)">
+          {{ t('AbpAccount.Register') }}
         </Button>
       </ACol>
     </ARow>
 
     <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
 
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <GithubFilled />
-      <WechatFilled />
-      <AlipayCircleFilled />
-      <GoogleCircleFilled />
-      <TwitterCircleFilled />
-    </div>
+    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`"> </div>
   </Form>
 </template>
 <script lang="ts" setup>
@@ -89,13 +80,6 @@
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
-  import {
-    GithubFilled,
-    WechatFilled,
-    AlipayCircleFilled,
-    GoogleCircleFilled,
-    TwitterCircleFilled,
-  } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
 

@@ -11,6 +11,11 @@
         <Avatar :size="26" :src="avatar" style="margin-left: -6px" />
       </template>
     </MenuItem>
+    <MenuItem key="notifications">
+      <template #icon>
+        <NotificationOutlined />
+      </template>
+    </MenuItem>
     <MenuItem key="chat-message">
       <template #icon>
         <MailOutlined />
@@ -33,11 +38,24 @@
   import { computed, defineComponent } from 'vue';
   import { useUserStoreWithOut } from '/@/store/modules/user';
   import { Avatar, Menu, MenuItem } from 'ant-design-vue';
-  import { MailOutlined, UserSwitchOutlined, UsergroupAddOutlined } from '@ant-design/icons-vue';
+  import {
+    MailOutlined,
+    UserSwitchOutlined,
+    UsergroupAddOutlined,
+    NotificationOutlined,
+  } from '@ant-design/icons-vue';
 
   export default defineComponent({
     name: 'ChatSider',
-    components: { Avatar, Menu, MenuItem, MailOutlined, UserSwitchOutlined, UsergroupAddOutlined },
+    components: {
+      Avatar,
+      Menu,
+      MenuItem,
+      MailOutlined,
+      UserSwitchOutlined,
+      UsergroupAddOutlined,
+      NotificationOutlined,
+    },
     props: {
       theme: {
         type: String as PropType<'dark' | 'light'>,

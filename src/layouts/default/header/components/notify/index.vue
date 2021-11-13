@@ -75,7 +75,7 @@
 
       function handleShowMessages() {
         console.log('handleShowMessages');
-        go('/sys/chat');
+        go('/sys/chat?type=chat-message');
       }
 
       return {

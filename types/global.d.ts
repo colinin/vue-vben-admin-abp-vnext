@@ -26,6 +26,13 @@ declare global {
   declare type PropType<T> = VuePropType<T>;
   declare type VueNode = VNodeChild | JSX.Element;
 
+  declare type NameValue<T> = {
+    name: string;
+    value: T;
+  };
+
+  declare type NameValue = NameValue<string>;
+
   export type Writable<T> = {
     -readonly [P in keyof T]: T[P];
   };

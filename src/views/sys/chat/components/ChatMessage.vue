@@ -30,10 +30,7 @@
               <div :class="getChatClass(chat)" :tabindex="index" @click="handleClickChat(chat)">
                 <div class="avatar">
                   <Avatar v-if="chat.avatar" :src="chat.avatar" />
-                  <Avatar
-                    v-else
-                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                  />
+                  <Avatar v-else :src="undefinedAvatar" />
                 </div>
                 <div class="main">
                   <div class="title">
@@ -101,6 +98,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   import { isNullOrWhiteSpace } from '/@/utils/strings';
+  import undefinedAvatar from '/@/assets/icons/64x64/color-user.png';
 
   interface Chat {
     id: string;
@@ -221,6 +219,7 @@
         getChatMessages,
         getGroupMessages,
         handleSendMessage,
+        undefinedAvatar,
       };
     },
   });

@@ -133,7 +133,7 @@ export class MultiTenancy {
 /** 全局设置 */
 export class Setting {
   /** 设置集合 */
-  values: { [key: string]: any } = {};
+  values: { [key: string]: string } = {};
 }
 
 /** 实体查询属性扩展 */

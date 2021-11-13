@@ -6,7 +6,7 @@
  * @example format('Hello, {0}!', ['World'])
  * @example format('Hello, {name}!', {name: 'World'})
  */
-export function format(formatted, args: any) {
+export function format(formatted: string, args: any) {
   if (typeof args === 'object') {
     Object.keys(args).forEach((key) => {
       const regexp = new RegExp('\\{' + key + '\\}', 'gi');
