@@ -255,12 +255,14 @@ export function useValidation() {
       const message = L(
         ValidationEnum.DoNotMatch,
         __getFieldName(match.name, match.resourceName, match.prefix),
+        __getFieldName(match.matchField, match.resourceName, match.prefix),
       );
       return _createRule({
+        required: match.required,
         message: message,
         trigger: match.trigger,
         validator: (_, value: string) => {
-          if (value !== match.value) {
+          if (value !== match.matchValue) {
             return Promise.reject(message);
           }
           return Promise.resolve();

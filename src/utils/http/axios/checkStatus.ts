@@ -108,7 +108,11 @@ export function checkResponse(response: any): void {
       };
       reader.readAsText(response.data);
     } else {
-      error(errorJson.message);
+      let errorMessage = errorJson.message;
+      if (errorJson.validationErrors) {
+        errorMessage += errorJson.validationErrors.map((v) => v.message).join('\n');
+      }
+      error(errorMessage);
     }
     return;
   }

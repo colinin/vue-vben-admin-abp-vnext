@@ -1,5 +1,10 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import {
+  LoginParams,
+  LoginResultModel,
+  GetUserInfoModel,
+  LoginByPhoneParams,
+} from './model/userModel';
 import { useGlobSetting } from '/@/hooks/setting';
 import { ContentTypeEnum } from '/@/enums/httpEnum';
 
@@ -23,6 +28,36 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     grant_type: 'password',
     username: params.username,
     password: params.password,
+  };
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.Login,
+      params: tokenParams,
+      headers: {
+        'Content-Type': ContentTypeEnum.FORM_URLENCODED,
+      },
+    },
+    {
+      errorMessageMode: mode,
+      apiUrl: '/connect',
+    },
+  );
+}
+
+/**
+ * 手机登录
+ * @param params
+ * @param mode
+ * @returns
+ */
+export function loginPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode = 'modal') {
+  const setting = useGlobSetting();
+  const tokenParams = {
+    client_id: setting.clientId,
+    client_secret: setting.clientSecret,
+    grant_type: 'phone_verify',
+    phone_number: params.phoneNumber,
+    phone_verify_code: params.code,
   };
   return defHttp.post<LoginResultModel>(
     {

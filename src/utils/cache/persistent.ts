@@ -52,7 +52,7 @@ function initPersistentMemory() {
 }
 
 export class Persistent {
-  static setTenant(value: string | '') {
+  static setTenant(value: any) {
     delCookie('__tenant');
     ls.set(ABP_TENANT_KEY, value);
   }

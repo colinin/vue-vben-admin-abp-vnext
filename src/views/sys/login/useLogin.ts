@@ -1,7 +1,5 @@
 import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
-import type { RuleObject } from 'ant-design-vue/lib/form/interface';
 import { ref, computed, unref, Ref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
 import { useValidation } from '/@/hooks/abp/useValidation';
 
 export enum LoginStateEnum {
@@ -11,6 +9,8 @@ export enum LoginStateEnum {
   MOBILE,
   QR_CODE,
   MOBILE_REGISTER,
+  WECHAT,
+  SSO,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);
@@ -41,7 +41,6 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
 }
 
 export function useFormRules(formData?: Recordable) {
-  const { t } = useI18n();
   const { ruleCreator } = useValidation();
 
   const getUserNameFormRule = computed(() =>
@@ -75,6 +74,19 @@ export function useFormRules(formData?: Recordable) {
       prefix: 'DisplayName',
     }),
   );
+  const getValidateConfirmPasswordRule = computed(() => {
+    return (password: string) => {
+      return ruleCreator.doNotMatch({
+        name: 'NewPassword',
+        resourceName: 'AbpAccount',
+        prefix: 'DisplayName',
+        matchField: 'NewPasswordConfirm',
+        matchValue: password,
+        trigger: 'change',
+        required: true,
+      });
+    };
+  });
 
   // const validatePolicy = async (_: RuleObject, value: boolean) => {
   //   return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
@@ -86,6 +98,7 @@ export function useFormRules(formData?: Recordable) {
     const emailFormRule = unref(getEmailFormRule);
     const mobileFormRule = unref(getMobileFormRule);
     const mobileCodeFormRule = unref(getMobileCodeFormRule);
+    const validateConfirmPasswordRule = unref(getValidateConfirmPasswordRule);
 
     const mobileRule = {
       code: mobileCodeFormRule,
@@ -114,8 +127,9 @@ export function useFormRules(formData?: Recordable) {
       // reset password form rules
       case LoginStateEnum.RESET_PASSWORD:
         return {
-          userName: userNameFormRule,
           ...mobileRule,
+          newPassword: passwordFormRule,
+          newPasswordConfirm: validateConfirmPasswordRule(formData?.newPassword),
         };
 
       // mobile form rules

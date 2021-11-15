@@ -6,12 +6,14 @@
     :rules="getFormRules"
     ref="formRef"
     v-show="getShow"
+    colon
+    labelAlign="left"
     @keypress.enter="handleLogin"
   >
     <FormItem>
       <MultiTenancyBox />
     </FormItem>
-    <FormItem name="userName" class="enter-x">
+    <FormItem name="userName" class="enter-x" :label="t('AbpAccount.DisplayName:SmsVerifyCode')">
       <BInput
         size="large"
         v-model:value="formData.userName"
@@ -19,7 +21,7 @@
         class="fix-auto-fill"
       />
     </FormItem>
-    <FormItem name="password" class="enter-x">
+    <FormItem name="password" class="enter-x" :label="t('AbpAccount.DisplayName:Password')">
       <InputPassword
         size="large"
         visibilityToggle
@@ -72,13 +74,37 @@
 
     <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
 
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`"> </div>
+    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
+      <SvgIcon
+        v-if="getLoginState !== LoginStateEnum.SSO"
+        name="idsv4"
+        :style="{ cursor: 'pointer' }"
+        :size="22"
+        title="SSO"
+      />
+      <UserOutlined
+        v-if="getLoginState !== LoginStateEnum.LOGIN"
+        :title="t('sys.login.passwordLogin')"
+        @click="setLoginState(LoginStateEnum.LOGIN)"
+      />
+      <MobileOutlined
+        v-if="getLoginState !== LoginStateEnum.MOBILE"
+        :title="t('sys.login.phoneLogin')"
+        @click="setLoginState(LoginStateEnum.MOBILE)"
+      />
+      <WechatOutlined
+        v-if="getLoginState !== LoginStateEnum.WECHAT"
+        :title="t('sys.login.wechatLogin')"
+      />
+    </div>
   </Form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
+  import { MobileOutlined, WechatOutlined, UserOutlined } from '@ant-design/icons-vue';
+  import { SvgIcon } from '/@/components/Icon';
   import { Input as BInput } from '/@/components/Input';
   import LoginFormTitle from './LoginFormTitle.vue';
   import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
@@ -97,7 +123,7 @@
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const { t } = useI18n();
-  const { notification, createErrorModal } = useMessage();
+  const { notification } = useMessage();
   const { prefixCls } = useDesign('login');
   const { settingProvider } = useSettings();
   const userStore = useUserStore();
@@ -139,12 +165,6 @@
           duration: 3,
         });
       }
-    } catch (error) {
-      createErrorModal({
-        title: t('sys.api.errorTip'),
-        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-      });
     } finally {
       loading.value = false;
     }

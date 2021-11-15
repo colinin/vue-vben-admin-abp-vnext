@@ -9,6 +9,9 @@
       colon
       labelAlign="left"
     >
+      <FormItem>
+        <MultiTenancyBox />
+      </FormItem>
       <FormItem name="userName" class="enter-x" :label="L('DisplayName:UserName')">
         <BInput class="fix-auto-fill" size="large" v-model:value="formData.userName" />
       </FormItem>
@@ -48,14 +51,18 @@
   import { Form, Button, Row, Col } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { StrengthMeter } from '/@/components/StrengthMeter';
+  import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useGlobSetting } from '/@/hooks/setting';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { register } from '/@/api/account/accounts';
 
   const ACol = Col;
   const ARow = Row;
   const FormItem = Form.Item;
   const { L } = useLocalization('AbpAccount');
   const { handleBackLogin, getLoginState, setLoginState } = useLoginState();
+  const glob = useGlobSetting();
 
   const formRef = ref();
   const loading = ref(false);
@@ -64,9 +71,10 @@
     userName: '',
     password: '',
     emailAddress: '',
+    appName: glob.shortName,
   });
 
-  const { getFormRules } = useFormRules(formData);
+  const { getFormRules } = useFormRules();
   const { validForm } = useFormValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
@@ -74,6 +82,9 @@
   async function handleRegister() {
     const data = await validForm();
     if (!data) return;
-    console.log(data);
+    register(data).then(() => {
+      formRef.value.resetFields();
+      setLoginState(LoginStateEnum.LOGIN);
+    });
   }
 </script>

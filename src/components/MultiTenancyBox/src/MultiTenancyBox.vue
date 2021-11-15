@@ -5,7 +5,7 @@
     size="large"
     autoComplete="off"
     @search="handleSwitchTenant"
-    v-model:value="formModelRef.tenantName"
+    v-model:value="currentTenant.name"
   >
     <template #enterButton>
       <Button> ({{ t('AbpUiMultiTenancy.Switch') }}) </Button>
@@ -24,21 +24,19 @@
   >
     <Form layout="vertical" :model="formModelRef">
       <FormItem :label="t('AbpUiMultiTenancy.SwitchTenantHint')">
-        <BInput :allowClear="true" v-model:value="formModelRef.tenantName" />
+        <BInput :allowClear="true" v-model:value="formModelRef.name" />
       </FormItem>
     </Form>
   </BasicModal>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, unref, onMounted } from 'vue';
+  import { computed, defineComponent, ref, unref } from 'vue';
   import { Button, Form, Input } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { Persistent } from '/@/utils/cache/persistent';
-
-  import { findTenantByName, findTenantById } from '/@/api/multi-tenancy/tenants';
-
+  import { findTenantByName } from '/@/api/multi-tenancy/tenants';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -58,15 +56,13 @@
       const { t } = useI18n();
       const { createMessage } = useMessage();
       const [registerModal, { openModal, closeModal }] = useModal();
-      const formModelRef = ref({ tenantName: '' });
-
-      onMounted(() => {
-        const tenantId = Persistent.getTenant();
-        if (tenantId) {
-          findTenantById(tenantId).then((res) => {
-            formModelRef.value.tenantName = res.name;
-          });
-        }
+      const currentTenant = computed(() => {
+        const abpStore = useAbpStoreWithOut();
+        return abpStore.getApplication.currentTenant;
+      });
+      const formModelRef = ref({
+        id: currentTenant.value.id,
+        name: currentTenant.value.name,
       });
 
       function handleSwitchTenant() {
@@ -74,15 +70,16 @@
       }
 
       async function switchToTenant() {
-        Persistent.setTenant('');
+        Persistent.setTenant({});
         const formModel = unref(formModelRef);
-        if (formModel.tenantName) {
-          const result = await findTenantByName(formModel.tenantName);
-          Persistent.setTenant(result.tenantId);
+        if (formModel.name) {
+          const result = await findTenantByName(formModel.name);
+          Persistent.setTenant({
+            id: result.tenantId,
+            name: result.name,
+          });
           if (!result.success) {
-            createMessage.warn(
-              t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [formModel.tenantName]),
-            );
+            createMessage.warn(t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [formModel.name]));
           }
         }
         const abpStore = useAbpStoreWithOut();
@@ -92,6 +89,7 @@
 
       return {
         t,
+        currentTenant,
         formModelRef,
         registerModal,
         switchToTenant,

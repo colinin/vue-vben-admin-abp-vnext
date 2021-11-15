@@ -49,11 +49,13 @@ export interface IFieldRegular extends IField {
   expression: string;
 }
 
-export interface IFieldMatch extends IField {
-  /** 比较字符 */
-  value: string;
+export interface IFieldMatch extends IFieldRequired {
   /** 字段名称 */
   name: string;
+  /** 对比字段 */
+  matchField: string;
+  /** 对比字段值 */
+  matchValue: string;
 }
 
 export interface IFieldContains extends IField {

@@ -102,9 +102,9 @@ const transform: AxiosTransform = {
     config.headers = config.headers ?? {};
     const localeStore = useLocaleStoreWithOut();
     config.headers['Accept-Language'] = localeStore.getLocale;
-    const tenantId = Persistent.getTenant();
-    if (tenantId) {
-      config.headers[globSetting.multiTenantKey] = tenantId;
+    const tenant = Persistent.getTenant();
+    if (tenant && tenant.id) {
+      config.headers[globSetting.multiTenantKey] = tenant.id;
     }
     return config;
   },

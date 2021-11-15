@@ -80,6 +80,10 @@ export default {
     registerButton: 'Sign up',
     rememberMe: 'Remember me',
     forgetPassword: 'Forget Password?',
+    passwordLogin: 'User password',
+    phoneLogin: 'Mobile',
+    wechatLogin: 'Wechat',
+    ssoLogin: 'Authentication center',
     otherSignIn: 'Sign in with',
 
     // notify

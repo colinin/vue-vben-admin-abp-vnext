@@ -74,6 +74,10 @@ export default {
     registerButton: '注册',
     rememberMe: '记住我',
     forgetPassword: '忘记密码?',
+    passwordLogin: '用户密码登录',
+    phoneLogin: '手机验证码登录',
+    wechatLogin: '微信认证登录',
+    ssoLogin: '认证中心登录',
     otherSignIn: '其他登录方式',
 
     // notify

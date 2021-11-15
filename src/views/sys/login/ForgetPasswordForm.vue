@@ -1,32 +1,49 @@
 <template>
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
-    <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-      <FormItem name="account" class="enter-x">
+    <Form
+      class="p-4 enter-x"
+      :model="formData"
+      :rules="getFormRules"
+      ref="formRef"
+      colon
+      labelAlign="left"
+    >
+      <FormItem>
+        <MultiTenancyBox />
+      </FormItem>
+      <FormItem name="phoneNumber" class="enter-x" :label="L('DisplayName:PhoneNumber')">
         <Input
           size="large"
-          v-model:value="formData.account"
-          :placeholder="t('sys.login.userName')"
+          v-model:value="formData.phoneNumber"
+          :placeholder="L('DisplayName:PhoneNumber')"
         />
       </FormItem>
-
-      <FormItem name="mobile" class="enter-x">
-        <Input size="large" v-model:value="formData.mobile" :placeholder="t('sys.login.mobile')" />
-      </FormItem>
-      <FormItem name="sms" class="enter-x">
+      <FormItem name="code" class="enter-x" :label="L('DisplayName:SmsVerifyCode')">
         <CountdownInput
           size="large"
-          v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
+          v-model:value="formData.code"
+          :placeholder="L('DisplayName:SmsVerifyCode')"
+          :send-code-api="handleSendCode"
         />
+      </FormItem>
+      <FormItem name="newPassword" class="enter-x" :label="L('DisplayName:NewPassword')">
+        <StrengthMeter size="large" v-model:value="formData.newPassword" />
+      </FormItem>
+      <FormItem
+        name="newPasswordConfirm"
+        class="enter-x"
+        :label="L('DisplayName:NewPasswordConfirm')"
+      >
+        <InputPassword size="large" v-model:value="formData.newPasswordConfirm" />
       </FormItem>
 
       <FormItem class="enter-x">
         <Button type="primary" size="large" block @click="handleReset" :loading="loading">
-          {{ t('common.resetText') }}
+          {{ L('ResetPassword') }}
         </Button>
         <Button size="large" block class="mt-4" @click="handleBackLogin">
-          {{ t('sys.login.backSignIn') }}
+          {{ L('Back') }}
         </Button>
       </FormItem>
     </Form>
@@ -35,31 +52,49 @@
 <script lang="ts" setup>
   import { reactive, ref, computed, unref } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Button } from 'ant-design-vue';
+  import { Form, Button, InputPassword } from 'ant-design-vue';
   import { Input } from '/@/components/Input';
   import { CountdownInput } from '/@/components/CountDown';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useLoginState, useFormRules, LoginStateEnum } from './useLogin';
+  import { StrengthMeter } from '/@/components/StrengthMeter';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
+  import { MultiTenancyBox } from '/@/components/MultiTenancyBox';
+  import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { resetPassword, sendPhoneResetPasswordCode } from '/@/api/account/accounts';
 
   const FormItem = Form.Item;
-  const { t } = useI18n();
-  const { handleBackLogin, getLoginState } = useLoginState();
-  const { getFormRules } = useFormRules();
+  const { L } = useLocalization('AbpAccount');
+  const { handleBackLogin, getLoginState, setLoginState } = useLoginState();
 
   const formRef = ref();
   const loading = ref(false);
-
   const formData = reactive({
-    account: '',
-    mobile: '',
-    sms: '',
+    phoneNumber: '',
+    code: '',
+    newPassword: '',
+    newPasswordConfirm: '',
   });
+
+  const { getFormRules } = useFormRules(formData);
+  const { validForm } = useFormValid(formRef);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.RESET_PASSWORD);
 
+  function handleSendCode() {
+    return sendPhoneResetPasswordCode(formData.phoneNumber)
+      .then(() => {
+        return Promise.resolve(true);
+      })
+      .catch(() => {
+        return Promise.reject(false);
+      });
+  }
+
   async function handleReset() {
-    const form = unref(formRef);
-    if (!form) return;
-    await form.resetFields();
+    const data = await validForm();
+    if (!data) return;
+    resetPassword(data).then(() => {
+      formRef.value.resetFields();
+      setLoginState(LoginStateEnum.LOGIN);
+    });
   }
 </script>
