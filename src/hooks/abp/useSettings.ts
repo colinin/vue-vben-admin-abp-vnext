@@ -28,10 +28,10 @@ interface ISettingProvider {
   getAll(...names: string[]): SettingValue[];
 }
 
-export function useSettings() {
-  const abpStore = useAbpStoreWithOut();
-  const { values: settings } = abpStore.getApplication.setting;
+const abpStore = useAbpStoreWithOut();
+const { values: settings } = abpStore.getApplication.setting;
 
+export function useSettings() {
   function get(name: string): SettingValue | null {
     if (settings[name]) {
       return {

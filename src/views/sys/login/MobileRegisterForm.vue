@@ -15,7 +15,7 @@
       <FormItem name="phoneNumber" class="enter-x" :label="L('DisplayName:PhoneNumber')">
         <BInput size="large" v-model:value="formData.phoneNumber" class="fix-auto-fill" />
       </FormItem>
-      <FormItem name="code" class="enter-x" :label="L('DisplayName:EmailVerifyCode')">
+      <FormItem name="code" class="enter-x" :label="L('DisplayName:SmsVerifyCode')">
         <CountdownInput size="large" class="fix-auto-fill" v-model:value="formData.code" />
       </FormItem>
       <FormItem name="password" class="enter-x" :label="L('DisplayName:Password')">

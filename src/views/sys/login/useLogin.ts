@@ -2,6 +2,7 @@ import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
 import type { RuleObject } from 'ant-design-vue/lib/form/interface';
 import { ref, computed, unref, Ref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
+import { useValidation } from '/@/hooks/abp/useValidation';
 
 export enum LoginStateEnum {
   LOGIN,
@@ -41,52 +42,79 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
 
 export function useFormRules(formData?: Recordable) {
   const { t } = useI18n();
-  const { t: abpAccount } = useI18n('AbpAccount');
+  const { ruleCreator } = useValidation();
 
-  const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
-  const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
-  const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
+  const getUserNameFormRule = computed(() =>
+    ruleCreator.fieldRequired({
+      name: 'UserName',
+      resourceName: 'AbpAccount',
+      prefix: 'DisplayName',
+    }),
+  );
+  const getPasswordFormRule = computed(() =>
+    ruleCreator.fieldRequired({
+      name: 'Password',
+      resourceName: 'AbpAccount',
+      prefix: 'DisplayName',
+    }),
+  );
   const getEmailFormRule = computed(() =>
-    createRule(abpAccount('The {0} field is required', [abpAccount('EmailAddress')])),
+    ruleCreator.fieldRequired({ name: 'Email', resourceName: 'AbpAccount', prefix: 'DisplayName' }),
   );
-  const getEmailCodeFormRule = computed(() =>
-    createRule(
-      abpAccount('The {0} field is required', [abpAccount('DisplayName:EmailVerifyCode')]),
-    ),
+  const getMobileFormRule = computed(() =>
+    ruleCreator.fieldRequired({
+      name: 'PhoneNumber',
+      resourceName: 'AbpAccount',
+      prefix: 'DisplayName',
+    }),
   );
-  const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
+  const getMobileCodeFormRule = computed(() =>
+    ruleCreator.fieldRequired({
+      name: 'SmsVerifyCode',
+      resourceName: 'AbpAccount',
+      prefix: 'DisplayName',
+    }),
+  );
 
-  const validatePolicy = async (_: RuleObject, value: boolean) => {
-    return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
-  };
+  // const validatePolicy = async (_: RuleObject, value: boolean) => {
+  //   return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
+  // };
 
   const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
-    const accountFormRule = unref(getAccountFormRule);
+    const userNameFormRule = unref(getUserNameFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
     const emailFormRule = unref(getEmailFormRule);
-    const emailCodeFormRule = unref(getEmailCodeFormRule);
-    const smsFormRule = unref(getSmsFormRule);
     const mobileFormRule = unref(getMobileFormRule);
+    const mobileCodeFormRule = unref(getMobileCodeFormRule);
 
     const mobileRule = {
-      sms: smsFormRule,
-      mobile: mobileFormRule,
+      code: mobileCodeFormRule,
+      phoneNumber: mobileFormRule,
     };
     switch (unref(currentState)) {
       // register form rules
       case LoginStateEnum.REGISTER:
         return {
-          account: accountFormRule,
+          userName: userNameFormRule,
           password: passwordFormRule,
-          email: emailFormRule,
-          emailCode: emailCodeFormRule,
-          policy: [{ validator: validatePolicy, trigger: 'change' }],
+          emailAddress: emailFormRule,
+          // policy: [{ validator: validatePolicy, trigger: 'change' }],
+        };
+
+      // register form rules
+      case LoginStateEnum.MOBILE_REGISTER:
+        const mobileCodeRule = unref(getMobileCodeFormRule);
+        return {
+          userName: userNameFormRule,
+          password: passwordFormRule,
+          phoneNumber: mobileFormRule,
+          code: mobileCodeRule,
         };
 
       // reset password form rules
       case LoginStateEnum.RESET_PASSWORD:
         return {
-          account: accountFormRule,
+          userName: userNameFormRule,
           ...mobileRule,
         };
 
@@ -97,20 +125,10 @@ export function useFormRules(formData?: Recordable) {
       // login form rules
       default:
         return {
-          account: accountFormRule,
+          userName: userNameFormRule,
           password: passwordFormRule,
         };
     }
   });
   return { getFormRules };
-}
-
-function createRule(message: string) {
-  return [
-    {
-      required: true,
-      message,
-      trigger: 'change',
-    },
-  ];
 }

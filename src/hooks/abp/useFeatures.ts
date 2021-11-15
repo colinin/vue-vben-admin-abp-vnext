@@ -19,10 +19,10 @@ interface IFeatureChecker {
   getOrEmpty(name: string): string;
 }
 
-export function useFeatures() {
-  const abpStore = useAbpStoreWithOut();
-  const { values: fetures } = abpStore.getApplication.features;
+const abpStore = useAbpStoreWithOut();
+const { values: fetures } = abpStore.getApplication.features;
 
+export function useFeatures() {
   function get(name: string): FeatureValue | null {
     if (fetures && fetures[name]) {
       return {

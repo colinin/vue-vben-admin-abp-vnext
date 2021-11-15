@@ -9,41 +9,33 @@
       colon
       labelAlign="left"
     >
-      <FormItem name="account" class="enter-x" :label="t('AbpAccount.DisplayName:UserName')">
-        <BInput class="fix-auto-fill" size="large" v-model:value="formData.account" />
+      <FormItem name="userName" class="enter-x" :label="L('DisplayName:UserName')">
+        <BInput class="fix-auto-fill" size="large" v-model:value="formData.userName" />
       </FormItem>
-      <FormItem name="email" class="enter-x" :label="t('AbpAccount.EmailAddress')">
-        <BInput size="large" v-model:value="formData.email" class="fix-auto-fill" />
+      <FormItem name="emailAddress" class="enter-x" :label="L('DisplayName:Email')">
+        <BInput size="large" v-model:value="formData.emailAddress" class="fix-auto-fill" />
       </FormItem>
-      <FormItem
-        name="emailCode"
-        class="enter-x"
-        :label="t('AbpAccount.DisplayName:EmailVerifyCode')"
-      >
-        <CountdownInput size="large" class="fix-auto-fill" v-model:value="formData.emailCode" />
-      </FormItem>
-      <FormItem name="password" class="enter-x" :label="t('AbpAccount.Password')">
+      <FormItem name="password" class="enter-x" :label="L('DisplayName:Password')">
         <StrengthMeter size="large" v-model:value="formData.password" />
-      </FormItem>
-
-      <FormItem class="enter-x" name="policy">
-        <!-- No logic, you need to deal with it yourself -->
-        <Checkbox v-model:checked="formData.policy" size="small">
-          {{ t('sys.login.policy') }}
-        </Checkbox>
       </FormItem>
 
       <FormItem class="enter-x">
         <Button type="primary" size="large" block @click="handleRegister" :loading="loading">
-          {{ t('AbpAccount.Register') }}
+          {{ L('Register') }}
+        </Button>
+      </FormItem>
+
+      <FormItem class="enter-x">
+        <Button size="large" block @click="setLoginState(LoginStateEnum.MOBILE_REGISTER)">
+          {{ L('通过手机号注册') }}
         </Button>
       </FormItem>
 
       <ARow class="enter-x">
         <ACol :md="24" :xs="24">
-          <span>{{ t('AbpAccount.AlreadyRegistered') }}</span>
+          <span>{{ L('AlreadyRegistered') }}</span>
           <Button type="link" @click="handleBackLogin">
-            {{ t('AbpAccount.Login') }}
+            {{ L('Login') }}
           </Button>
         </ACol>
       </ARow>
@@ -53,28 +45,25 @@
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Button, Checkbox, Row, Col } from 'ant-design-vue';
+  import { Form, Button, Row, Col } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { StrengthMeter } from '/@/components/StrengthMeter';
-  import { CountdownInput } from '/@/components/CountDown';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   const ACol = Col;
   const ARow = Row;
   const FormItem = Form.Item;
-  const { t } = useI18n();
-  const { handleBackLogin, getLoginState } = useLoginState();
+  const { L } = useLocalization('AbpAccount');
+  const { handleBackLogin, getLoginState, setLoginState } = useLoginState();
 
   const formRef = ref();
   const loading = ref(false);
 
   const formData = reactive({
-    account: '',
+    userName: '',
     password: '',
-    email: '',
-    emailCode: '',
-    policy: false,
+    emailAddress: '',
   });
 
   const { getFormRules } = useFormRules(formData);

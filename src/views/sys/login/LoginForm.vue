@@ -11,10 +11,10 @@
     <FormItem>
       <MultiTenancyBox />
     </FormItem>
-    <FormItem name="account" class="enter-x">
+    <FormItem name="userName" class="enter-x">
       <BInput
         size="large"
-        v-model:value="formData.account"
+        v-model:value="formData.userName"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -108,7 +108,7 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: '',
+    userName: '',
     password: '',
   });
 
@@ -125,7 +125,7 @@
       loading.value = true;
       const userInfo = await userStore.login({
         password: data.password,
-        username: data.account,
+        username: data.userName,
         mode: 'none', //不要默认的错误提示
       });
       if (userInfo) {

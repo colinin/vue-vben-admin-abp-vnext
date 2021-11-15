@@ -92,20 +92,34 @@ export const isServer = typeof window === 'undefined';
 
 export const isClient = !isServer;
 
+export function isMatch(reg: RegExp, val: string) {
+  return reg.test(val);
+}
+
+export function isEmail(val: string) {
+  const reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+  return isMatch(reg, val);
+}
+
+export function isPhone(val: string) {
+  const reg = /^(13[0-9]|14[5|7]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/;
+  return isMatch(reg, val);
+}
+
 export function isUrl(path: string): boolean {
   const reg =
     /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
-  return reg.test(path);
+  return isMatch(reg, path);
 }
 
 export function isSortUrl(path: string) {
   const reg1 = /^[a-zA-Z]+:\d{1,5}$/;
   const reg2 = /^([a-zA-Z\-\d+]+\.){1,}[a-z\-\d]+:\d{1,5}$/;
-  return reg1.test(path) || reg2.test(path);
+  return isMatch(reg1, path) || isMatch(reg2, path);
 }
 
 export function isIpPort(path: string): boolean {
-  const regIpPort =
+  const reg =
     /^(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}:([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
-  return regIpPort.test(path);
+  return isMatch(reg, path);
 }
