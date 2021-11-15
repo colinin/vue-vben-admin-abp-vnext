@@ -18,12 +18,16 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { h } from 'vue';
 
+import { mgr } from '/@/utils/auth/oidc';
+
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
+  /** sso标记,用于后台退出 */
+  sso?: boolean;
 }
 
 const undefinedUser: UserInfo = {
@@ -49,6 +53,9 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
+    getSso(): boolean {
+      return this.sso === true;
+    },
     getUserInfo(): UserInfo {
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
@@ -66,6 +73,9 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
+    setSso(sso: boolean) {
+      this.sso = sso;
+    },
     setToken(info: string | undefined) {
       this.token = info ? info : ''; // for null or undefined value
       setAuthCache(TOKEN_KEY, info);
@@ -103,7 +113,7 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
         const { access_token } = data;
-
+        this.setSso(false);
         this.setToken(access_token);
         return this.afterLoginAction(goHome);
       } catch (error) {
@@ -121,12 +131,18 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginPhoneApi(loginParams, mode);
         const { access_token } = data;
-
+        this.setSso(false);
         this.setToken(access_token);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
       }
+    },
+
+    async oidcLogin(user: { access_token: string }) {
+      this.setSso(true);
+      this.setToken(user.access_token);
+      return this.afterLoginAction(true);
     },
 
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
@@ -175,7 +191,12 @@ export const useUserStore = defineStore({
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);
-      goLogin && router.push(PageEnum.BASE_LOGIN);
+      if (this.getSso === true) {
+        this.setSso(false);
+        mgr.signoutRedirect();
+      } else {
+        goLogin && router.push(PageEnum.BASE_LOGIN);
+      }
     },
 
     /**

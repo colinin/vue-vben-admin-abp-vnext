@@ -145,6 +145,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
         // 数据处理方式
         transform,
+        xsrfCookieName: 'XSRF-TOKEN',
+        xsrfHeaderName: 'RequestVerificationToken',
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
         requestOptions: {
           // 默认将prefix 添加到url

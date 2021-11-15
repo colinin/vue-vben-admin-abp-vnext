@@ -49,6 +49,7 @@
     "mockjs": "^1.1.0",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",
+    "oidc-client": "^1.11.5",
     "path-to-regexp": "^6.2.0",
     "pinia": "2.0.0",
     "qrcode": "^1.4.4",

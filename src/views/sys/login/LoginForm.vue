@@ -81,6 +81,7 @@
         :style="{ cursor: 'pointer' }"
         :size="22"
         title="SSO"
+        @click="login"
       />
       <UserOutlined
         v-if="getLoginState !== LoginStateEnum.LOGIN"
@@ -114,6 +115,7 @@
 
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
+  import { useOidc } from './useOidc';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useSettings } from '/@/hooks/abp/useSettings';
   //import { onKeyStroke } from '@vueuse/core';
@@ -127,6 +129,7 @@
   const { prefixCls } = useDesign('login');
   const { settingProvider } = useSettings();
   const userStore = useUserStore();
+  const { login } = useOidc();
 
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();

@@ -177,7 +177,10 @@ export interface OidcConfig {
   response_type: string;
   redirect_uri: string;
   scope?: string;
-  silentRedirectUrl?: string;
+  silent_redirect_uri?: string;
   post_logout_redirect_uri: string;
-  automaticSilentRenew: boolean;
+  automaticSilentRenew?: boolean;
+  automaticSilentSignin?: boolean;
+  accessTokenExpiringNotificationTime?: number;
+  revokeAccessTokenOnSignout?: boolean;
 }

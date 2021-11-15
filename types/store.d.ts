@@ -37,6 +37,7 @@ export interface UserInfo {
   desc?: string;
   homePath?: string;
   roles: string[];
+  idToken?: stirng;
 }
 
 export interface BeforeMiniState {
