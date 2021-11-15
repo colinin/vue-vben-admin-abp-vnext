@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 type FeatureValue = NameValue<string>;
@@ -19,10 +20,12 @@ interface IFeatureChecker {
   getOrEmpty(name: string): string;
 }
 
-const abpStore = useAbpStoreWithOut();
-const { values: fetures } = abpStore.getApplication.features;
-
 export function useFeatures() {
+  const fetures = computed(() => {
+    const abpStore = useAbpStoreWithOut();
+    return abpStore.getApplication.features.values;
+  });
+
   function get(name: string): FeatureValue | null {
     if (fetures && fetures[name]) {
       return {

@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
 type SettingValue = NameValue<string>;
@@ -28,10 +29,12 @@ interface ISettingProvider {
   getAll(...names: string[]): SettingValue[];
 }
 
-const abpStore = useAbpStoreWithOut();
-const { values: settings } = abpStore.getApplication.setting;
-
 export function useSettings() {
+  const settings = computed(() => {
+    const abpStore = useAbpStoreWithOut();
+    return abpStore.getApplication.setting.values;
+  });
+
   function get(name: string): SettingValue | null {
     if (settings[name]) {
       return {
@@ -43,7 +46,7 @@ export function useSettings() {
   }
 
   function getAll(...names: string[]): SettingValue[] {
-    let settingKeys = Object.keys(settings);
+    let settingKeys = Object.keys(settings.value);
     if (names) {
       settingKeys = settingKeys.filter((key) => names.includes(key));
     }
