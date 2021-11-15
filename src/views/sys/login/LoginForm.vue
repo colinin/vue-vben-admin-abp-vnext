@@ -61,7 +61,7 @@
       </ACol>
     </ARow> -->
 
-    <ARow class="enter-x">
+    <ARow class="enter-x" v-if="settingProvider.isTrue('Abp.Account.IsSelfRegistrationEnabled')">
       <ACol :md="24" :xs="24">
         <span>{{ t('AbpAccount.AreYouANewUser') }}</span>
         <Button type="link" @click="setLoginState(LoginStateEnum.REGISTER)">
@@ -89,6 +89,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useSettings } from '/@/hooks/abp/useSettings';
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
@@ -98,6 +99,7 @@
   const { t } = useI18n();
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
+  const { settingProvider } = useSettings();
   const userStore = useUserStore();
 
   const { setLoginState, getLoginState } = useLoginState();

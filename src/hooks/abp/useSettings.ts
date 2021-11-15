@@ -30,32 +30,27 @@ interface ISettingProvider {
 }
 
 export function useSettings() {
-  const settings = computed(() => {
+  const getSettings = computed(() => {
     const abpStore = useAbpStoreWithOut();
-    return abpStore.getApplication.setting.values;
-  });
-
-  function get(name: string): SettingValue | null {
-    if (settings[name]) {
-      return {
-        name: name,
-        value: settings[name],
-      };
-    }
-    return null;
-  }
-
-  function getAll(...names: string[]): SettingValue[] {
-    let settingKeys = Object.keys(settings.value);
-    if (names) {
-      settingKeys = settingKeys.filter((key) => names.includes(key));
-    }
-    return settingKeys.map((key) => {
+    const { values: settings } = abpStore.getApplication.setting;
+    const settingValues = Object.keys(settings).map((key): SettingValue => {
       return {
         name: key,
         value: settings[key],
       };
     });
+    return settingValues;
+  });
+
+  function get(name: string): SettingValue | undefined {
+    return getSettings.value.find((setting) => name === setting.name);
+  }
+
+  function getAll(...names: string[]): SettingValue[] {
+    if (names) {
+      return getSettings.value.filter((setting) => names.includes(setting.name));
+    }
+    return getSettings.value;
   }
 
   function getOrDefault<T>(name: string, defaultValue: T): T | string {
@@ -68,7 +63,7 @@ export function useSettings() {
 
   const settingProvider: ISettingProvider = {
     getOrEmpty(name: string) {
-      return get(name)?.value ?? '';
+      return getOrDefault(name, '');
     },
     getAll(...names: string[]) {
       return getAll(...names);
@@ -79,8 +74,8 @@ export function useSettings() {
       return isNaN(num) ? defaultValue : num;
     },
     isTrue(name: string) {
-      var setting = get(name);
-      return setting?.value.toLowerCase() === 'true';
+      var value = getOrDefault(name, 'false');
+      return value.toLowerCase() === 'true';
     },
   };
 

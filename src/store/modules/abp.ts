@@ -47,7 +47,6 @@ export const useAbpStore = defineStore({
       // 清除与用户相关的信息
       this.application.auth = new Auth();
       this.application.currentUser = new CurrentUser();
-      this.application.setting = new Setting();
     },
     setApplication(application: ApplicationConfiguration) {
       this.application = application;
