@@ -63,7 +63,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, onMounted } from 'vue';
   import { AppLogo } from '/@/components/Application';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
@@ -76,6 +76,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useLocaleStore } from '/@/store/modules/locale';
+  import { useLoginState, LoginStateEnum } from './useLogin';
 
   defineProps({
     sessionTimeout: {
@@ -86,9 +87,12 @@
   const globSetting = useGlobSetting();
   const { prefixCls } = useDesign('login');
   const { t } = useI18n();
+  const { setLoginState } = useLoginState();
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
   const title = computed(() => globSetting?.title ?? '');
+
+  onMounted(() => setLoginState(LoginStateEnum.LOGIN));
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login';

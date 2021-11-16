@@ -147,8 +147,10 @@ export interface GlobConfig {
   // Project abbreviation
   shortName: string;
   // Client
+  authority: string;
   clientId: string;
   clientSecret: string;
+  scopes: string;
   // Tenant key
   multiTenantKey: string;
 }
@@ -164,23 +166,10 @@ export interface GlobEnvConfig {
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
   // STS connect
+  VITE_GLOB_AUTHORITY: string;
   VITE_GLOB_CLIENT_ID: string;
   VITE_GLOB_CLIENT_SECRET: string;
+  VITE_GLOB_CLIENT_SCOPES: string;
   // Multi-tenancy key
   VITE_GLOB_MULTITENANCY_KEY: string;
-}
-
-export interface OidcConfig {
-  authority: string;
-  client_id: string;
-  client_secret?: string;
-  response_type: string;
-  redirect_uri: string;
-  scope?: string;
-  silent_redirect_uri?: string;
-  post_logout_redirect_uri: string;
-  automaticSilentRenew?: boolean;
-  automaticSilentSignin?: boolean;
-  accessTokenExpiringNotificationTime?: number;
-  revokeAccessTokenOnSignout?: boolean;
 }

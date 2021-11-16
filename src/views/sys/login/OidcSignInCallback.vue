@@ -10,12 +10,10 @@
     mgr
       .signinRedirectCallback()
       .then((user) => {
-        if (user.profile.tenantid) {
-          Persistent.setTenant({
-            id: user.profile.tenantid,
-            name: '',
-          });
-        }
+        Persistent.setTenant({
+          id: user.profile?.tenantid ?? '',
+          name: '',
+        });
         userStore.oidcLogin(user);
         // go(PageEnum.BASE_HOME);
       })

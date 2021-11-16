@@ -13,11 +13,11 @@
     <FormItem>
       <MultiTenancyBox />
     </FormItem>
-    <FormItem name="userName" class="enter-x" :label="t('AbpAccount.DisplayName:SmsVerifyCode')">
+    <FormItem name="userName" class="enter-x" :label="t('AbpAccount.DisplayName:UserName')">
       <BInput
         size="large"
         v-model:value="formData.userName"
-        :placeholder="t('sys.login.userName')"
+        :placeholder="t('AbpAccount.DisplayName:UserName')"
         class="fix-auto-fill"
       />
     </FormItem>
@@ -27,7 +27,7 @@
         visibilityToggle
         autocomplete="off"
         v-model:value="formData.password"
-        :placeholder="t('sys.login.password')"
+        :placeholder="t('AbpAccount.DisplayName:Password')"
       />
     </FormItem>
 
