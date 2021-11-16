@@ -146,6 +146,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // 数据处理方式
         transform,
         xsrfCookieName: 'XSRF-TOKEN',
+        // ASP.NET Core
         xsrfHeaderName: 'RequestVerificationToken',
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
         requestOptions: {

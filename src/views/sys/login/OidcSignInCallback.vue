@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue';
   import { mgr } from '/@/utils/auth/oidc';
+  import { del as delCookie } from '/@/utils/cookie';
   import { Persistent } from '/@/utils/cache/persistent';
   import { useUserStoreWithOut } from '/@/store/modules/user';
 
@@ -14,6 +15,8 @@
           id: user.profile?.tenantid ?? '',
           name: '',
         });
+        // TODO: 暂时先删除XSRF TOKEN?
+        delCookie('XSRF-TOKEN');
         userStore.oidcLogin(user);
         // go(PageEnum.BASE_HOME);
       })
