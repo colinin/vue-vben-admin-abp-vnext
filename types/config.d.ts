@@ -150,7 +150,6 @@ export interface GlobConfig {
   authority: string;
   clientId: string;
   clientSecret: string;
-  scopes: string;
   // Tenant key
   multiTenantKey: string;
 }
@@ -169,7 +168,6 @@ export interface GlobEnvConfig {
   VITE_GLOB_AUTHORITY: string;
   VITE_GLOB_CLIENT_ID: string;
   VITE_GLOB_CLIENT_SECRET: string;
-  VITE_GLOB_CLIENT_SCOPES: string;
   // Multi-tenancy key
   VITE_GLOB_MULTITENANCY_KEY: string;
 }

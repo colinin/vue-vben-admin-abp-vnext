@@ -13,7 +13,6 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     VITE_GLOB_AUTHORITY,
     VITE_GLOB_CLIENT_ID,
     VITE_GLOB_CLIENT_SECRET,
-    VITE_GLOB_CLIENT_SCOPES,
     VITE_GLOB_MULTITENANCY_KEY,
   } = getAppEnvConfig();
 
@@ -33,7 +32,6 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     authority: VITE_GLOB_AUTHORITY,
     clientId: VITE_GLOB_CLIENT_ID,
     clientSecret: VITE_GLOB_CLIENT_SECRET,
-    scopes: VITE_GLOB_CLIENT_SCOPES,
     multiTenantKey: VITE_GLOB_MULTITENANCY_KEY,
   };
   return glob as Readonly<GlobConfig>;

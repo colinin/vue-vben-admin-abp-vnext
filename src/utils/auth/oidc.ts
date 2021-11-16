@@ -9,8 +9,8 @@ export const mgr = new oidc.UserManager({
   authority: glob.authority,
   client_id: glob.clientId,
   client_secret: glob.clientSecret,
-  scope: glob.scopes,
   response_type: 'id_token token',
+  scope: 'openid profile email address offline_access lingyun-abp-application',
   redirect_uri: `${location.protocol}//${location.host}/signin-callback`,
   post_logout_redirect_uri: `${location.protocol}//${location.host}/signout-callback`,
 });
