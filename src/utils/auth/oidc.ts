@@ -2,7 +2,6 @@ import oidc from 'oidc-client';
 import { useGlobSetting } from '/@/hooks/setting';
 const glob = useGlobSetting();
 const location = window.location;
-console.log(glob, location);
 // 预留oidc接口
 // 用于可能的SSO
 // yarn add oidc-client
