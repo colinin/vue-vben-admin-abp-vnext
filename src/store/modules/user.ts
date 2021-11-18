@@ -172,12 +172,14 @@ export const useUserStore = defineStore({
         roles: currentUser.roles,
         // 从 userinfo 端点获取
         realName: userInfo.nickname,
-        avatar: userInfo.avatarUrl,
         phoneNumber: userInfo.phone_number,
         phoneNumberConfirmed: userInfo.phone_number_verified === 'True',
         email: userInfo.email,
         emailConfirmed: userInfo.email_verified === 'True',
       };
+      if (userInfo.avatarUrl) {
+        outgoingUserInfo.avatar = formatUrl(userInfo.avatarUrl);
+      }
       this.setUserInfo(outgoingUserInfo);
 
       return outgoingUserInfo;
