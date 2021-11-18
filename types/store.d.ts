@@ -38,6 +38,10 @@ export interface UserInfo {
   homePath?: string;
   roles: string[];
   idToken?: stirng;
+  email?: string;
+  emailConfirmed?: boolean;
+  phoneNumber?: string;
+  phoneNumberConfirmed?: boolean;
 }
 
 export interface BeforeMiniState {

@@ -43,6 +43,7 @@
     "ant-design-vue": "2.2.8",
     "axios": "^0.24.0",
     "codemirror": "^5.62.2",
+    "cropperjs": "^1.5.12",
     "crypto-js": "^4.1.1",
     "echarts": "^5.2.2",
     "lodash-es": "^4.17.21",

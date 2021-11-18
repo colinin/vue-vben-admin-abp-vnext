@@ -1,4 +1,8 @@
-import { PagedAndSortedResultRequestDto, PagedResultDto } from '../../model/baseModel';
+import {
+  ListResultDto,
+  PagedAndSortedResultRequestDto,
+  PagedResultDto,
+} from '../../model/baseModel';
 
 export enum NotificationLifetime {
   Persistent = 0,
@@ -40,9 +44,23 @@ export interface NotificationInfo {
   severity: NotificationSeverity;
 }
 
+export interface NotificationGroup {
+  name: string;
+  displayName: string;
+  notifications: {
+    name: string;
+    displayName: string;
+    description: string;
+    type: NotificationType;
+    lifetime: NotificationLifetime;
+  }[];
+}
+
 export class GetNotificationPagedRequest extends PagedAndSortedResultRequestDto {
   reverse = true;
   readState = NotificationReadState.UnRead;
 }
 
 export class NotificationPagedResult extends PagedResultDto<NotificationInfo> {}
+
+export class NotificationGroupListResult extends ListResultDto<NotificationGroup> {}

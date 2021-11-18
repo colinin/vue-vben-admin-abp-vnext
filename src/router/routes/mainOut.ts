@@ -15,6 +15,9 @@ export const mainOutRoutes: AppRouteModule[] = [
     meta: {
       title: 'signin-callbackk',
       ignoreAuth: true,
+      hideMenu: true,
+      hideTab: true,
+      hideBreadcrumb: true,
     },
   },
   {
@@ -24,6 +27,9 @@ export const mainOutRoutes: AppRouteModule[] = [
     meta: {
       title: 'signout-callback',
       ignoreAuth: true,
+      hideMenu: true,
+      hideTab: true,
+      hideBreadcrumb: true,
     },
   },
 ];

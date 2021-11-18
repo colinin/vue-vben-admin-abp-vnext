@@ -12,12 +12,16 @@
     <template #overlay>
       <Menu @click="handleMenuClick">
         <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
+          key="center"
+          :text="t('AbpAccount.PersonalInfo')"
+          icon="ant-design:profile-outlined"
         />
-        <MenuDivider v-if="getShowDoc" />
+        <MenuItem
+          key="setting"
+          :text="t('AbpAccount.PersonalSettings')"
+          icon="ant-design:setting-outlined"
+        />
+        <MenuDivider />
         <MenuItem
           v-if="getUseLockPage"
           key="lock"
@@ -47,6 +51,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
+  import { useGo } from '/@/hooks/web/usePage';
 
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
@@ -54,7 +59,7 @@
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'setting' | 'center';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -71,6 +76,7 @@
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
+      const go = useGo();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
       const userStore = useUserStore();
 
@@ -105,6 +111,12 @@
             break;
           case 'lock':
             handleLock();
+            break;
+          case 'setting':
+            go('/account/settings');
+            break;
+          case 'center':
+            go('/account/center');
             break;
         }
       }

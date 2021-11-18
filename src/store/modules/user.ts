@@ -1,4 +1,3 @@
-import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -9,7 +8,7 @@ import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, LoginByPhoneParams } from '/@/api/sys/model/userModel';
 import { useAbpStoreWithOut } from './abp';
 
-import { loginApi, loginPhoneApi } from '/@/api/sys/user';
+import { loginApi, loginPhoneApi, getUserInfo } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -19,9 +18,10 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { h } from 'vue';
 
 import { mgr } from '/@/utils/auth/oidc';
+import { formatUrl } from '/@/api/oss-management/private';
 
 interface UserState {
-  userInfo: Nullable<UserInfo>;
+  userInfo: Nullable<GetUserInfoModel>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
@@ -29,14 +29,6 @@ interface UserState {
   /** sso标记,用于后台退出 */
   sso?: boolean;
 }
-
-const undefinedUser: UserInfo = {
-  userId: '',
-  username: '',
-  realName: '',
-  avatar: '',
-  roles: [],
-};
 
 export const useUserStore = defineStore({
   id: 'app-user',
@@ -56,8 +48,8 @@ export const useUserStore = defineStore({
     getSso(): boolean {
       return this.sso === true;
     },
-    getUserInfo(): UserInfo {
-      return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    getUserInfo(): GetUserInfoModel {
+      return this.userInfo || getAuthCache<GetUserInfoModel>(USER_INFO_KEY) || {};
     },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY);
@@ -84,7 +76,7 @@ export const useUserStore = defineStore({
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
     },
-    setUserInfo(info: UserInfo | null) {
+    setUserInfo(info: GetUserInfoModel) {
       this.userInfo = info;
       this.lastUpdateTime = new Date().getTime();
       setAuthCache(USER_INFO_KEY, info);
@@ -93,7 +85,7 @@ export const useUserStore = defineStore({
       this.sessionTimeout = flag;
     },
     resetState() {
-      this.setUserInfo(undefinedUser);
+      this.setUserInfo({});
       this.setToken('');
       this.setRoleList([]);
       this.setSessionTimeout(false);
@@ -167,22 +159,28 @@ export const useUserStore = defineStore({
       }
       return userInfo;
     },
-    async getUserInfoAction(): Promise<UserInfo | null> {
+    async getUserInfoAction(): Promise<GetUserInfoModel> {
       const abpStore = useAbpStoreWithOut();
-
       await abpStore.initlizeAbpApplication();
+      const userInfo = await getUserInfo();
+      const currentUser = abpStore.getApplication.currentUser;
 
-      const currentUser = abpStore.application.currentUser;
-      const userInfo = {
-        userId: currentUser.id!,
-        username: currentUser.userName!,
-        realName: currentUser.surName!,
-        avatar: '',
+      const outgoingUserInfo: { [key: string]: any } = {
+        // 从 currentuser 接口获取
+        userId: currentUser.id,
+        username: currentUser.userName,
         roles: currentUser.roles,
+        // 从 userinfo 端点获取
+        realName: userInfo.nickname,
+        avatar: userInfo.avatarUrl,
+        phoneNumber: userInfo.phone_number,
+        phoneNumberConfirmed: userInfo.phone_number_verified === 'True',
+        email: userInfo.email,
+        emailConfirmed: userInfo.email_verified === 'True',
       };
-      this.setUserInfo(userInfo);
+      this.setUserInfo(outgoingUserInfo);
 
-      return userInfo;
+      return outgoingUserInfo;
     },
     /**
      * @description: logout
@@ -190,7 +188,7 @@ export const useUserStore = defineStore({
     async logout(goLogin = false) {
       this.setToken(undefined);
       this.setSessionTimeout(false);
-      this.setUserInfo(null);
+      this.setUserInfo({});
       if (this.getSso === true) {
         this.setSso(false);
         mgr.signoutRedirect();

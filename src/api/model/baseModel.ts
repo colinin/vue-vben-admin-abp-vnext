@@ -109,6 +109,10 @@ export class ExtensibleAuditedEntity<TKey> extends ExtensibleCreationAuditedEnti
   lastModifierId?: string;
 }
 
+export interface IHasConcurrencyStamp {
+  concurrencyStamp: string;
+}
+
 export interface IHasExtraProperties {
   extraProperties: { [key: string]: any };
 }
