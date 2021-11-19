@@ -245,7 +245,7 @@
         <TabPane key="rateLimit" :tab="t('ApiGateway.RateLimit')" forceRender>
           <FormItem
             :name="['rateLimitOptions', 'limit']"
-            :label="t('ApiGateway.DisplayName:limit')"
+            :label="t('ApiGateway.DisplayName:Limit')"
           >
             <InputNumber style="width: 100%" v-model:value="routeRef.rateLimitOptions.limit" />
           </FormItem>

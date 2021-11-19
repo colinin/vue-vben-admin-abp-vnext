@@ -26,7 +26,7 @@ export function useGlobalModal({ emit, appIdRef, formElRef, modalMethods }: UseG
 
   const radioOptions = reactive([
     { label: t('ApiGateway.DisplayName:Enable'), value: true },
-    { label: t('ApiGateway.DisplayName:Disble'), value: false },
+    { label: t('ApiGateway.DisplayName:Disable'), value: false },
   ]);
 
   const discoveryOptions = reactive([

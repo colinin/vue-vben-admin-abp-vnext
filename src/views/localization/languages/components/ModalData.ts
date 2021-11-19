@@ -36,7 +36,7 @@ export function getModalFormSchemas(): FormSchema[] {
       renderComponentContent: t('LocalizationManagement.DisplayName:Enable'),
     },
     {
-      field: 'uiCultureName',
+      field: 'cultureName',
       component: 'Input',
       label: t('LocalizationManagement.DisplayName:CultureName'),
       colProps: { span: 24 },
