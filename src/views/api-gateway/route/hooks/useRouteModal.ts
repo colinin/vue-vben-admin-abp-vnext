@@ -91,7 +91,7 @@ export function useRouteModal({ emit, formElRef, routeIdRef, modalMethods }: Use
 
   const radioOptions = reactive([
     { label: t('ApiGateway.DisplayName:Enable'), value: true },
-    { label: t('ApiGateway.DisplayName:Disble'), value: false },
+    { label: t('ApiGateway.DisplayName:Disable'), value: false },
   ]);
 
   const formTitle = computed(() => {
