@@ -2,21 +2,21 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">{{ t('AppPlatform.Menu:AddNew') }}</a-button>
+        <a-button type="primary" @click="handleAddNew">{{ L('Menu:AddNew') }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
               auth: 'Platform.Menu.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'Platform.Menu.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -32,7 +32,7 @@
   import { defineComponent, ref } from 'vue';
 
   import { Modal } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
@@ -48,11 +48,11 @@
       MenuDrawer,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform', 'AbpUi');
       const useFramework = ref('');
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'id',
-        title: t('AppPlatform.DisplayName:Menus'),
+        title: L('DisplayName:Menus'),
         columns: getDataColumns(),
         api: getAll,
         beforeFetch: (request) => {
@@ -76,7 +76,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -85,7 +85,7 @@
       const [registerDrawer, { openDrawer }] = useDrawer();
 
       return {
-        t,
+        L,
         registerTable,
         reloadTable,
         registerDrawer,
@@ -104,10 +104,8 @@
       },
       handleDelete(record: Recordable) {
         Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
-            record.displayName,
-          ] as Recordable),
+          title: this.L('AreYouSure'),
+          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {

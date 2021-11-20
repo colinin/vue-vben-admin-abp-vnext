@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="t('AbpIdentity.SetPassword')"
+    :title="L('SetPassword')"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm" />
@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
   import { usePassword } from '../hooks/usePassword';
@@ -21,7 +21,7 @@
     name: 'PasswordModal',
     components: { BasicModal, BasicForm },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const userIdRef = ref('');
       const { formSchemas } = usePassword();
       const [registerModal, { closeModal }] = useModalInner((val) => {
@@ -36,7 +36,7 @@
       });
 
       return {
-        t,
+        L,
         registerModal,
         closeModal,
         registerForm,

@@ -2,8 +2,9 @@ import type { Ref } from 'vue';
 
 import { watch, ref, unref } from 'vue';
 import { message } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { FeatureGroup, Validator } from '/@/api/feature/model/featureModel';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation } from '/@/hooks/abp/useValidation';
+import { FeatureGroup } from '/@/api/feature/model/featureModel';
 import { get, update } from '/@/api/feature/feature';
 import { ReturnInnerMethods } from '/@/components/Modal';
 
@@ -15,7 +16,8 @@ interface UseFeature {
 }
 
 export function useFeature({ providerName, providerKey, formRel, modalMethods }: UseFeature) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpFeatureManagement');
+  const { ruleCreator } = useValidation();
   const featureGroup = ref<{ groups: FeatureGroup[] }>({
     groups: [],
   });
@@ -35,7 +37,7 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
           featureGroup.value.groups = mapFeatures(res.groups);
         });
       }
-    }
+    },
   );
 
   function getFeatures(groups: FeatureGroup[]) {
@@ -69,54 +71,41 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
     return groups;
   }
 
-  function numericValidator(validator: Validator) {
-    return {
-      validator: (_, value) => {
-        if (value < validator.properties.MinValue || value > validator.properties.MaxValue) {
-          return Promise.reject(
-            t('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', [
-              validator.properties.MinValue,
-              validator.properties.MaxValue,
-            ] as Recordable)
-          );
-        } else {
-          return Promise.resolve();
-        }
-      },
-      type: 'number',
-      trigger: 'change',
-    };
-  }
-
   function validator(validator: Validator) {
     const featureRules: { [key: string]: any }[] = new Array<{ [key: string]: any }>();
-    if (validator.name === 'NUMERIC' && validator.properties) {
-      featureRules.push({
-        type: 'number',
-        required: true,
-        trigger: 'blur',
-      });
-      featureRules.push(numericValidator(validator));
-    } else if (validator.name === 'STRING' && validator.properties) {
-      if (
-        validator.properties.AllowNull &&
-        validator.properties.AllowNull.toLowerCase() === 'true'
-      ) {
-        const ruleRequired: { [key: string]: any } = {};
-        ruleRequired.required = true;
-        ruleRequired.trigger = 'blur';
-        ruleRequired.messahe = t('AbpFeatureManagement.ThisFieldIsRequired');
-        featureRules.push(ruleRequired);
+    if (validator.properties) {
+      switch (validator.name) {
+        case 'NUMERIC':
+          featureRules.push(
+            ...ruleCreator.fieldMustBeetWeen({
+              start: Number(validator.properties.MinValue),
+              end: Number(validator.properties.MaxValue),
+              trigger: 'change',
+            }),
+          );
+          break;
+        case 'STRING':
+          if (
+            validator.properties.AllowNull &&
+            validator.properties.AllowNull.toLowerCase() === 'true'
+          ) {
+            featureRules.push(
+              ...ruleCreator.fieldRequired({
+                trigger: 'blur',
+              }),
+            );
+          }
+          featureRules.push(
+            ...ruleCreator.fieldMustBeStringWithMinimumLengthAndMaximumLength({
+              minimum: Number(validator.properties.MinValue),
+              maximum: Number(validator.properties.MaxValue),
+              trigger: 'blur',
+            }),
+          );
+          break;
+        default:
+          break;
       }
-      const ruleString: { [key: string]: any } = {};
-      ruleString.min = validator.properties.MinLength;
-      ruleString.max = validator.properties.MaxLength;
-      ruleString.trigger = 'blur';
-      ruleString.message = t('AbpFeatureManagement.ThisFieldMustBeBetween{0}And{1}', [
-        validator.properties.MinValue,
-        validator.properties.MaxValue,
-      ] as Recordable);
-      featureRules.push(ruleString);
     }
     return featureRules;
   }
@@ -135,10 +124,10 @@ export function useFeature({ providerName, providerKey, formRel, modalMethods }:
         },
         {
           features: getFeatures(unref(featureGroup).groups),
-        }
+        },
       ).then(() => {
         modalMethods.closeModal();
-        message.success(t('AbpUi.Successful'));
+        message.success(L('Successful'));
       });
     });
   }

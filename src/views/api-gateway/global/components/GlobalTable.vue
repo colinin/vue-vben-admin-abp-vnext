@@ -6,7 +6,7 @@
           v-if="hasPermission('ApiGateway.Global.Create')"
           type="primary"
           @click="handleAddNew"
-          >新建配置</a-button
+          >{{ L('AddNew') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -14,14 +14,14 @@
           :actions="[
             {
               auth: 'ApiGateway.Global.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'ApiGateway.Global.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -37,7 +37,7 @@
   import { defineComponent } from 'vue';
   import { cloneDeep } from 'lodash-es';
   import { Modal } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
@@ -55,12 +55,12 @@
     name: 'GlobalTable',
     components: { BasicTable, GlobalModal, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'itemId',
-        title: '公共配置',
+        title: L('Globals'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -75,14 +75,14 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
       });
 
       return {
-        t,
+        L,
         registerModal,
         openModal,
         registerTable,
@@ -99,8 +99,8 @@
       },
       handleDelete(record: Recordable) {
         Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.appId] as Recordable),
+          title: this.L('AreYouSure'),
+          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.appId] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteByAppId(record.appId).then(() => {

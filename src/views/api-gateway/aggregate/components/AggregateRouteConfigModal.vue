@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="register"
-    :title="t('ApiGateway.AggregateRoute:ManageRouteConfig')"
+    :title="L('AggregateRoute:ManageRouteConfig')"
     :width="800"
     :showCancelBtn="false"
     :showOkBtn="false"
@@ -13,7 +13,7 @@
           v-if="hasPermission('ApiGateway.AggregateRoute.ManageRouteConfig')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('ApiGateway.AggregateRoute:ManageRouteConfig') }}</a-button
+          >{{ L('AggregateRoute:ManageRouteConfig') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -21,14 +21,14 @@
           :actions="[
             {
               auth: 'ApiGateway.AggregateRoute.ManageRouteConfig',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'ApiGateway.AggregateRoute.ManageRouteConfig',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -49,7 +49,7 @@
   import { defineComponent, watch, ref, unref } from 'vue';
   import { cloneDeep } from 'lodash-es';
   import { BasicModal, useModal, useModalInner } from '/@/components/Modal';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
@@ -68,16 +68,16 @@
     },
     emits: ['register'],
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const { hasPermission } = usePermission();
       const dataSource = ref<AggregateRouteConfig[]>([]);
       const formItems = getConfigModalFormSchemas();
-      const formTitle = t('ApiGateway.AggregateRoute:ManageRouteConfig');
+      const formTitle = L('AggregateRoute:ManageRouteConfig');
       const [register] = useModalInner();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'reRouteId',
-        title: t('ApiGateway.AggregateRoute:ManageRouteConfig'),
+        title: L('AggregateRoute:ManageRouteConfig'),
         columns: getConfigDataColumns(),
         dataSource: dataSource,
         // beforeFetch: formatPagedRequest,
@@ -92,7 +92,7 @@
         rowSelection: { type: 'checkbox' },
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -110,7 +110,7 @@
       );
 
       return {
-        t,
+        L,
         register,
         hasPermission,
         formItems,

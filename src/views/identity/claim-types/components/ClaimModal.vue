@@ -23,7 +23,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useClaimModal } from '../hooks/useClaimModal';
@@ -33,7 +32,6 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
       const submiting = ref(false);
       const claimRef = ref<Nullable<IdentityClaimType>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -58,7 +56,6 @@
       }
 
       return {
-        t,
         submiting,
         formElRef,
         formTitle,

@@ -1,7 +1,8 @@
 import type { Ref } from 'vue';
 
 import { cloneDeep } from 'lodash-es';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation } from '/@/hooks/abp/useValidation';
 import { computed, reactive, ref, unref, onMounted } from 'vue';
 import { CreateUser, UpdateUser } from '/@/api/identity/model/userModel';
 import { create, getById, getRoleList, update } from '/@/api/identity/user';
@@ -14,7 +15,8 @@ interface UseUserFormContext {
 }
 
 export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
+  const { ruleCreator } = useValidation();
   const assignableRoles = ref<Role[]>([]);
 
   onMounted(() => {
@@ -24,27 +26,22 @@ export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
   });
 
   const formRules = reactive({
-    userName: [
-      {
-        trigger: 'blur',
-        required: true,
-        message: `${t('common.inputText')} ${t('AbpIdentity.UserName')}`,
-      },
-    ],
-    password: [
-      {
-        trigger: 'blur',
-        required: true,
-        message: `${t('common.inputText')} ${t('AbpIdentity.Password')}`,
-      },
-    ],
-    email: [
-      {
-        trigger: 'blur',
-        required: true,
-        message: `${t('common.inputText')} ${t('AbpIdentity.DisplayName:Email')}`,
-      },
-    ],
+    userName: ruleCreator.fieldRequired({
+      name: 'UserName',
+      resourceName: 'AbpIdentity',
+      trigger: 'blur',
+    }),
+    password: ruleCreator.fieldRequired({
+      name: 'Password',
+      resourceName: 'AbpIdentity',
+      trigger: 'blur',
+    }),
+    email: ruleCreator.fieldRequired({
+      name: 'Email',
+      prefix: 'DisplayName',
+      resourceName: 'AbpIdentity',
+      trigger: 'blur',
+    }),
   });
 
   const roleDataSource = computed(() => {
@@ -61,9 +58,9 @@ export function useUserForm({ userRef, formElRef }: UseUserFormContext) {
 
   const userTitle = computed(() => {
     if (unref(userRef)?.id) {
-      return t('AbpIdentity.Edit');
+      return L('Edit');
     }
-    return t('AbpIdentity.NewUser');
+    return L('NewUser');
   });
 
   async function getUser(id) {

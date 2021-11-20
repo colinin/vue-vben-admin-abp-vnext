@@ -25,7 +25,6 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { TabForm, FormActionType } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
 
@@ -42,7 +41,6 @@
     props: basicProps,
     emits: ['change', 'register'],
     setup(props) {
-      const { t } = useI18n();
       const menu = ref<Menu>({} as Menu);
       const formElRef = ref<Nullable<FormActionType>>(null);
       const { formTitle, getFormSchemas, handleFormSubmit, warpParentRootMenu } =
@@ -59,7 +57,6 @@
       });
 
       return {
-        t,
         formTitle,
         formElRef,
         handleFormSubmit,

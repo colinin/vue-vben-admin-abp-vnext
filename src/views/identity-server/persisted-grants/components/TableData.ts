@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,42 +13,42 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentityServer.Client:Id'),
+      title: L('Client:Id'),
       dataIndex: 'clientId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Grants:Key'),
+      title: L('Grants:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 300,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Grants:Type'),
+      title: L('Grants:Type'),
       dataIndex: 'type',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Grants:SessionId'),
+      title: L('Grants:SessionId'),
       dataIndex: 'sessionId',
       align: 'left',
       width: 200,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Grants:SubjectId'),
+      title: L('Grants:SubjectId'),
       dataIndex: 'subjectId',
       align: 'left',
       width: 300,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Grants:ConsumedTime'),
+      title: L('Grants:ConsumedTime'),
       dataIndex: 'consumedTime',
       align: 'left',
       width: 180,
@@ -61,7 +61,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpIdentityServer.CreationTime'),
+      title: L('CreationTime'),
       dataIndex: 'creationTime',
       align: 'left',
       width: 180,
@@ -71,7 +71,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpIdentityServer.Expiration'),
+      title: L('Expiration'),
       dataIndex: 'expiration',
       align: 'left',
       width: 180,

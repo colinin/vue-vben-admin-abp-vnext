@@ -3,7 +3,8 @@ import type { Ref } from 'vue';
 import { computed, ref, reactive, unref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { cloneDeep } from 'lodash-es';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation } from '/@/hooks/abp/useValidation';
 
 import { get, create, update } from '/@/api/identity-server/identityResources';
 import { IdentityResource } from '/@/api/identity-server/model/identityResourcesModel';
@@ -15,7 +16,8 @@ interface UseModal {
 }
 
 export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentityServer');
+  const { ruleCreator } = useValidation();
   const modelRef = ref<IdentityResource>({} as IdentityResource);
 
   const isEdit = computed(() => {
@@ -26,19 +28,15 @@ export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
   });
   const formTitle = computed(() => {
     return isEdit.value
-      ? t('AbpIdentityServer.Resource:Name', [
-          unref(modelRef)?.displayName ?? unref(modelRef)?.name,
-        ] as Recordable)
-      : t('AbpIdentityServer.Resource:New');
+      ? L('Resource:Name', [unref(modelRef)?.displayName ?? unref(modelRef)?.name] as Recordable)
+      : L('Resource:New');
   });
   const formRules = reactive({
-    name: [
-      {
-        trigger: 'blur',
-        required: true,
-        message: `${t('common.inputText')} ${t('AbpIdentityServer.Name')}`,
-      },
-    ],
+    name: ruleCreator.fieldRequired({
+      name: 'Name',
+      resourceName: 'AbpIdentityServer',
+      trigger: 'blur',
+    }),
   });
 
   watch(
@@ -55,7 +53,7 @@ export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
           properties: [],
         });
       }
-    }
+    },
   );
 
   function handleChangeTab(activeKey) {
@@ -80,7 +78,7 @@ export function useModal({ modelIdRef, formElRef, tabActivedKey }: UseModal) {
             : create(Object.assign(input));
           api
             .then((res) => {
-              message.success(t('AbpIdentityServer.Successful'));
+              message.success(L('Successful'));
               resolve(res);
             })
             .catch((error) => {

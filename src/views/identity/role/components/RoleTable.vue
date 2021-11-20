@@ -6,7 +6,7 @@
           v-if="hasPermission('AbpIdentity.Roles.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('AbpIdentity.NewRole') }}</a-button
+          >{{ L('NewRole') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -15,14 +15,14 @@
           :actions="[
             {
               auth: 'AbpIdentity.Roles.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'AbpIdentity.Roles.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               ifShow: !record.isStatic,
               onClick: handleDelete.bind(null, record),
@@ -31,17 +31,17 @@
           :dropDownActions="[
             {
               auth: 'AbpIdentity.Roles.ManagePermissions',
-              label: t('AbpIdentity.Permissions'),
+              label: L('Permissions'),
               onClick: showPermissionModal.bind(null, record.name),
             },
             {
               auth: 'AbpIdentity.Users.ManageClaims',
-              label: t('AbpIdentity.Claim'),
+              label: L('Claim'),
               onClick: openClaimModal.bind(null, true, record, true),
             },
             {
               auth: 'Platform.Menu.ManageRoles',
-              label: t('AppPlatform.Menu:Manage'),
+              label: PL('Menu:Manage'),
               onClick: handleSetMenu.bind(null, record),
             },
           ]"
@@ -62,7 +62,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import RoleModal from './RoleModal.vue';
@@ -85,7 +85,8 @@
       PermissionModal,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
+      const { L: PL } = useLocalization('AppPlatform');
       const loadMenuRef = ref(false);
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
@@ -114,7 +115,8 @@
       }
 
       return {
-        t,
+        L,
+        PL,
         loadMenuRef,
         hasPermission,
         registerTable,

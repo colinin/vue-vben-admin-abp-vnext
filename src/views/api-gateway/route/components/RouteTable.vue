@@ -6,7 +6,7 @@
           v-if="hasPermission('ApiGateway.Route.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('ApiGateway.Route:AddNew') }}</a-button
+          >{{ L('Route:AddNew') }}</a-button
         >
       </template>
       <template #methods="{ record }">
@@ -34,14 +34,14 @@
           :actions="[
             {
               auth: 'ApiGateway.Route.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'ApiGateway.Route.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -55,7 +55,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { Modal, Tag } from 'ant-design-vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
@@ -70,13 +70,13 @@
     name: 'RouteTable',
     components: { BasicTable, RouteModal, Tag, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
 
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'reRouteId',
-        title: t('ApiGateway.Routes'),
+        title: L('Routes'),
         columns: getDataColumns(),
         api: getList,
         // beforeFetch: formatPagedRequest,
@@ -92,7 +92,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -112,10 +112,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
-            record.reRouteName,
-          ] as Recordable),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessageWithFormat', [record.reRouteName] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteById(record.reRouteId).then(() => {
@@ -126,7 +124,7 @@
       }
 
       return {
-        t,
+        L,
         registerTable,
         reloadTable,
         registerModal,

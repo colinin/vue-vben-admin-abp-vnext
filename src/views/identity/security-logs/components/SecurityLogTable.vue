@@ -6,7 +6,7 @@
           {
             auth: 'AbpAuditing.SecurityLog.Delete',
             color: 'error',
-            label: t('AbpUi.Delete'),
+            label: L('Delete'),
             icon: 'ant-design:delete-outlined',
             onClick: handleDelete.bind(null, record),
           },
@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Modal } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
@@ -30,10 +30,10 @@
     name: 'SecurityLogTable',
     components: { BasicTable, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpAuditLogging');
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('AbpAuditLogging.SecurityLog'),
+        title: L('SecurityLog'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -49,7 +49,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 120,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -57,8 +57,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {
@@ -69,7 +69,7 @@
       }
 
       return {
-        t,
+        L,
         registerTable,
         handleDelete,
       };

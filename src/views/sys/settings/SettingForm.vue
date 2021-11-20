@@ -88,7 +88,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, toRaw } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
 
@@ -119,12 +119,12 @@
     props,
     emits: ['change'],
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpSettingManagement');
       const activeTabKey = ref(0);
       const updateSetting = ref(new SettingsUpdate());
 
       return {
-        t,
+        L,
         activeTabKey,
         updateSetting,
       };
@@ -133,9 +133,9 @@
       sumbitButtonTitle() {
         return () => {
           if (this.hasChangeSetting) {
-            return this.t('AbpSettingManagement.Save');
+            return this.L('Save');
           }
-          return this.t('AbpSettingManagement.Save');
+          return this.L('Save');
         };
       },
       expandedCollapseKeys() {

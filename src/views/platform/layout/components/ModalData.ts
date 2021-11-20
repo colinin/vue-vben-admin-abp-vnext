@@ -1,9 +1,9 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { Layout } from '/@/api/platform/model/layoutModel';
 import { getByName, getAll } from '/@/api/platform/dataDic';
 
-const { t } = useI18n();
+const { L } = useLocalization('AppPlatform');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -12,13 +12,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Filter'),
+        label: L('DisplayName:Filter'),
         colProps: { span: 8 },
       },
       {
         field: 'framework',
         component: 'ApiSelect',
-        label: t('AppPlatform.DisplayName:UIFramework'),
+        label: L('DisplayName:UIFramework'),
         colProps: { span: 8 },
         componentProps: {
           api: () => getByName('UI Framework'),
@@ -50,7 +50,7 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'framework',
       component: 'ApiSelect',
-      label: t('AppPlatform.DisplayName:UIFramework'),
+      label: L('DisplayName:UIFramework'),
       colProps: { span: 24 },
       required: true,
       show: ({ values }) => {
@@ -67,7 +67,7 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'dataId',
       component: 'ApiSelect',
-      label: t('AppPlatform.DisplayName:Constraint'),
+      label: L('DisplayName:Constraint'),
       colProps: { span: 24 },
       required: true,
       show: ({ values }) => {
@@ -84,7 +84,7 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
       defaultValue: layout.name,
@@ -92,7 +92,7 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'displayName',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:DisplayName'),
+      label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
       defaultValue: layout.displayName,
@@ -100,7 +100,7 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'path',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:Path'),
+      label: L('DisplayName:Path'),
       colProps: { span: 24 },
       required: true,
       defaultValue: layout.path,
@@ -108,14 +108,14 @@ export function getModalFormSchemas(layout: Layout): FormSchema[] {
     {
       field: 'redirect',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:Redirect'),
+      label: L('DisplayName:Redirect'),
       colProps: { span: 24 },
       defaultValue: layout.redirect,
     },
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('AppPlatform.DisplayName:Description'),
+      label: L('DisplayName:Description'),
       colProps: { span: 24 },
       defaultValue: layout.description,
     },

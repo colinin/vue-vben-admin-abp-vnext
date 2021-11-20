@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="t('AbpIdentityServer.DisplayName:PersistedGrants')"
+    :title="L('DisplayName:PersistedGrants')"
     :width="660"
     :min-height="400"
   >
@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, watch, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from './ModalData';
@@ -33,7 +33,7 @@
     components: { BasicForm, BasicModal },
     emits: ['register'],
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const persistedGrantIdRef = ref('');
       const persistedGrantRef = ref<PersistedGrant | null>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -54,7 +54,7 @@
       );
 
       return {
-        t,
+        L,
         formElRef,
         formSchemas,
         registerModal,

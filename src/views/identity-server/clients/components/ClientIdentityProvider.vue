@@ -1,7 +1,7 @@
 <template>
-  <FormItem name="enableLocalLogin" :label="t('AbpIdentityServer.Client:EnableLocalLogin')">
+  <FormItem name="enableLocalLogin" :label="L('Client:EnableLocalLogin')">
     <Checkbox :checked="modelRef.enableLocalLogin" @change="handleCheckedChange">{{
-      t('AbpIdentityServer.Client:EnableLocalLogin')
+      L('Client:EnableLocalLogin')
     }}</Checkbox>
   </FormItem>
   <DynamicForm
@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, toRefs } from 'vue';
   import { Checkbox, Form } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import DynamicForm from './DynamicForm.vue';
@@ -36,12 +36,12 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const schemas: FormSchema[] = [
         {
           field: 'provider',
           component: 'Input',
-          label: t('AbpIdentityServer.Client:IdentityProviderRestrictions'),
+          label: L('Client:IdentityProviderRestrictions'),
           colProps: { span: 24 },
           required: true,
         },
@@ -49,7 +49,7 @@
       const columns: BasicColumn[] = [
         {
           dataIndex: 'provider',
-          title: t('AbpIdentityServer.Client:IdentityProviderRestrictions'),
+          title: L('Client:IdentityProviderRestrictions'),
           align: 'left',
           width: 'auto',
           sorter: true,
@@ -70,7 +70,7 @@
       }
 
       return {
-        t,
+        L,
         schemas,
         columns,
         handleAddNew,

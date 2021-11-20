@@ -1,20 +1,20 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 export function getFormSchemas(): FormSchema[] {
   return [
     {
       field: 'key',
       component: 'Input',
-      label: t('AbpIdentityServer.Propertites:Key'),
+      label: L('Propertites:Key'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'value',
       component: 'Input',
-      label: t('AbpIdentityServer.Propertites:Value'),
+      label: L('Propertites:Value'),
       colProps: { span: 24 },
       required: true,
     },

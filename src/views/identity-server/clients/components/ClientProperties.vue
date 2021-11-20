@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import { defineComponent, toRefs } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import DynamicForm from './DynamicForm.vue';
@@ -30,19 +30,19 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const schemas: FormSchema[] = [
         {
           field: 'type',
           component: 'Input',
-          label: t('AbpIdentityServer.Propertites:Key'),
+          label: L('Propertites:Key'),
           colProps: { span: 24 },
           required: true,
         },
         {
           field: 'value',
           component: 'Input',
-          label: t('AbpIdentityServer.Propertites:Value'),
+          label: L('Propertites:Value'),
           colProps: { span: 24 },
           required: true,
         },
@@ -50,14 +50,14 @@
       const columns: BasicColumn[] = [
         {
           dataIndex: 'type',
-          title: t('AbpIdentityServer.Propertites:Key'),
+          title: L('Propertites:Key'),
           align: 'left',
           width: '150',
           sorter: true,
         },
         {
           dataIndex: 'value',
-          title: t('AbpIdentityServer.Propertites:Value'),
+          title: L('Propertites:Value'),
           align: 'left',
           width: 'auto',
           sorter: true,
@@ -76,7 +76,7 @@
       }
 
       return {
-        t,
+        L,
         schemas,
         columns,
         handleAddNew,

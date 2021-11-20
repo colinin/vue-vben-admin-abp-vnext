@@ -13,7 +13,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   import { Data } from '/@/api/platform/model/dataModel';
   import { getDateFormSchemas } from './ModalData';
@@ -28,7 +28,7 @@
     },
     setup() {
       const data = ref<Data>();
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform');
       const schemas = getDateFormSchemas(data.value);
 
       const [registerForm, { validate, getFieldsValue, resetFields }] = useForm({
@@ -45,7 +45,7 @@
       });
 
       return {
-        t,
+        L,
         registerForm,
         register,
         data,
@@ -59,9 +59,9 @@
       title() {
         return () => {
           if (this.data && this.data.id) {
-            return this.t('AppPlatform.Data:Edit');
+            return this.L('Data:Edit');
           }
-          return this.t('AppPlatform.Data:AddNew');
+          return this.L('Data:AddNew');
         };
       },
     },

@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,7 +13,7 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpAuditLogging.CreationTime'),
+      title: L('CreationTime'),
       dataIndex: 'creationTime',
       align: 'left',
       width: 150,
@@ -23,63 +23,63 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpAuditLogging.Actions'),
+      title: L('Actions'),
       dataIndex: 'action',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ClientIpAddress'),
+      title: L('ClientIpAddress'),
       dataIndex: 'clientIpAddress',
       align: 'left',
       width: 200,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.BrowserInfo'),
+      title: L('BrowserInfo'),
       dataIndex: 'browserInfo',
       align: 'left',
       width: 270,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ApplicationName'),
+      title: L('ApplicationName'),
       dataIndex: 'applicationName',
       align: 'left',
       width: 140,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.TenantName'),
+      title: L('TenantName'),
       dataIndex: 'tenantName',
       align: 'left',
       width: 120,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.Identity'),
+      title: L('Identity'),
       dataIndex: 'identity',
       align: 'left',
       width: 120,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.UserName'),
+      title: L('UserName'),
       dataIndex: 'userName',
       align: 'left',
       width: 120,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ClientId'),
+      title: L('ClientId'),
       dataIndex: 'clientId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.CorrelationId'),
+      title: L('CorrelationId'),
       dataIndex: 'correlationId',
       align: 'left',
       width: 'auto',

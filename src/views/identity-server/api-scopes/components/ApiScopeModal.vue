@@ -18,43 +18,34 @@
     >
       <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
         <!-- Api 资源基本信息 -->
-        <TabPane key="basic" :tab="t('AbpIdentityServer.Basics')">
-          <FormItem name="enabled" :label="t('AbpIdentityServer.Enabled')">
-            <Checkbox v-model:checked="modelRef.enabled">{{
-              t('AbpIdentityServer.Enabled')
-            }}</Checkbox>
+        <TabPane key="basic" :tab="L('Basics')">
+          <FormItem name="enabled" :label="L('Enabled')">
+            <Checkbox v-model:checked="modelRef.enabled">{{ L('Enabled') }}</Checkbox>
           </FormItem>
-          <FormItem name="required" :label="t('AbpIdentityServer.Required')">
-            <Checkbox v-model:checked="modelRef.required">{{
-              t('AbpIdentityServer.Required')
-            }}</Checkbox>
+          <FormItem name="required" :label="L('Required')">
+            <Checkbox v-model:checked="modelRef.required">{{ L('Required') }}</Checkbox>
           </FormItem>
-          <FormItem name="emphasize" :label="t('AbpIdentityServer.Emphasize')">
-            <Checkbox v-model:checked="modelRef.emphasize">{{
-              t('AbpIdentityServer.Emphasize')
-            }}</Checkbox>
+          <FormItem name="emphasize" :label="L('Emphasize')">
+            <Checkbox v-model:checked="modelRef.emphasize">{{ L('Emphasize') }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="showInDiscoveryDocument"
-            :label="t('AbpIdentityServer.ShowInDiscoveryDocument')"
-          >
+          <FormItem name="showInDiscoveryDocument" :label="L('ShowInDiscoveryDocument')">
             <Checkbox v-model:checked="modelRef.showInDiscoveryDocument">{{
-              t('AbpIdentityServer.ShowInDiscoveryDocument')
+              L('ShowInDiscoveryDocument')
             }}</Checkbox>
           </FormItem>
-          <FormItem name="name" required :label="t('AbpIdentityServer.Name')">
+          <FormItem name="name" required :label="L('Name')">
             <Input v-model:value="modelRef.name" :disabled="isEdit" />
           </FormItem>
-          <FormItem name="displayName" :label="t('AbpIdentityServer.DisplayName')">
+          <FormItem name="displayName" :label="L('DisplayName')">
             <Input v-model:value="modelRef.displayName" />
           </FormItem>
-          <FormItem name="description" :label="t('AbpIdentityServer.Description')">
+          <FormItem name="description" :label="L('Description')">
             <Input v-model:value="modelRef.description" />
           </FormItem>
         </TabPane>
 
         <!-- Api 资源用户声明 -->
-        <TabPane key="claim" :tab="t('AbpIdentityServer.UserClaim')">
+        <TabPane key="claim" :tab="L('UserClaim')">
           <UserClaim :target-claims="targetClaims" @change="handleClaimChange" />
         </TabPane>
 
@@ -63,12 +54,12 @@
           <template #tab>
             <Dropdown>
               <span
-                >{{ t('AbpIdentityServer.Advanced') }}
+                >{{ L('Advanced') }}
                 <DownOutlined />
               </span>
               <template #overlay>
                 <Menu @click="handleClickMenu">
-                  <MenuItem key="properties">{{ t('AbpIdentityServer.Propertites') }}</MenuItem>
+                  <MenuItem key="properties">{{ L('Propertites') }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
@@ -87,7 +78,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form } from 'ant-design-vue';
   import { Input } from '/@/components/Input';
@@ -116,7 +107,7 @@
     },
     emits: ['change', 'register'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const formElRef = ref<any>(null);
       const modelIdRef = ref('');
       const tabActivedKey = ref('basic');
@@ -157,7 +148,7 @@
       }
 
       return {
-        t,
+        L,
         isEdit,
         formElRef,
         formRules,

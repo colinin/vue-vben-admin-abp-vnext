@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpTenantManagement');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpTenantManagement.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
       },
     ],
@@ -28,14 +28,14 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AbpTenantManagement.DisplayName:TenantName'),
+      label: L('DisplayName:TenantName'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'adminEmailAddress',
       component: 'Input',
-      label: t('AbpTenantManagement.DisplayName:AdminEmailAddress'),
+      label: L('DisplayName:AdminEmailAddress'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -45,7 +45,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'adminPassword',
       component: 'InputPassword',
-      label: t('AbpTenantManagement.DisplayName:AdminPassword'),
+      label: L('DisplayName:AdminPassword'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -61,12 +61,12 @@ export function getModalFormSchemas(): FormSchema[] {
       ifShow: ({ values }) => {
         return values.id ? false : true;
       },
-      renderComponentContent: t('AbpTenantManagement.DisplayName:UseSharedDatabase'),
+      renderComponentContent: L('DisplayName:UseSharedDatabase'),
     },
     {
       field: 'defaultConnectionString',
       component: 'InputTextArea',
-      label: t('AbpTenantManagement.DisplayName:DefaultConnectionString'),
+      label: L('DisplayName:DefaultConnectionString'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -84,14 +84,14 @@ export function getConnectionFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AbpTenantManagement.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'value',
       component: 'Input',
-      label: t('AbpTenantManagement.DisplayName:Value'),
+      label: L('DisplayName:Value'),
       colProps: { span: 24 },
       required: true,
     },

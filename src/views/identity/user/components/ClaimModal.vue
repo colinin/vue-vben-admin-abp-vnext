@@ -2,28 +2,28 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="t('AbpIdentity.ManageClaim')"
+    :title="L('ManageClaim')"
     :width="800"
     :showCancelBtn="false"
     :showOkBtn="false"
   >
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">{{ t('AbpIdentity.AddClaim') }}</a-button>
+        <a-button type="primary" @click="handleAddNew">{{ L('AddClaim') }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
               auth: 'AbpIdentity.Users.ManageClaims',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'AbpIdentity.Users.ManageClaims',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -35,14 +35,14 @@
       @register="registerClaimForm"
       :save-changes="handleSaveChanges"
       :form-items="formSchemas"
-      :title="t('AbpIdentity.ManageClaim')"
+      :title="L('ManageClaim')"
     />
   </BasicModal>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { BasicModalForm } from '/@/components/ModalForm';
@@ -52,7 +52,7 @@
     name: 'ClaimModal',
     components: { BasicModal, BasicTable, BasicModalForm, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const userIdRef = ref('');
       const [registerModal] = useModalInner((val) => {
         userIdRef.value = val.id;
@@ -67,7 +67,7 @@
       } = useClaim({ userIdRef });
 
       return {
-        t,
+        L,
         formSchemas,
         registerModal,
         registerTable,

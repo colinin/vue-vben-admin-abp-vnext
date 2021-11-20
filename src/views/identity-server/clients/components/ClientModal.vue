@@ -18,51 +18,43 @@
     >
       <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
         <!-- 基本信息 -->
-        <TabPane key="basic" :tab="t('AbpIdentityServer.Basics')">
-          <FormItem name="enabled" :label="t('AbpIdentityServer.Enabled')">
-            <Checkbox v-model:checked="modelRef.enabled">{{
-              t('AbpIdentityServer.Enabled')
-            }}</Checkbox>
+        <TabPane key="basic" :tab="L('Basics')">
+          <FormItem name="enabled" :label="L('Enabled')">
+            <Checkbox v-model:checked="modelRef.enabled">{{ L('Enabled') }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="requireRequestObject"
-            :label="t('AbpIdentityServer.Client:RequireRequestObject')"
-          >
+          <FormItem name="requireRequestObject" :label="L('Client:RequireRequestObject')">
             <Checkbox v-model:checked="modelRef.requireRequestObject">{{
-              t('AbpIdentityServer.Client:RequireRequestObject')
+              L('Client:RequireRequestObject')
             }}</Checkbox>
           </FormItem>
-          <FormItem name="clientId" required :label="t('AbpIdentityServer.Client:Id')">
+          <FormItem name="clientId" required :label="L('Client:Id')">
             <BInput v-model:value="modelRef.clientId" :disabled="isEdit" />
           </FormItem>
-          <FormItem name="clientName" required :label="t('AbpIdentityServer.Name')">
+          <FormItem name="clientName" required :label="L('Name')">
             <BInput v-model:value="modelRef.clientName" />
           </FormItem>
-          <FormItem name="description" :label="t('AbpIdentityServer.Description')">
+          <FormItem name="description" :label="L('Description')">
             <TextArea v-model:value="modelRef.description" />
           </FormItem>
-          <FormItem name="protocolType" :label="t('AbpIdentityServer.Client:ProtocolType')">
+          <FormItem name="protocolType" :label="L('Client:ProtocolType')">
             <Select v-model:value="modelRef.protocolType">
               <Option value="oidc">OpenID Connect</Option>
             </Select>
           </FormItem>
           <FormItem
             name="allowedIdentityTokenSigningAlgorithms"
-            :label="t('AbpIdentityServer.Client:AllowedIdentityTokenSigningAlgorithms')"
+            :label="L('Client:AllowedIdentityTokenSigningAlgorithms')"
           >
             <BInput v-model:value="modelRef.allowedIdentityTokenSigningAlgorithms" />
           </FormItem>
-          <FormItem name="requirePkce" :label="t('AbpIdentityServer.Client:RequiredPkce')">
+          <FormItem name="requirePkce" :label="L('Client:RequiredPkce')">
             <Checkbox v-model:checked="modelRef.requirePkce">{{
-              t('AbpIdentityServer.Client:RequiredPkce')
+              L('Client:RequiredPkce')
             }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="allowPlainTextPkce"
-            :label="t('AbpIdentityServer.Client:AllowedPlainTextPkce')"
-          >
+          <FormItem name="allowPlainTextPkce" :label="L('Client:AllowedPlainTextPkce')">
             <Checkbox v-model:checked="modelRef.allowPlainTextPkce">{{
-              t('AbpIdentityServer.Client:AllowedPlainTextPkce')
+              L('Client:AllowedPlainTextPkce')
             }}</Checkbox>
           </FormItem>
         </TabPane>
@@ -72,19 +64,17 @@
           <template #tab>
             <Dropdown>
               <span
-                >{{ t('AbpIdentityServer.Client:ApplicationUrls') }}
+                >{{ L('Client:ApplicationUrls') }}
                 <DownOutlined />
               </span>
               <template #overlay>
                 <Menu @click="handleClickUrlsMenu">
-                  <MenuItem key="client-callback">{{
-                    t('AbpIdentityServer.Client:CallbackUrl')
-                  }}</MenuItem>
+                  <MenuItem key="client-callback">{{ L('Client:CallbackUrl') }}</MenuItem>
                   <MenuItem key="client-cors-origins">{{
-                    t('AbpIdentityServer.Client:AllowedCorsOrigins')
+                    L('Client:AllowedCorsOrigins')
                   }}</MenuItem>
                   <MenuItem key="client-logout-redirect-uris">{{
-                    t('AbpIdentityServer.Client:PostLogoutRedirectUri')
+                    L('Client:PostLogoutRedirectUri')
                   }}</MenuItem>
                 </Menu>
               </template>
@@ -98,17 +88,13 @@
           <template #tab>
             <Dropdown>
               <span
-                >{{ t('AbpIdentityServer.Client:Resources') }}
+                >{{ L('Client:Resources') }}
                 <DownOutlined />
               </span>
               <template #overlay>
                 <Menu @click="handleClickResourcesMenu">
-                  <MenuItem key="client-api-resource">{{
-                    t('AbpIdentityServer.Resource:Api')
-                  }}</MenuItem>
-                  <MenuItem key="client-identity-resource">{{
-                    t('AbpIdentityServer.Resource:Identity')
-                  }}</MenuItem>
+                  <MenuItem key="client-api-resource">{{ L('Resource:Api') }}</MenuItem>
+                  <MenuItem key="client-identity-resource">{{ L('Resource:Identity') }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
@@ -117,68 +103,50 @@
         </TabPane>
 
         <!-- 认证/注销 -->
-        <TabPane key="authentication" :tab="t('AbpIdentityServer.Authentication')">
+        <TabPane key="authentication" :tab="L('Authentication')">
           <FormItem
             name="frontChannelLogoutSessionRequired"
-            :label="t('AbpIdentityServer.Client:FrontChannelLogoutSessionRequired')"
+            :label="L('Client:FrontChannelLogoutSessionRequired')"
           >
             <Checkbox v-model:checked="modelRef.frontChannelLogoutSessionRequired">{{
-              t('AbpIdentityServer.Client:FrontChannelLogoutSessionRequired')
+              L('Client:FrontChannelLogoutSessionRequired')
             }}</Checkbox>
           </FormItem>
           <!-- :required="modelRef.frontChannelLogoutSessionRequired" -->
-          <FormItem
-            name="frontChannelLogoutUri"
-            :label="t('AbpIdentityServer.Client:FrontChannelLogoutUri')"
-          >
+          <FormItem name="frontChannelLogoutUri" :label="L('Client:FrontChannelLogoutUri')">
             <BInput v-model:value="modelRef.frontChannelLogoutUri" />
           </FormItem>
-          <FormItem
-            name="enabled"
-            :label="t('AbpIdentityServer.Client:BackChannelLogoutSessionRequired')"
-          >
+          <FormItem name="enabled" :label="L('Client:BackChannelLogoutSessionRequired')">
             <Checkbox v-model:checked="modelRef.backChannelLogoutSessionRequired">{{
-              t('AbpIdentityServer.Client:BackChannelLogoutSessionRequired')
+              L('Client:BackChannelLogoutSessionRequired')
             }}</Checkbox>
           </FormItem>
           <!-- :required="modelRef.backChannelLogoutSessionRequired" -->
-          <FormItem
-            name="backChannelLogoutUri"
-            :label="t('AbpIdentityServer.Client:BackChannelLogoutUri')"
-          >
+          <FormItem name="backChannelLogoutUri" :label="L('Client:BackChannelLogoutUri')">
             <BInput v-model:value="modelRef.backChannelLogoutUri" />
           </FormItem>
         </TabPane>
 
         <!-- 令牌 -->
-        <TabPane key="token" :tab="t('AbpIdentityServer.Token')">
-          <FormItem
-            name="identityTokenLifetime"
-            :label="t('AbpIdentityServer.Client:IdentityTokenLifetime')"
-          >
+        <TabPane key="token" :tab="L('Token')">
+          <FormItem name="identityTokenLifetime" :label="L('Client:IdentityTokenLifetime')">
             <InputNumber class="input-number" v-model:value="modelRef.identityTokenLifetime" />
           </FormItem>
-          <FormItem
-            name="accessTokenLifetime"
-            :label="t('AbpIdentityServer.Client:AccessTokenLifetime')"
-          >
+          <FormItem name="accessTokenLifetime" :label="L('Client:AccessTokenLifetime')">
             <InputNumber class="input-number" v-model:value="modelRef.accessTokenLifetime" />
           </FormItem>
-          <FormItem name="accessTokenType" :label="t('AbpIdentityServer.Client:AccessTokenType')">
+          <FormItem name="accessTokenType" :label="L('Client:AccessTokenType')">
             <Select v-model:value="modelRef.accessTokenType">
               <Option :value="0">Jwt</Option>
               <Option :value="1">Reference</Option>
             </Select>
           </FormItem>
-          <FormItem
-            name="authorizationCodeLifetime"
-            :label="t('AbpIdentityServer.Client:AuthorizationCodeLifetime')"
-          >
+          <FormItem name="authorizationCodeLifetime" :label="L('Client:AuthorizationCodeLifetime')">
             <InputNumber class="input-number" v-model:value="modelRef.authorizationCodeLifetime" />
           </FormItem>
           <FormItem
             name="absoluteRefreshTokenLifetime"
-            :label="t('AbpIdentityServer.Client:AbsoluteRefreshTokenLifetime')"
+            :label="L('Client:AbsoluteRefreshTokenLifetime')"
           >
             <InputNumber
               class="input-number"
@@ -187,109 +155,88 @@
           </FormItem>
           <FormItem
             name="slidingRefreshTokenLifetime"
-            :label="t('AbpIdentityServer.Client:SlidingRefreshTokenLifetime')"
+            :label="L('Client:SlidingRefreshTokenLifetime')"
           >
             <InputNumber
               class="input-number"
               v-model:value="modelRef.slidingRefreshTokenLifetime"
             />
           </FormItem>
-          <FormItem
-            name="refreshTokenUsage"
-            :label="t('AbpIdentityServer.Client:RefreshTokenUsage')"
-          >
+          <FormItem name="refreshTokenUsage" :label="L('Client:RefreshTokenUsage')">
             <Select v-model:value="modelRef.refreshTokenUsage">
               <Option :value="0">ReUse</Option>
               <Option :value="1">OneTimeOnly</Option>
             </Select>
           </FormItem>
-          <FormItem
-            name="refreshTokenExpiration"
-            :label="t('AbpIdentityServer.Client:RefreshTokenExpiration')"
-          >
+          <FormItem name="refreshTokenExpiration" :label="L('Client:RefreshTokenExpiration')">
             <Select v-model:value="modelRef.refreshTokenExpiration">
               <Option :value="0">Sliding</Option>
               <Option :value="1">Absolute</Option>
             </Select>
           </FormItem>
-          <FormItem name="userSsoLifetime" :label="t('AbpIdentityServer.Client:UserSsoLifetime')">
+          <FormItem name="userSsoLifetime" :label="L('Client:UserSsoLifetime')">
             <InputNumber class="input-number" v-model:value="modelRef.userSsoLifetime" />
           </FormItem>
-          <FormItem
-            name="allowOfflineAccess"
-            :label="t('AbpIdentityServer.Client:AllowedOfflineAccess')"
-          >
+          <FormItem name="allowOfflineAccess" :label="L('Client:AllowedOfflineAccess')">
             <Checkbox v-model:checked="modelRef.allowOfflineAccess">{{
-              t('AbpIdentityServer.Client:AllowedOfflineAccess')
+              L('Client:AllowedOfflineAccess')
             }}</Checkbox>
           </FormItem>
           <FormItem
             name="allowAccessTokensViaBrowser"
-            :label="t('AbpIdentityServer.Client:AllowedAccessTokensViaBrowser')"
+            :label="L('Client:AllowedAccessTokensViaBrowser')"
           >
             <Checkbox v-model:checked="modelRef.allowAccessTokensViaBrowser">{{
-              t('AbpIdentityServer.Client:AllowedAccessTokensViaBrowser')
+              L('Client:AllowedAccessTokensViaBrowser')
             }}</Checkbox>
           </FormItem>
           <FormItem
             name="updateAccessTokenClaimsOnRefresh"
-            :label="t('AbpIdentityServer.Client:UpdateAccessTokenClaimsOnRefresh')"
+            :label="L('Client:UpdateAccessTokenClaimsOnRefresh')"
           >
             <Checkbox v-model:checked="modelRef.updateAccessTokenClaimsOnRefresh">{{
-              t('AbpIdentityServer.Client:UpdateAccessTokenClaimsOnRefresh')
+              L('Client:UpdateAccessTokenClaimsOnRefresh')
             }}</Checkbox>
           </FormItem>
-          <FormItem name="includeJwtId" :label="t('AbpIdentityServer.Client:IncludeJwtId')">
+          <FormItem name="includeJwtId" :label="L('Client:IncludeJwtId')">
             <Checkbox v-model:checked="modelRef.includeJwtId">{{
-              t('AbpIdentityServer.Client:IncludeJwtId')
+              L('Client:IncludeJwtId')
             }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="clientClaimsPrefix"
-            :label="t('AbpIdentityServer.Client:ClientClaimsPrefix')"
-          >
+          <FormItem name="clientClaimsPrefix" :label="L('Client:ClientClaimsPrefix')">
             <BInput v-model:value="modelRef.clientClaimsPrefix" />
           </FormItem>
-          <FormItem
-            name="pairWiseSubjectSalt"
-            :label="t('AbpIdentityServer.Client:PairWiseSubjectSalt')"
-          >
+          <FormItem name="pairWiseSubjectSalt" :label="L('Client:PairWiseSubjectSalt')">
             <BInput v-model:value="modelRef.pairWiseSubjectSalt" />
           </FormItem>
         </TabPane>
 
         <!-- 同意屏幕 -->
-        <TabPane key="consent" :tab="t('AbpIdentityServer.Consent')">
-          <FormItem name="requireConsent" :label="t('AbpIdentityServer.Client:RequireConsent')">
+        <TabPane key="consent" :tab="L('Consent')">
+          <FormItem name="requireConsent" :label="L('Client:RequireConsent')">
             <Checkbox v-model:checked="modelRef.requireConsent">{{
-              t('AbpIdentityServer.Client:RequireConsent')
+              L('Client:RequireConsent')
             }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="allowRememberConsent"
-            :label="t('AbpIdentityServer.Client:AllowRememberConsent')"
-          >
+          <FormItem name="allowRememberConsent" :label="L('Client:AllowRememberConsent')">
             <Checkbox v-model:checked="modelRef.allowRememberConsent">{{
-              t('AbpIdentityServer.Client:AllowRememberConsent')
+              L('Client:AllowRememberConsent')
             }}</Checkbox>
           </FormItem>
-          <FormItem name="clientUri" :label="t('AbpIdentityServer.Client:ClientUri')">
+          <FormItem name="clientUri" :label="L('Client:ClientUri')">
             <BInput v-model:value="modelRef.clientUri" />
           </FormItem>
-          <FormItem name="logoUri" :label="t('AbpIdentityServer.Client:LogoUri')">
+          <FormItem name="logoUri" :label="L('Client:LogoUri')">
             <BInput v-model:value="modelRef.logoUri" />
           </FormItem>
         </TabPane>
 
         <!-- 设备流程 -->
-        <TabPane key="deviceFlow" :tab="t('AbpIdentityServer.DeviceFlow')">
-          <FormItem name="userCodeType" :label="t('AbpIdentityServer.Client:UserCodeType')">
+        <TabPane key="deviceFlow" :tab="L('DeviceFlow')">
+          <FormItem name="userCodeType" :label="L('Client:UserCodeType')">
             <BInput v-model:value="modelRef.userCodeType" />
           </FormItem>
-          <FormItem
-            name="deviceCodeLifetime"
-            :label="t('AbpIdentityServer.Client:DeviceCodeLifetime')"
-          >
+          <FormItem name="deviceCodeLifetime" :label="L('Client:DeviceCodeLifetime')">
             <InputNumber class="input-number" v-model:value="modelRef.deviceCodeLifetime" />
           </FormItem>
         </TabPane>
@@ -299,21 +246,17 @@
           <template #tab>
             <Dropdown>
               <span
-                >{{ t('AbpIdentityServer.Advanced') }}
+                >{{ L('Advanced') }}
                 <DownOutlined />
               </span>
               <template #overlay>
                 <Menu @click="handleClickAdvancedMenu">
-                  <MenuItem key="client-secret">{{ t('AbpIdentityServer.Secret') }}</MenuItem>
-                  <MenuItem key="client-claim">{{ t('AbpIdentityServer.Claims') }}</MenuItem>
-                  <MenuItem key="client-properties">{{
-                    t('AbpIdentityServer.Propertites')
-                  }}</MenuItem>
-                  <MenuItem key="client-grant-type">{{
-                    t('AbpIdentityServer.Client:AllowedGrantTypes')
-                  }}</MenuItem>
+                  <MenuItem key="client-secret">{{ L('Secret') }}</MenuItem>
+                  <MenuItem key="client-claim">{{ L('Claims') }}</MenuItem>
+                  <MenuItem key="client-properties">{{ L('Propertites') }}</MenuItem>
+                  <MenuItem key="client-grant-type">{{ L('Client:AllowedGrantTypes') }}</MenuItem>
                   <MenuItem key="client-identity-provider">{{
-                    t('AbpIdentityServer.Client:IdentityProviderRestrictions')
+                    L('Client:IdentityProviderRestrictions')
                   }}</MenuItem>
                 </Menu>
               </template>
@@ -328,7 +271,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form, Input, InputNumber, Select } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
@@ -375,7 +318,7 @@
     },
     emits: ['change', 'register'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const formElRef = ref<any>(null);
       const modelIdRef = ref('');
       const tabActivedKey = ref('basic');
@@ -426,7 +369,7 @@
       }
 
       return {
-        t,
+        L,
         isEdit,
         formElRef,
         formRules,

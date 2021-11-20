@@ -3,7 +3,7 @@ import type { TabFormSchema, FormActionType } from '/@/components/Form/src/types
 
 import { unref, computed, watch, h } from 'vue';
 import { Checkbox } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { cloneDeep } from 'lodash-es';
 
 import { get as getLayout, getAll as getAllLayout } from '/@/api/platform/layout';
@@ -20,12 +20,12 @@ interface UseMenuFormContext {
 }
 
 export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AppPlatform');
 
   function getMetaFormSchemas(meta: DataItem[]): TabFormSchema[] {
     return meta.map((item) => {
       const schema: TabFormSchema = {
-        tab: t('AppPlatform.DisplayName:Meta'),
+        tab: L('DisplayName:Meta'),
         field: 'meta.'.concat(item.name),
         label: item.displayName,
         colProps: { span: 24 },
@@ -94,7 +94,7 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
   function getBasicFormSchemas(): TabFormSchema[] {
     return [
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'id',
         component: 'Input',
         label: 'id',
@@ -102,10 +102,10 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         ifShow: false,
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'layoutId',
         component: 'ApiSelect',
-        label: t('AppPlatform.DisplayName:Layout'),
+        label: L('DisplayName:Layout'),
         colProps: { span: 24 },
         required: true,
         componentProps: {
@@ -123,17 +123,17 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         },
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'isPublic',
         component: 'Checkbox',
-        label: t('AppPlatform.DisplayName:IsPublic'),
+        label: L('DisplayName:IsPublic'),
         colProps: { span: 24 },
-        renderComponentContent: t('AppPlatform.DisplayName:IsPublic'),
+        renderComponentContent: L('DisplayName:IsPublic'),
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'parentId',
-        label: t('AppPlatform.DisplayName:ParentMenu'),
+        label: L('DisplayName:ParentMenu'),
         component: 'TreeSelect',
         colProps: { span: 24 },
         componentProps: {
@@ -146,49 +146,49 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
         },
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'name',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Name'),
+        label: L('DisplayName:Name'),
         colProps: { span: 24 },
         required: true,
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'displayName',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:DisplayName'),
+        label: L('DisplayName:DisplayName'),
         colProps: { span: 24 },
         required: true,
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'path',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Path'),
+        label: L('DisplayName:Path'),
         colProps: { span: 24 },
         required: true,
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'component',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Component'),
+        label: L('DisplayName:Component'),
         colProps: { span: 24 },
         required: true,
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'redirect',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Redirect'),
+        label: L('DisplayName:Redirect'),
         colProps: { span: 24 },
       },
       {
-        tab: t('AppPlatform.DisplayName:Basic'),
+        tab: L('DisplayName:Basic'),
         field: 'description',
         component: 'InputTextArea',
-        label: t('AppPlatform.DisplayName:Description'),
+        label: L('DisplayName:Description'),
         colProps: { span: 24 },
       },
     ];
@@ -201,9 +201,9 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
   const formTitle = computed((): string => {
     const menu = unref(menuModel);
     if (menu.id) {
-      return t('AppPlatform.Menu:EditByName', [menu.displayName] as Recordable);
+      return L('Menu:EditByName', [menu.displayName] as Recordable);
     }
-    return t('AppPlatform.Menu:AddNew');
+    return L('Menu:AddNew');
   });
 
   async function appendMenuMetaItem(layoutId: string) {
@@ -264,7 +264,7 @@ export function useMenuFormContext({ menuModel, formElRef }: UseMenuFormContext)
       formEl?.resetFields();
       formEl?.setFieldsValue(model);
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return {

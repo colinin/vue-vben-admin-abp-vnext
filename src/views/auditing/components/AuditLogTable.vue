@@ -14,14 +14,14 @@
             {
               auth: 'AbpAuditing.AuditLog',
               color: 'success',
-              label: t('AbpAuditLogging.ShowLogDialog'),
+              label: L('ShowLogDialog'),
               icon: 'ant-design:search-outlined',
               onClick: handleShow.bind(null, record),
             },
             {
               auth: 'AbpAuditing.AuditLog.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -36,7 +36,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Modal, Tag } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getDataColumns } from './TableData';
   import { getSearchFormSchemas } from './ModalData';
@@ -50,10 +50,10 @@
     name: 'AuditLogTable',
     components: { AuditLogModal, BasicTable, Tag, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpAuditLogging');
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('AbpAuditLogging.AuditLog'),
+        title: L('AuditLog'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -69,7 +69,7 @@
         scroll: { x: true },
         actionColumn: {
           width: 180,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -83,8 +83,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {
@@ -95,7 +95,7 @@
       }
 
       return {
-        t,
+        L,
         httpMethodColor,
         httpStatusCodeColor,
         registerTable,

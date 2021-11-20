@@ -1,8 +1,8 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { Route } from '/@/api/api-gateway/model/routeModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('ApiGateway');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,21 +13,21 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('ApiGateway.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'reRouteName',
       align: 'left',
       width: 270,
       sorter: (a: Route, b: Route) => a.reRouteName.localeCompare(b.reRouteName),
     },
     {
-      title: t('ApiGateway.DisplayName:UpstreamPathTemplate'),
+      title: L('DisplayName:UpstreamPathTemplate'),
       dataIndex: 'upstreamPathTemplate',
       align: 'left',
       width: 300,
       sorter: (a: Route, b: Route) => a.upstreamPathTemplate.localeCompare(b.upstreamPathTemplate),
     },
     {
-      title: t('ApiGateway.DisplayName:DownstreamPathTemplate'),
+      title: L('DisplayName:DownstreamPathTemplate'),
       dataIndex: 'downstreamPathTemplate',
       align: 'left',
       width: 300,
@@ -35,7 +35,7 @@ export function getDataColumns(): BasicColumn[] {
         a.downstreamPathTemplate.localeCompare(b.downstreamPathTemplate),
     },
     {
-      title: t('ApiGateway.DisplayName:UpstreamHttpMethod'),
+      title: L('DisplayName:UpstreamHttpMethod'),
       dataIndex: 'upstreamHttpMethod',
       width: 180,
       slots: {
@@ -46,24 +46,24 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('ApiGateway.DisplayName:DownstreamScheme'),
+      title: L('DisplayName:DownstreamScheme'),
       dataIndex: 'downstreamScheme',
       width: 180,
       sorter: (a: Route, b: Route) => a.downstreamScheme?.localeCompare(b.downstreamScheme ?? ''),
     },
     {
-      title: t('ApiGateway.DisplayName:DownstreamHostAndPorts'),
+      title: L('DisplayName:DownstreamHostAndPorts'),
       dataIndex: 'downstreamHostAndPorts',
       width: 180,
       slots: { customRender: 'hosts' },
     },
     {
-      title: t('ApiGateway.DisplayName:Timeout'),
+      title: L('DisplayName:Timeout'),
       dataIndex: 'timeout',
       width: 150,
     },
     {
-      title: t('ApiGateway.DisplayName:ServiceName'),
+      title: L('DisplayName:ServiceName'),
       dataIndex: 'serviceName',
       width: 180,
       sorter: (a: Route, b: Route) => a.serviceName?.localeCompare(b.serviceName ?? ''),

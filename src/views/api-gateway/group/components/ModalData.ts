@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('ApiGateway');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('ApiGateway.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
       },
     ],
@@ -29,42 +29,42 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'isActive',
       component: 'Switch',
-      label: t('ApiGateway.DisplayName:IsActive'),
+      label: L('DisplayName:IsActive'),
       colProps: { span: 24 },
       defaultValue: true,
     },
     {
       field: 'appId',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:AppId'),
+      label: L('DisplayName:AppId'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'appName',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:AppName'),
+      label: L('DisplayName:AppName'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'appIpAddress',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:AppAddress'),
+      label: L('DisplayName:AppAddress'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'name',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('ApiGateway.DisplayName:Description'),
+      label: L('DisplayName:Description'),
       colProps: { span: 24 },
     },
   ];

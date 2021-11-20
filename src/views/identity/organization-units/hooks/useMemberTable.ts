@@ -1,7 +1,7 @@
 import { ComputedRef } from 'vue';
 import { Modal } from 'ant-design-vue';
 import { watch, ref, unref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn, useTable } from '/@/components/Table';
 import { User } from '/@/api/identity/model/userModel';
 import { removeOrganizationUnit } from '/@/api/identity/user';
@@ -13,7 +13,7 @@ interface UseMemberTable {
 }
 
 export function useMemberTable({ getProps }: UseMemberTable) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const dataSource = ref([] as User[]);
   const dataColumns: BasicColumn[] = [
     {
@@ -23,14 +23,14 @@ export function useMemberTable({ getProps }: UseMemberTable) {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.DisplayName:UserName'),
+      title: L('DisplayName:UserName'),
       dataIndex: 'userName',
       align: 'left',
       width: 280,
       sorter: true,
     },
     {
-      title: t('AbpIdentity.EmailAddress'),
+      title: L('EmailAddress'),
       dataIndex: 'email',
       align: 'left',
       width: 'auto',
@@ -55,7 +55,7 @@ export function useMemberTable({ getProps }: UseMemberTable) {
     immediate: false,
     actionColumn: {
       width: 170,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -63,10 +63,8 @@ export function useMemberTable({ getProps }: UseMemberTable) {
 
   function handleDelete(user) {
     Modal.warning({
-      title: t('AbpIdentity.AreYouSure'),
-      content: t('AbpIdentity.OrganizationUnit:AreYouSureRemoveUser', [
-        user.userName,
-      ] as Recordable),
+      title: L('AreYouSure'),
+      content: L('OrganizationUnit:AreYouSureRemoveUser', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
         removeOrganizationUnit(user.id, unref(getProps).ouId).then(() => reloadMembers());
@@ -91,7 +89,7 @@ export function useMemberTable({ getProps }: UseMemberTable) {
       if (id) {
         reloadMembers();
       }
-    }
+    },
   );
 
   return {

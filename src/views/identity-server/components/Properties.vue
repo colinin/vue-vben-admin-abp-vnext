@@ -9,15 +9,13 @@
       :maxHeight="230"
       :actionColumn="{
         width: 100,
-        title: t('table.action'),
+        title: L('Actions'),
         dataIndex: 'action',
         slots: { customRender: 'action' },
       }"
     >
       <template #toolbar>
-        <Button type="primary" @click="handleAddNew">{{
-          t('AbpIdentityServer.Propertites:New')
-        }}</Button>
+        <Button type="primary" @click="handleAddNew">{{ L('Propertites:New') }}</Button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -26,7 +24,7 @@
               auth: 'AbpIdentityServer.ApiResources.ManageProperties',
               color: 'error',
               icon: 'ant-design:delete-outlined',
-              label: t('AbpIdentityServer.Propertites:Delete'),
+              label: L('Propertites:Delete'),
               onClick: handleDelete.bind(null, record),
             },
           ]"
@@ -41,12 +39,12 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { Button } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { Property } from '/@/api/identity-server/model/basicModel';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { getDataColumns } from './TableData';
   import { getFormSchemas } from './ModalData';
 
@@ -68,7 +66,7 @@
     },
     emits: ['new', 'props-new', 'props-delete'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const title = ref('');
       const [registerForm, { validate, resetFields }] = useForm({
         labelWidth: 120,
@@ -78,7 +76,7 @@
       const [registerModal, { openModal, closeModal }] = useModal();
 
       function handleAddNew() {
-        title.value = t('AbpIdentityServer.Propertites:New');
+        title.value = L('Propertites:New');
         openModal(true);
       }
 
@@ -95,7 +93,7 @@
       }
 
       return {
-        t,
+        L,
         title,
         handleAddNew,
         handleDelete,

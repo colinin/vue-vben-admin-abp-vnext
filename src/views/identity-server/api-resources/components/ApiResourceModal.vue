@@ -18,44 +18,39 @@
     >
       <Tabs v-model:activeKey="tabActivedKey" @change="handleChangeTab">
         <!-- Api 资源基本信息 -->
-        <TabPane key="basic" :tab="t('AbpIdentityServer.Basics')">
-          <FormItem name="enabled" :label="t('AbpIdentityServer.Resource:Enabled')">
-            <Checkbox v-model:checked="resourceRef.enabled">{{
-              t('AbpIdentityServer.Resource:Enabled')
-            }}</Checkbox>
+        <TabPane key="basic" :tab="L('Basics')">
+          <FormItem name="enabled" :label="L('Resource:Enabled')">
+            <Checkbox v-model:checked="resourceRef.enabled">{{ L('Resource:Enabled') }}</Checkbox>
           </FormItem>
-          <FormItem
-            name="showInDiscoveryDocument"
-            :label="t('AbpIdentityServer.ShowInDiscoveryDocument')"
-          >
+          <FormItem name="showInDiscoveryDocument" :label="L('ShowInDiscoveryDocument')">
             <Checkbox v-model:checked="resourceRef.showInDiscoveryDocument">{{
-              t('AbpIdentityServer.ShowInDiscoveryDocument')
+              L('ShowInDiscoveryDocument')
             }}</Checkbox>
           </FormItem>
-          <FormItem name="name" required :label="t('AbpIdentityServer.Name')">
+          <FormItem name="name" required :label="L('Name')">
             <Input v-model:value="resourceRef.name" :disabled="isEdit" />
           </FormItem>
-          <FormItem name="displayName" :label="t('AbpIdentityServer.DisplayName')">
+          <FormItem name="displayName" :label="L('DisplayName')">
             <Input v-model:value="resourceRef.displayName" />
           </FormItem>
-          <FormItem name="description" :label="t('AbpIdentityServer.Description')">
+          <FormItem name="description" :label="L('Description')">
             <Input v-model:value="resourceRef.description" />
           </FormItem>
           <FormItem
             name="allowedAccessTokenSigningAlgorithms"
-            :label="t('AbpIdentityServer.AllowedAccessTokenSigningAlgorithms')"
+            :label="L('AllowedAccessTokenSigningAlgorithms')"
           >
             <Input v-model:value="resourceRef.allowedAccessTokenSigningAlgorithms" />
           </FormItem>
         </TabPane>
 
         <!-- Api 资源用户声明 -->
-        <TabPane key="claim" :tab="t('AbpIdentityServer.UserClaim')">
+        <TabPane key="claim" :tab="L('UserClaim')">
           <UserClaim :target-claims="targetClaims" @change="handleClaimChange" />
         </TabPane>
 
         <!-- Api 资源范围 -->
-        <TabPane key="scope" :tab="t('AbpIdentityServer.Scope')">
+        <TabPane key="scope" :tab="L('Scope')">
           <ApiResourceScope :target-scopes="targetScopes" @change="handleScopeChange" />
         </TabPane>
 
@@ -64,13 +59,13 @@
           <template #tab>
             <Dropdown>
               <span
-                >{{ t('AbpIdentityServer.Advanced') }}
+                >{{ L('Advanced') }}
                 <DownOutlined />
               </span>
               <template #overlay>
                 <Menu @click="handleClickMenu">
-                  <MenuItem key="api-resource-secret">{{ t('AbpIdentityServer.Secret') }}</MenuItem>
-                  <MenuItem key="properties">{{ t('AbpIdentityServer.Propertites') }}</MenuItem>
+                  <MenuItem key="api-resource-secret">{{ L('Secret') }}</MenuItem>
+                  <MenuItem key="properties">{{ L('Propertites') }}</MenuItem>
                 </Menu>
               </template>
             </Dropdown>
@@ -92,7 +87,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { DownOutlined } from '@ant-design/icons-vue';
   import { Checkbox, Dropdown, Menu, Tabs, Form } from 'ant-design-vue';
   import { Input } from '/@/components/Input';
@@ -127,7 +122,7 @@
     },
     emits: ['change', 'register'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const formElRef = ref<any>(null);
       const resourceIdRef = ref('');
       const tabActivedKey = ref('basic');
@@ -170,7 +165,7 @@
       }
 
       return {
-        t,
+        L,
         isEdit,
         formElRef,
         formRules,

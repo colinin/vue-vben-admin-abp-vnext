@@ -1,7 +1,8 @@
 import { Ref } from 'vue';
 
 import { computed, ref, unref, reactive, watchEffect } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation } from '/@/hooks/abp/useValidation';
 import { getActivedList } from '/@/api/api-gateway/group';
 import { getLoadBalancerProviders } from '/@/api/api-gateway/basic';
 import { getByAppId, create, update } from '/@/api/api-gateway/global';
@@ -19,46 +20,35 @@ interface UseGlobalModal {
 }
 
 export function useGlobalModal({ emit, appIdRef, formElRef, modalMethods }: UseGlobalModal) {
-  const { t } = useI18n();
+  const { L } = useLocalization('ApiGateway');
+  const { ruleCreator } = useValidation();
   const modelRef = ref<Recordable>({});
   const appIdOptions = ref<any>([]);
   const balancerOptions = ref<any>([]);
 
   const radioOptions = reactive([
-    { label: t('ApiGateway.DisplayName:Enable'), value: true },
-    { label: t('ApiGateway.DisplayName:Disable'), value: false },
+    { label: L('DisplayName:Enable'), value: true },
+    { label: L('DisplayName:Disable'), value: false },
   ]);
 
   const discoveryOptions = reactive([
-    { label: t('ApiGateway.None'), value: '' },
+    { label: L('None'), value: '' },
     { label: 'Consul', value: 'Consul' },
     { label: 'Eureka', value: 'Eureka' },
     { label: 'Zookeeper', value: 'Zookeeper' },
   ]);
 
   const formRules = reactive({
-    appId: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [t('ApiGateway.DisplayName:AppId')]),
-      },
-    ],
-    baseUrl: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [
-          t('ApiGateway.DisplayName:BaseUrl'),
-        ]),
-      },
-    ],
+    appId: ruleCreator.fieldRequired({ name: 'AppId', prefix: 'DisplayName' }),
+    baseUrl: ruleCreator.fieldRequired({ name: 'BaseUrl', prefix: 'DisplayName' }),
   });
 
   const formTitle = computed(() => {
     const model = unref(modelRef);
     if (model && model.itemId) {
-      return t('ApiGateway.Group:EditBy', [model.appId]);
+      return L('Group:EditBy', [model.appId]);
     }
-    return t('ApiGateway.Group:AddNew');
+    return L('Group:AddNew');
   });
 
   watchEffect(() => {

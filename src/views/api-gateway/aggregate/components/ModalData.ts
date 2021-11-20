@@ -1,9 +1,9 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { getActivedList } from '/@/api/api-gateway/group';
 import { getDefinedAggregatorProviders } from '/@/api/api-gateway/basic';
 
-const { t } = useI18n();
+const { L } = useLocalization('ApiGateway');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -12,7 +12,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'appId',
         component: 'ApiSelect',
-        label: t('ApiGateway.DisplayName:AppId'),
+        label: L('DisplayName:AppId'),
         colProps: { span: 12 },
         required: true,
         componentProps: {
@@ -25,7 +25,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('ApiGateway.Search'),
+        label: L('Search'),
         colProps: { span: 12 },
         defaultValue: '',
       },
@@ -52,7 +52,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'appId',
       component: 'ApiSelect',
-      label: t('ApiGateway.DisplayName:AppId'),
+      label: L('DisplayName:AppId'),
       colProps: { span: 24 },
       required: true,
       componentProps: {
@@ -68,14 +68,14 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'aggregator',
       component: 'ApiSelect',
-      label: t('ApiGateway.DisplayName:Aggregator'),
+      label: L('DisplayName:Aggregator'),
       colProps: { span: 24 },
       componentProps: {
         api: () => getDefinedAggregatorProviders(),
@@ -87,7 +87,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'reRouteKeys',
       component: 'Select',
-      label: t('ApiGateway.DisplayName:RouteKeys'),
+      label: L('DisplayName:RouteKeys'),
       colProps: { span: 24 },
       required: true,
       componentProps: {
@@ -99,7 +99,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'priority',
       component: 'InputNumber',
-      label: t('ApiGateway.DisplayName:Priority'),
+      label: L('DisplayName:Priority'),
       colProps: { span: 24 },
       componentProps: {
         style: {
@@ -110,28 +110,28 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'upstreamHost',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:UpstreamHost'),
+      label: L('DisplayName:UpstreamHost'),
       colProps: { span: 24 },
     },
     {
       field: 'reRouteIsCaseSensitive',
       component: 'Checkbox',
-      label: t('ApiGateway.DisplayName:CaseSensitive'),
+      label: L('DisplayName:CaseSensitive'),
       colProps: { span: 24 },
       defaultValue: true,
-      renderComponentContent: t('ApiGateway.DisplayName:CaseSensitive'),
+      renderComponentContent: L('DisplayName:CaseSensitive'),
     },
     {
       field: 'upstreamPathTemplate',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:UpstreamPathTemplate'),
+      label: L('DisplayName:UpstreamPathTemplate'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'upstreamHttpMethod',
       component: 'Select',
-      label: t('ApiGateway.DisplayName:UpstreamHttpMethod'),
+      label: L('DisplayName:UpstreamHttpMethod'),
       colProps: { span: 24 },
       componentProps: {
         mode: 'tags',
@@ -154,20 +154,20 @@ export function getConfigModalFormSchemas(): FormSchema[] {
     {
       field: 'reRouteKey',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:RouteKey'),
+      label: L('DisplayName:RouteKey'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'parameter',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:Parameter'),
+      label: L('DisplayName:Parameter'),
       colProps: { span: 24 },
     },
     {
       field: 'jsonPath',
       component: 'Input',
-      label: t('ApiGateway.DisplayName:JsonPath'),
+      label: L('DisplayName:JsonPath'),
       colProps: { span: 24 },
     },
   ];

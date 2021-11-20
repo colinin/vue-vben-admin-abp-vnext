@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -12,7 +12,7 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentityServer.Enabled'),
+      title: L('Enabled'),
       dataIndex: 'enabled',
       align: 'left',
       width: 200,
@@ -20,21 +20,21 @@ export function getDataColumns(): BasicColumn[] {
       slots: { customRender: 'enabled' },
     },
     {
-      title: t('AbpIdentityServer.Client:Id'),
+      title: L('Client:Id'),
       dataIndex: 'clientId',
       align: 'left',
       width: 200,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Name'),
+      title: L('Name'),
       dataIndex: 'clientName',
       align: 'left',
       width: 300,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Description'),
+      title: L('Description'),
       dataIndex: 'description',
       align: 'left',
       width: 300,
@@ -46,14 +46,14 @@ export function getDataColumns(): BasicColumn[] {
 export function getPropertyColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpIdentityServer.Propertites:Key'),
+      title: L('Propertites:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Propertites:Value'),
+      title: L('Propertites:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,

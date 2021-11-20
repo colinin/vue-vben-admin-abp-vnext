@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { message } from 'ant-design-vue';
   import { BasicForm, FormSchema, FormActionType, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -26,7 +26,7 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('LocalizationManagement', 'AbpUi');
       const idRef = ref<number | undefined>(undefined);
       const modelRef = ref<Nullable<Text>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -41,7 +41,7 @@
         {
           field: 'cultureName',
           component: 'ApiSelect',
-          label: t('LocalizationManagement.DisplayName:TargetCultureName'),
+          label: L('DisplayName:TargetCultureName'),
           colProps: { span: 24 },
           required: true,
           componentProps: {
@@ -79,7 +79,7 @@
         {
           field: 'resourceName',
           component: 'ApiSelect',
-          label: t('LocalizationManagement.DisplayName:ResourceName'),
+          label: L('DisplayName:ResourceName'),
           colProps: { span: 24 },
           required: true,
           componentProps: {
@@ -95,14 +95,14 @@
         {
           field: 'key',
           component: 'Input',
-          label: t('LocalizationManagement.DisplayName:Key'),
+          label: L('DisplayName:Key'),
           colProps: { span: 24 },
           required: true,
         },
         {
           field: 'value',
           component: 'InputTextArea',
-          label: t('LocalizationManagement.DisplayName:Value'),
+          label: L('DisplayName:Value'),
           colProps: { span: 24 },
           required: true,
         },
@@ -122,9 +122,9 @@
       const formTitle = computed(() => {
         const id = unref(modelRef)?.id;
         if (id && id > 0) {
-          return t('LocalizationManagement.EditByName', [unref(modelRef)?.key] as Recordable);
+          return L('EditByName', [unref(modelRef)?.key] as Recordable);
         }
-        return t('LocalizationManagement.Text:AddNew');
+        return L('Text:AddNew');
       });
 
       watch(
@@ -152,7 +152,7 @@
           api
             .then(() => {
               emit('change');
-              message.success(t('AbpUi.Successful'));
+              message.success(L('Successful'));
               formEl?.resetFields();
               closeModal();
             })
@@ -163,7 +163,7 @@
       }
 
       return {
-        t,
+        L,
         formElRef,
         formTitle,
         registerForm,

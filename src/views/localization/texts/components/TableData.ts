@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-const { t } = useI18n();
+const { L } = useLocalization('LocalizationManagement');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -12,28 +12,28 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('LocalizationManagement.DisplayName:Key'),
+      title: L('DisplayName:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 260,
       sorter: true,
     },
     {
-      title: t('LocalizationManagement.DisplayName:Value'),
+      title: L('DisplayName:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('LocalizationManagement.DisplayName:TargetValue'),
+      title: L('DisplayName:TargetValue'),
       dataIndex: 'targetValue',
       align: 'left',
       width: 200,
       sorter: true,
     },
     {
-      title: t('LocalizationManagement.DisplayName:ResourceName'),
+      title: L('DisplayName:ResourceName'),
       dataIndex: 'resourceName',
       align: 'left',
       width: 200,

@@ -1,4 +1,5 @@
 import { computed } from 'vue';
+import { merge } from 'lodash-es';
 import { useAbpStoreWithOut } from '/@/store/modules/abp';
 import { format } from '/@/utils/strings';
 
@@ -6,18 +7,21 @@ interface IStringLocalizer {
   L(key: string, ...args: any[]): string;
 }
 
-export function useLocalization(resourceName: string) {
-  const localization = computed(() => {
+export function useLocalization(...resourceNames: string[]) {
+  const getResource = computed(() => {
     const abpStore = useAbpStoreWithOut();
-    return abpStore.getApplication.localization;
+    const { values } = abpStore.getApplication.localization;
+    let resource: { [key: string]: string } = {};
+    resourceNames.forEach((resourceName) => {
+      resource = merge(resource, values[resourceName]);
+    });
+    return resource;
   });
 
   function L(key: string, ...args: any[]) {
     if (!key) return '';
-    if (!localization.value.values) return key;
-    const resource = localization.value.values[resourceName];
-    if (!resource || !resource[key]) return key;
-    return format(resource[key], args ?? []);
+    if (!getResource.value[key]) return key;
+    return format(getResource.value[key], args ?? []);
   }
 
   const localizer: IStringLocalizer = {

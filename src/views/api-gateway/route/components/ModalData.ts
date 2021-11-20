@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 import { getActivedList } from '/@/api/api-gateway/group';
 
-const { t } = useI18n();
+const { L } = useLocalization('ApiGateway');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -11,7 +11,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'appId',
         component: 'ApiSelect',
-        label: t('ApiGateway.DisplayName:AppId'),
+        label: L('DisplayName:AppId'),
         colProps: { span: 12 },
         required: true,
         componentProps: {
@@ -24,7 +24,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('ApiGateway.Search'),
+        label: L('Search'),
         colProps: { span: 12 },
         defaultValue: '',
       },

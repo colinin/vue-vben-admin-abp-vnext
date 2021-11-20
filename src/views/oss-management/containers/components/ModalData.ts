@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpOssManagement', 'AbpUi');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'prefix',
         component: 'Input',
-        label: t('AbpUi.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
         defaultValue: '',
       },
@@ -23,7 +23,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AbpOssManagement.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },

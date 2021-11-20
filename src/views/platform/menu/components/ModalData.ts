@@ -1,9 +1,9 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 import { getAll as getAllLayout } from '/@/api/platform/layout';
 import { getByName as getDataByName } from '/@/api/platform/dataDic';
 
-const { t } = useI18n();
+const { L } = useLocalization('AppPlatform');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -12,13 +12,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AppPlatform.DisplayName:Filter'),
+        label: L('DisplayName:Filter'),
         colProps: { span: 8 },
       },
       {
         field: 'framework',
         component: 'ApiSelect',
-        label: t('AppPlatform.DisplayName:UIFramework'),
+        label: L('DisplayName:UIFramework'),
         colProps: { span: 8 },
         componentProps: {
           api: () => getDataByName('UI Framework'),
@@ -30,7 +30,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'layoutId',
         component: 'ApiSelect',
-        label: t('AppPlatform.DisplayName:Layout'),
+        label: L('DisplayName:Layout'),
         colProps: { span: 8 },
         componentProps: {
           api: () => getAllLayout(),

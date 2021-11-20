@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentity');
 
 export function getMemberColumns(): BasicColumn[] {
   return [
@@ -12,7 +12,7 @@ export function getMemberColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.DisplayName:RoleName'),
+      title: L('DisplayName:RoleName'),
       dataIndex: 'name',
       align: 'left',
       width: 'auto',

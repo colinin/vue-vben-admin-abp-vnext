@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="t('AbpOssManagement.Objects:CreateFolder')"
+    :title="L('Objects:CreateFolder')"
     :width="466"
     :min-height="66"
     @ok="handleSubmit"
@@ -13,7 +13,7 @@
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
   import { message } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
   import { getFolderModalSchemas } from '../datas/ModalData';
@@ -24,7 +24,7 @@
     components: { BasicModal, BasicForm },
     emits: ['register', 'change'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
       const bucket = ref('');
       const path = ref('');
       const [registerForm, { validate, resetFields }] = useForm({
@@ -50,7 +50,7 @@
             object: name,
             overwrite: false,
           }).then(() => {
-            message.success(t('AbpUi.Successful'));
+            message.success(L('Successful'));
             closeModal();
             emit('change', name);
           });
@@ -58,7 +58,7 @@
       }
 
       return {
-        t,
+        L,
         registerForm,
         registerModal,
         handleSubmit,

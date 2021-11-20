@@ -1,12 +1,12 @@
 <template>
   <div class="content">
-    <Card :title="t('AbpOssManagement.Objects:FileSystem')">
+    <Card :title="L('Objects:FileSystem')">
       <CardGrid style="width: 25%">
         <CardMeta>
           <template #title>
             <Select
               style="width: 100%"
-              :placeholder="t('AbpOssManagement.Containers:Select')"
+              :placeholder="L('Containers:Select')"
               @change="handleContainerChange"
             >
               <Option
@@ -25,7 +25,7 @@
               ghost
               type="primary"
               @click="handleNewFolder"
-              >{{ t('AbpOssManagement.Objects:CreateFolder') }}</a-button
+              >{{ L('Objects:CreateFolder') }}</a-button
             >
             <DirectoryTree
               v-if="!lockTree"
@@ -46,7 +46,7 @@
               :disabled="lockTree"
               type="primary"
               @click="handleUpload"
-              >{{ t('AbpOssManagement.Objects:UploadFile') }}</a-button
+              >{{ L('Objects:UploadFile') }}</a-button
             >
           </template>
           <template #action="{ record }">
@@ -55,21 +55,21 @@
               :actions="[
                 {
                   color: 'success',
-                  label: t('AbpOssManagement.Objects:Preview'),
+                  label: L('Objects:Preview'),
                   icon: 'ant-design:search-outlined',
                   onClick: handlePreview.bind(null, record),
                 },
                 {
                   auth: 'AbpOssManagement.OssObject.Delete',
                   color: 'error',
-                  label: t('AbpOssManagement.Delete'),
+                  label: L('Delete'),
                   icon: 'ant-design:delete-outlined',
                   onClick: handleDelete.bind(null, record),
                 },
                 {
                   auth: 'AbpOssManagement.OssObject.Download',
                   ifShow: !record.isFolder,
-                  label: t('AbpOssManagement.Objects:Download'),
+                  label: L('Objects:Download'),
                   icon: 'ant-design:download-outlined',
                   onClick: handleDownload.bind(null, record),
                 },
@@ -88,7 +88,7 @@
 <script lang="ts">
   import { computed, defineComponent, unref } from 'vue';
   import { Card, Modal, Tree, Select } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -117,7 +117,7 @@
     setup() {
       // 暂时不将逻辑代码移动到hooks，也不算太复杂 Orz...
 
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
       const { hasPermission } = usePermission();
       const [registerFolderModal, { openModal: openFolderModal }] = useModal();
       const [registerUploadModal, { openModal: openUploadModal }] = useModal();
@@ -134,7 +134,7 @@
       } = useObjects();
       const [registerTable, { reload, setPagination }] = useTable({
         rowKey: 'name',
-        title: t('AbpOssManagement.DisplayName:OssObject'),
+        title: L('DisplayName:OssObject'),
         columns: getDataColumns(),
         api: getObjects,
         fetchSetting: {
@@ -158,7 +158,7 @@
         rowSelection: { type: 'checkbox' },
         actionColumn: {
           width: 240,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -177,8 +177,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteObject({
@@ -224,7 +224,7 @@
       }
 
       return {
-        t,
+        L,
         folders,
         lockTree,
         expandedKeys,

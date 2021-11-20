@@ -1,20 +1,17 @@
 <template>
-  <FormItem
-    name="alwaysSendClientClaims"
-    :label="t('AbpIdentityServer.Client:AlwaysSendClientClaims')"
-  >
+  <FormItem name="alwaysSendClientClaims" :label="L('Client:AlwaysSendClientClaims')">
     <Checkbox :checked="modelRef.alwaysSendClientClaims" @change="handleCheckedChange">{{
-      t('AbpIdentityServer.Client:AlwaysSendClientClaims')
+      L('Client:AlwaysSendClientClaims')
     }}</Checkbox>
   </FormItem>
   <FormItem
     name="alwaysIncludeUserClaimsInIdToken"
-    :label="t('AbpIdentityServer.Client:AlwaysIncludeUserClaimsInIdToken')"
+    :label="L('Client:AlwaysIncludeUserClaimsInIdToken')"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
   >
     <Checkbox :checked="modelRef.alwaysIncludeUserClaimsInIdToken" @change="handleCheckedChange">{{
-      t('AbpIdentityServer.Client:AlwaysIncludeUserClaimsInIdToken')
+      L('Client:AlwaysIncludeUserClaimsInIdToken')
     }}</Checkbox>
   </FormItem>
   <DynamicForm
@@ -32,7 +29,7 @@
 <script lang="ts">
   import { defineComponent, toRefs } from 'vue';
   import { Checkbox, Form } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import DynamicForm from './DynamicForm.vue';
@@ -50,12 +47,12 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const schemas: FormSchema[] = [
         {
           field: 'type',
           component: 'ApiSelect',
-          label: t('AbpIdentityServer.Claims:Type'),
+          label: L('Claims:Type'),
           colProps: { span: 24 },
           required: true,
           componentProps: {
@@ -68,7 +65,7 @@
         {
           field: 'value',
           component: 'Input',
-          label: t('AbpIdentityServer.Claims:Value'),
+          label: L('Claims:Value'),
           colProps: { span: 24 },
           required: true,
           // TODO: 选择的type ValueType变化时需要调整输入控件类型
@@ -77,14 +74,14 @@
       const columns: BasicColumn[] = [
         {
           dataIndex: 'type',
-          title: t('AbpIdentityServer.Claims:Type'),
+          title: L('Claims:Type'),
           align: 'left',
           width: '150',
           sorter: true,
         },
         {
           dataIndex: 'value',
-          title: t('AbpIdentityServer.Claims:Value'),
+          title: L('Claims:Value'),
           align: 'left',
           width: 'auto',
           sorter: true,
@@ -103,7 +100,7 @@
       }
 
       return {
-        t,
+        L,
         schemas,
         columns,
         handleAddNew,

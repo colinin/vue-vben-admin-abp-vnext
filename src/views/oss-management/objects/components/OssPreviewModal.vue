@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     @register="registerModal"
-    :title="t('AbpOssManagement.Objects:Preview')"
+    :title="L('Objects:Preview')"
     :width="966"
     :min-height="466"
   >
@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { ImagePreview } from '/@/components/Preview';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { OssObject } from '/@/api/oss-management/model/ossModel';
@@ -21,7 +21,7 @@
     name: 'OssPreviewModal',
     components: { BasicModal, ImagePreview },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpOssManagement');
       const bucket = ref('');
       const objects = ref<OssObject[]>([]);
       const previewImages = ref<any[]>([]);
@@ -48,7 +48,7 @@
       );
 
       return {
-        t,
+        L,
         previewImages,
         registerModal,
       };

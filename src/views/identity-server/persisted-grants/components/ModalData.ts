@@ -1,11 +1,11 @@
 import { h } from 'vue';
 import { Input } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { CodeEditor } from '/@/components/CodeEditor';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -14,13 +14,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpIdentityServer.Search'),
+        label: L('Search'),
         colProps: { span: 12 },
       },
       {
         field: 'subjectId',
         component: 'Input',
-        label: t('AbpIdentityServer.Grants:SubjectId'),
+        label: L('Grants:SubjectId'),
         colProps: { span: 12 },
       },
     ],
@@ -32,7 +32,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'key',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:Key'),
+      label: L('Grants:Key'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -45,7 +45,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'type',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:Type'),
+      label: L('Grants:Type'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -58,7 +58,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'subjectId',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:SubjectId'),
+      label: L('Grants:SubjectId'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -71,7 +71,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'sessionId',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:SessionId'),
+      label: L('Grants:SessionId'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -84,7 +84,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'description',
       component: 'Input',
-      label: t('AbpIdentityServer.Description'),
+      label: L('Description'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -97,7 +97,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'creationTime',
       component: 'Input',
-      label: t('AbpIdentityServer.CreationTime'),
+      label: L('CreationTime'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -112,7 +112,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'expiration',
       component: 'Input',
-      label: t('AbpIdentityServer.Expiration'),
+      label: L('Expiration'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -127,7 +127,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'consumedTime',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:ConsumedTime'),
+      label: L('Grants:ConsumedTime'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(Input, {
@@ -142,7 +142,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'data',
       component: 'Input',
-      label: t('AbpIdentityServer.Grants:Data'),
+      label: L('Grants:Data'),
       colProps: { span: 24 },
       render: ({ model, field }) => {
         return h(CodeEditor, {

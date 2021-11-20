@@ -1,9 +1,7 @@
 <template>
   <Card :title="title" size="small">
     <template #extra>
-      <a-button type="primary" @click="handleNewData(null)">{{
-        t('AppPlatform.Data:AddNew')
-      }}</a-button>
+      <a-button type="primary" @click="handleNewData(null)">{{ L('Data:AddNew') }}</a-button>
     </template>
 
     <BasicTree
@@ -26,7 +24,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   import { Modal, Card } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
@@ -50,8 +48,8 @@
     },
     emits: ['change', 'append-item'],
     setup() {
-      const { t } = useI18n();
-      const title = t('AppPlatform.DisplayName:DataDictionary');
+      const { L } = useLocalization('AppPlatform');
+      const title = L('DisplayName:DataDictionary');
       const treeData = ref<Data[]>();
       const replaceFields = ref({
         title: 'displayName',
@@ -65,7 +63,7 @@
       const getDataId = ref('');
 
       return {
-        t,
+        L,
         formItems,
         formTitle,
         title,
@@ -86,24 +84,24 @@
       getContentMenus(node: any): ContextMenuItem[] {
         return [
           {
-            label: this.t('AppPlatform.Data:Edit'),
+            label: this.L('Data:Edit'),
             handler: () => {
               get(node.eventKey).then((res) => {
-                this.formTitle = this.t('AppPlatform.Data:Edit');
+                this.formTitle = this.L('Data:Edit');
                 this.openDataModal(true, res, true);
               });
             },
             icon: 'ant-design:edit-outlined',
           },
           {
-            label: this.t('AppPlatform.Data:AddNew'),
+            label: this.L('Data:AddNew'),
             handler: () => {
               this.handleNewData(node.eventKey);
             },
             icon: 'ant-design:plus-outlined',
           },
           {
-            label: this.t('AppPlatform.Data:AppendItem'),
+            label: this.L('Data:AppendItem'),
             handler: () => {
               this.getDataId = node.eventKey;
               this.openItemModal(true, {}, true);
@@ -111,7 +109,7 @@
             icon: 'ant-design:plus-square-outlined',
           },
           {
-            label: this.t('AppPlatform.Data:Delete'),
+            label: this.L('Data:Delete'),
             handler: () => {
               Modal.warning({
                 title: this.t('AbpUi.AreYouSure'),
@@ -141,7 +139,7 @@
         }
       },
       handleNewData(parentId: string | null) {
-        this.formTitle = this.t('AppPlatform.Data:AddNew');
+        this.formTitle = this.L('Data:AddNew');
         this.openDataModal(
           true,
           {

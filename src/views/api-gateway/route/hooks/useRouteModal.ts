@@ -1,7 +1,8 @@
 import type { Ref } from 'vue';
 
 import { computed, reactive, ref, unref, watchEffect } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
+import { useValidation, ValidationEnum } from '/@/hooks/abp/useValidation';
 import { HostAndPort, HttpMethods } from '/@/api/api-gateway/model/basicModel';
 import { create, update, getById } from '/@/api/api-gateway/route';
 import { CreateRoute, UpdateRoute } from '/@/api/api-gateway/model/routeModel';
@@ -18,7 +19,9 @@ interface UseRouteModal {
 }
 
 export function useRouteModal({ emit, formElRef, routeIdRef, modalMethods }: UseRouteModal) {
-  const { t } = useI18n();
+  const { L } = useLocalization('ApiGateway');
+  const { L: VL } = useLocalization('AbpValidation');
+  const { ruleCreator } = useValidation();
   const routeRef = ref<Recordable>({});
   const appIdOptions = ref<any>([]);
   const balancerOptions = ref<any>([]);
@@ -90,21 +93,21 @@ export function useRouteModal({ emit, formElRef, routeIdRef, modalMethods }: Use
   });
 
   const radioOptions = reactive([
-    { label: t('ApiGateway.DisplayName:Enable'), value: true },
-    { label: t('ApiGateway.DisplayName:Disable'), value: false },
+    { label: L('DisplayName:Enable'), value: true },
+    { label: L('DisplayName:Disable'), value: false },
   ]);
 
   const formTitle = computed(() => {
     const route = unref(routeRef);
     if (route.reRouteId) {
-      return t('ApiGateway.Route:EditBy', [route.reRouteName]);
+      return L('Route:EditBy', [route.reRouteName]);
     }
-    return t('ApiGateway.Route:AddNew');
+    return L('Route:AddNew');
   });
 
   function validatePathTemplate(_, value: string) {
     if (!String(value).startsWith('/')) {
-      return Promise.reject(t('ApiGateway.RequestAddressMustStartWithBackslashSymbol'));
+      return Promise.reject(L('RequestAddressMustStartWithBackslashSymbol'));
     }
     return Promise.resolve();
   }
@@ -112,39 +115,41 @@ export function useRouteModal({ emit, formElRef, routeIdRef, modalMethods }: Use
   function validateDownstreamHostAndPort(_, value: HostAndPort[]) {
     if (!value || value.length === 0) {
       return Promise.reject(
-        t('AbpValidation.The {0} field is required', [
-          t('ApiGateway.DisplayName:DownstreamHostAndPorts'),
-        ]),
+        VL(ValidationEnum.FieldRequired, [L('DisplayName:DownstreamHostAndPorts')]),
       );
     }
     for (let index = 0; index < value.length; index++) {
       const url = `${value[index].host}:${value[index].port}`;
       if (!isIpPort(url) && !isSortUrl(url)) {
-        return Promise.reject(t('AbpValidation.The field {0} is invalid', [url]));
+        return Promise.reject(VL(ValidationEnum.FieldInvalid, [url]));
       }
     }
     return Promise.resolve();
   }
 
   const formRules = reactive({
-    appId: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [t('ApiGateway.DisplayName:AppId')]),
-      },
-    ],
-    reRouteName: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [t('ApiGateway.DisplayName:Name')]),
-      },
-    ],
+    appId: ruleCreator.fieldRequired({
+      name: 'AppId',
+      prefix: 'DisplayName',
+      resourceName: 'ApiGateway',
+    }),
+    reRouteName: ruleCreator.fieldRequired({
+      name: 'Name',
+      prefix: 'DisplayName',
+      resourceName: 'ApiGateway',
+    }),
     upstreamHttpMethod: [
       {
         required: true,
-        message: t('AbpValidation.The {0} field is required', [
-          t('ApiGateway.DisplayName:UpstreamHttpMethod'),
-        ]),
+        trigger: 'blur',
+        validator: (_, value: string[]) => {
+          if (!value || value.length === 0) {
+            return Promise.reject(
+              VL(ValidationEnum.FieldRequired, [L('DisplayName:UpstreamHttpMethod')]),
+            );
+          }
+          return Promise.resolve();
+        },
       },
     ],
     downstreamHostAndPorts: [
@@ -155,24 +160,22 @@ export function useRouteModal({ emit, formElRef, routeIdRef, modalMethods }: Use
       },
     ],
     upstreamPathTemplate: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [
-          t('ApiGateway.DisplayName:UpstreamPathTemplate'),
-        ]),
-      },
+      ...ruleCreator.fieldRequired({
+        name: 'UpstreamPathTemplate',
+        prefix: 'DisplayName',
+        resourceName: 'ApiGateway',
+      }),
       {
         trigger: 'change',
         validator: validatePathTemplate,
       },
     ],
     downstreamPathTemplate: [
-      {
-        required: true,
-        message: t('AbpValidation.The {0} field is required', [
-          t('ApiGateway.DisplayName:DownstreamPathTemplate'),
-        ]),
-      },
+      ...ruleCreator.fieldRequired({
+        name: 'DownstreamPathTemplate',
+        prefix: 'DisplayName',
+        resourceName: 'ApiGateway',
+      }),
       {
         trigger: 'change',
         validator: validatePathTemplate,

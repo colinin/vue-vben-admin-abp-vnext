@@ -2,7 +2,7 @@
   <Transfer
     :dataSource="supportedScopes"
     :targetKeys="targetScopes"
-    :titles="[t('AbpIdentityServer.Assigned'), t('AbpIdentityServer.Available')]"
+    :titles="[L('Assigned'), L('Available')]"
     :render="(item) => item.title"
     :list-style="{
       width: '293px',
@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Transfer } from 'ant-design-vue';
   import { discovery } from '/@/api/identity-server/identityServer';
 
@@ -26,7 +26,7 @@
     },
     emits: ['change'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const supportedScopes = ref<
         {
           key: string;
@@ -50,7 +50,7 @@
       }
 
       return {
-        t,
+        L,
         supportedScopes,
         handleChange,
       };

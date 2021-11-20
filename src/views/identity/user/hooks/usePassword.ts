@@ -1,17 +1,17 @@
 import { createVNode } from 'vue';
 import { Button } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
 import { useRandomPassword } from '/@/hooks/security/useRandomPassword';
 
 export function usePassword() {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const formSchemas: FormSchema[] = [
     {
       field: 'password',
       component: 'InputSearch',
-      label: t('AbpIdentity.Password'),
+      label: L('Password'),
       colProps: { span: 24 },
       required: true,
       componentProps: ({ formModel }) => {

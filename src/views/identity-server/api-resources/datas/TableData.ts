@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,28 +13,28 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentityServer.Name'),
+      title: L('Name'),
       dataIndex: 'name',
       align: 'left',
       width: 200,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.DisplayName'),
+      title: L('DisplayName'),
       dataIndex: 'displayName',
       align: 'left',
       width: 300,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Description'),
+      title: L('Description'),
       dataIndex: 'description',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Resource:Enabled'),
+      title: L('Resource:Enabled'),
       dataIndex: 'enabled',
       align: 'left',
       width: 200,
@@ -42,7 +42,7 @@ export function getDataColumns(): BasicColumn[] {
       slots: { customRender: 'enabled' },
     },
     {
-      title: t('AbpIdentityServer.ShowInDiscoveryDocument'),
+      title: L('ShowInDiscoveryDocument'),
       dataIndex: 'showInDiscoveryDocument',
       align: 'left',
       width: 200,
@@ -50,7 +50,7 @@ export function getDataColumns(): BasicColumn[] {
       slots: { customRender: 'discovery' },
     },
     {
-      title: t('AbpIdentityServer.AllowedAccessTokenSigningAlgorithms'),
+      title: L('AllowedAccessTokenSigningAlgorithms'),
       dataIndex: 'allowedAccessTokenSigningAlgorithms',
       align: 'left',
       width: 180,
@@ -62,28 +62,28 @@ export function getDataColumns(): BasicColumn[] {
 export function getSecretColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpIdentityServer.Secret:Type'),
+      title: L('Secret:Type'),
       dataIndex: 'type',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Secret:Value'),
+      title: L('Secret:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Description'),
+      title: L('Description'),
       dataIndex: 'description',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Expiration'),
+      title: L('Expiration'),
       dataIndex: 'expiration',
       align: 'left',
       width: 180,
@@ -101,14 +101,14 @@ export function getSecretColumns(): BasicColumn[] {
 export function getPropertyColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpIdentityServer.Propertites:Key'),
+      title: L('Propertites:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Propertites:Value'),
+      title: L('Propertites:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,

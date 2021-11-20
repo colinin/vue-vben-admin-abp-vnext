@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { Modal } from 'ant-design-vue';
 import { FormSchema } from '/@/components/Form';
 import { useModal } from '/@/components/Modal';
@@ -15,7 +15,7 @@ interface UseClaim {
 }
 // TODO: 与UserClaim重复 需要分离组件
 export function useClaim({ roleIdRef }: UseClaim) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const formSchemas: FormSchema[] = [
     {
       field: 'id',
@@ -27,7 +27,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
     {
       field: 'claimType',
       component: 'ApiSelect',
-      label: t('AbpIdentity.DisplayName:ClaimType'),
+      label: L('DisplayName:ClaimType'),
       colProps: { span: 24 },
       required: true,
       componentProps: {
@@ -40,7 +40,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
     {
       field: 'claimValue',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName:ClaimValue'),
+      label: L('DisplayName:ClaimValue'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -50,7 +50,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
     {
       field: 'newClaimValue',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName:ClaimValue'),
+      label: L('DisplayName:ClaimValue'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -65,7 +65,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
   });
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
-    title: t('AbpIdentity.ManageClaim'),
+    title: L('ManageClaim'),
     columns: getClaimColumns(),
     api: getClaimList,
     searchInfo: search,
@@ -80,7 +80,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
     rowSelection: { type: 'checkbox' },
     actionColumn: {
       width: 160,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -95,7 +95,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
         Object.assign(model, {
           newClaimValue: model.claimValue,
         }),
-        true
+        true,
       );
     } else {
       openModal(true, {}, true);
@@ -104,8 +104,8 @@ export function useClaim({ roleIdRef }: UseClaim) {
 
   function handleDelete(claim) {
     Modal.warning({
-      title: t('AbpUi.AreYouSure'),
-      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteClaim(unref(roleIdRef), claim).then(() => {
@@ -132,7 +132,7 @@ export function useClaim({ roleIdRef }: UseClaim) {
           id: id,
         },
       });
-    }
+    },
   );
 
   return {

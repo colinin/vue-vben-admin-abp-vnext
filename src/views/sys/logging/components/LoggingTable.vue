@@ -9,7 +9,7 @@
           :actions="[
             {
               color: 'success',
-              label: t('AbpAuditLogging.ShowLogDialog'),
+              label: L('ShowLogDialog'),
               icon: 'ant-design:search-outlined',
               onClick: handleShow.bind(null, record),
             },
@@ -24,7 +24,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Tag } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { LogLevelColor, LogLevelLabel } from '../datas/typing';
@@ -38,11 +38,11 @@
     name: 'LoggingTable',
     components: { BasicTable, Tag, TableAction, LoggingModal },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpAuditLogging');
       const [registerModal, { openModal }] = useModal();
       const [registerTable] = useTable({
         rowKey: 'timeStamp',
-        title: t('AbpAuditLogging.Logging'),
+        title: L('Logging'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -58,7 +58,7 @@
         scroll: { x: true },
         actionColumn: {
           width: 180,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -69,7 +69,7 @@
       }
 
       return {
-        t,
+        L,
         registerModal,
         registerTable,
         LogLevelColor,

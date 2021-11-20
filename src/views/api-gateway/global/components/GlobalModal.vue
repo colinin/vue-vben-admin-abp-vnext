@@ -16,44 +16,38 @@
       :wrapper-col="{ span: 18 }"
     >
       <Tabs v-model:activeKey="activedTabRef">
-        <TabPane key="info" :tab="t('ApiGateway.Basic')" forceRender>
-          <FormItem name="appId" :label="t('ApiGateway.DisplayName:AppId')">
+        <TabPane key="info" :tab="L('Basic')" forceRender>
+          <FormItem name="appId" :label="L('DisplayName:AppId')">
             <Select
               v-model:value="modelRef.appId"
               :options="appIdOptions"
               :disabled="modelRef.itemId !== undefined"
             />
           </FormItem>
-          <FormItem name="baseUrl" :label="t('ApiGateway.DisplayName:BaseUrl')">
+          <FormItem name="baseUrl" :label="L('DisplayName:BaseUrl')">
             <Input v-model:value="modelRef.baseUrl" />
           </FormItem>
-          <FormItem name="requestIdKey" :label="t('ApiGateway.DisplayName:RequestIdKey')">
+          <FormItem name="requestIdKey" :label="L('DisplayName:RequestIdKey')">
             <Input v-model:value="modelRef.requestIdKey" />
           </FormItem>
-          <FormItem name="downstreamScheme" :label="t('ApiGateway.DisplayName:DownstreamScheme')">
+          <FormItem name="downstreamScheme" :label="L('DisplayName:DownstreamScheme')">
             <Input v-model:value="modelRef.downstreamScheme" />
           </FormItem>
-          <FormItem
-            name="downstreamHttpVersion"
-            :label="t('ApiGateway.DisplayName:DownstreamHttpVersion')"
-          >
+          <FormItem name="downstreamHttpVersion" :label="L('DisplayName:DownstreamHttpVersion')">
             <Input v-model:value="modelRef.downstreamHttpVersion" />
           </FormItem>
         </TabPane>
-        <TabPane key="httpOptions" :tab="t('ApiGateway.HttpOptions')" forceRender>
+        <TabPane key="httpOptions" :tab="L('HttpOptions')" forceRender>
           <FormItem
             name="httpHandlerOptions.maxConnectionsPerServer"
-            :label="t('ApiGateway.DisplayName:MaxConnectionsPerServer')"
+            :label="L('DisplayName:MaxConnectionsPerServer')"
           >
             <InputNumber
               style="width: 100%"
               v-model:value="modelRef.httpHandlerOptions.maxConnectionsPerServer"
             />
           </FormItem>
-          <FormItem
-            :name="['httpHandlerOptions', 'useProxy']"
-            :label="t('ApiGateway.DisplayName:UseProxy')"
-          >
+          <FormItem :name="['httpHandlerOptions', 'useProxy']" :label="L('DisplayName:UseProxy')">
             <RadioGroup
               v-model:value="modelRef.httpHandlerOptions.useProxy"
               :options="radioOptions"
@@ -61,7 +55,7 @@
           </FormItem>
           <FormItem
             :name="['httpHandlerOptions', 'useTracing']"
-            :label="t('ApiGateway.DisplayName:UseTracing')"
+            :label="L('DisplayName:UseTracing')"
           >
             <RadioGroup
               v-model:value="modelRef.httpHandlerOptions.useTracing"
@@ -70,7 +64,7 @@
           </FormItem>
           <FormItem
             :name="['httpHandlerOptions', 'allowAutoRedirect']"
-            :label="t('ApiGateway.DisplayName:AllowAutoRedirect')"
+            :label="L('DisplayName:AllowAutoRedirect')"
           >
             <RadioGroup
               v-model:value="modelRef.httpHandlerOptions.allowAutoRedirect"
@@ -79,7 +73,7 @@
           </FormItem>
           <FormItem
             :name="['httpHandlerOptions', 'useCookieContainer']"
-            :label="t('ApiGateway.DisplayName:UseCookieContainer')"
+            :label="L('DisplayName:UseCookieContainer')"
           >
             <RadioGroup
               v-model:value="modelRef.httpHandlerOptions.useCookieContainer"
@@ -87,10 +81,10 @@
             />
           </FormItem>
         </TabPane>
-        <TabPane key="rateLimit" :tab="t('ApiGateway.RateLimit')" forceRender>
+        <TabPane key="rateLimit" :tab="L('RateLimit')" forceRender>
           <FormItem
             :name="['rateLimitOptions', 'disableRateLimitHeaders']"
-            :label="t('ApiGateway.DisplayName:DisableRateLimitHeaders')"
+            :label="L('DisplayName:DisableRateLimitHeaders')"
           >
             <RadioGroup
               v-model:value="modelRef.rateLimitOptions.disableRateLimitHeaders"
@@ -99,13 +93,13 @@
           </FormItem>
           <FormItem
             :name="['rateLimitOptions', 'clientIdHeader']"
-            :label="t('ApiGateway.DisplayName:ClientIdHeader')"
+            :label="L('DisplayName:ClientIdHeader')"
           >
             <Input v-model:value="modelRef.rateLimitOptions.clientIdHeader" />
           </FormItem>
           <FormItem
             :name="['rateLimitOptions', 'httpStatusCode']"
-            :label="t('ApiGateway.DisplayName:HttpStatusCode')"
+            :label="L('DisplayName:HttpStatusCode')"
           >
             <InputNumber
               style="width: 100%"
@@ -114,13 +108,13 @@
           </FormItem>
           <FormItem
             :name="['rateLimitOptions', 'rateLimitCounterPrefix']"
-            :label="t('ApiGateway.DisplayName:RateLimitCounterPrefix')"
+            :label="L('DisplayName:RateLimitCounterPrefix')"
           >
             <Input v-model:value="modelRef.rateLimitOptions.rateLimitCounterPrefix" />
           </FormItem>
           <FormItem
             :name="['rateLimitOptions', 'quotaExceededMessage']"
-            :label="t('ApiGateway.DisplayName:QuotaExceededMessage')"
+            :label="L('DisplayName:QuotaExceededMessage')"
           >
             <TextArea
               v-model:value="modelRef.rateLimitOptions.quotaExceededMessage"
@@ -128,22 +122,19 @@
             />
           </FormItem>
         </TabPane>
-        <TabPane key="qos" :tab="t('ApiGateway.Qos')" forceRender>
-          <FormItem
-            :name="['qoSOptions', 'timeoutValue']"
-            :label="t('ApiGateway.DisplayName:TimeoutValue')"
-          >
+        <TabPane key="qos" :tab="L('Qos')" forceRender>
+          <FormItem :name="['qoSOptions', 'timeoutValue']" :label="L('DisplayName:TimeoutValue')">
             <InputNumber style="width: 100%" v-model:value="modelRef.qoSOptions.timeoutValue" />
           </FormItem>
           <FormItem
             :name="['qoSOptions', 'durationOfBreak']"
-            :label="t('ApiGateway.DisplayName:DurationOfBreak')"
+            :label="L('DisplayName:DurationOfBreak')"
           >
             <InputNumber style="width: 100%" v-model:value="modelRef.qoSOptions.durationOfBreak" />
           </FormItem>
           <FormItem
             :name="['qoSOptions', 'exceptionsAllowedBeforeBreaking']"
-            :label="t('ApiGateway.DisplayName:ExceptionsAllowedBeforeBreaking')"
+            :label="L('DisplayName:ExceptionsAllowedBeforeBreaking')"
           >
             <InputNumber
               style="width: 100%"
@@ -151,78 +142,60 @@
             />
           </FormItem>
         </TabPane>
-        <TabPane key="LoadBalancer" :tab="t('ApiGateway.LoadBalancer')" forceRender>
+        <TabPane key="LoadBalancer" :tab="L('LoadBalancer')" forceRender>
           <FormItem
             :name="['loadBalancerOptions', 'type']"
-            :label="t('ApiGateway.DisplayName:LoadBalancerType')"
+            :label="L('DisplayName:LoadBalancerType')"
           >
             <Select v-model:value="modelRef.loadBalancerOptions.type" :options="balancerOptions" />
           </FormItem>
-          <FormItem
-            :name="['loadBalancerOptions', 'key']"
-            :label="t('ApiGateway.DisplayName:PollingKey')"
-          >
+          <FormItem :name="['loadBalancerOptions', 'key']" :label="L('DisplayName:PollingKey')">
             <Input v-model:value="modelRef.loadBalancerOptions.key" />
           </FormItem>
-          <FormItem
-            :name="['loadBalancerOptions', 'expiry']"
-            :label="t('ApiGateway.DisplayName:Expiry')"
-          >
+          <FormItem :name="['loadBalancerOptions', 'expiry']" :label="L('DisplayName:Expiry')">
             <InputNumber style="width: 100%" v-model:value="modelRef.loadBalancerOptions.expiry" />
           </FormItem>
         </TabPane>
-        <TabPane key="ServiceDiscovery" :tab="t('ApiGateway.ServiceDiscovery')" forceRender>
+        <TabPane key="ServiceDiscovery" :tab="L('ServiceDiscovery')" forceRender>
           <FormItem
             :name="['serviceDiscoveryProvider', 'type']"
-            :label="t('ApiGateway.DisplayName:DiscoveryType')"
+            :label="L('DisplayName:DiscoveryType')"
           >
             <Select
               v-model:value="modelRef.serviceDiscoveryProvider.type"
               :options="discoveryOptions"
             />
           </FormItem>
-          <FormItem
-            :name="['serviceDiscoveryProvider', 'host']"
-            :label="t('ApiGateway.DisplayName:Host')"
-          >
+          <FormItem :name="['serviceDiscoveryProvider', 'host']" :label="L('DisplayName:Host')">
             <Input v-model:value="modelRef.serviceDiscoveryProvider.host" />
           </FormItem>
-          <FormItem
-            :name="['serviceDiscoveryProvider', 'port']"
-            :label="t('ApiGateway.DisplayName:Port')"
-          >
+          <FormItem :name="['serviceDiscoveryProvider', 'port']" :label="L('DisplayName:Port')">
             <InputNumber
               style="width: 100%"
               v-model:value="modelRef.serviceDiscoveryProvider.port"
             />
           </FormItem>
-          <FormItem
-            :name="['serviceDiscoveryProvider', 'token']"
-            :label="t('ApiGateway.DisplayName:Token')"
-          >
+          <FormItem :name="['serviceDiscoveryProvider', 'token']" :label="L('DisplayName:Token')">
             <Input v-model:value="modelRef.serviceDiscoveryProvider.token" />
           </FormItem>
           <FormItem
             :name="['serviceDiscoveryProvider', 'configurationKey']"
-            :label="t('ApiGateway.DisplayName:ConfigurationKey')"
+            :label="L('DisplayName:ConfigurationKey')"
           >
             <Input v-model:value="modelRef.serviceDiscoveryProvider.configurationKey" />
           </FormItem>
           <FormItem
             :name="['serviceDiscoveryProvider', 'namespace']"
-            :label="t('ApiGateway.DisplayName:Namespace')"
+            :label="L('DisplayName:Namespace')"
           >
             <Input v-model:value="modelRef.serviceDiscoveryProvider.namespace" />
           </FormItem>
-          <FormItem
-            :name="['serviceDiscoveryProvider', 'scheme']"
-            :label="t('ApiGateway.DisplayName:Scheme')"
-          >
+          <FormItem :name="['serviceDiscoveryProvider', 'scheme']" :label="L('DisplayName:Scheme')">
             <Input v-model:value="modelRef.serviceDiscoveryProvider.scheme" />
           </FormItem>
           <FormItem
             :name="['serviceDiscoveryProvider', 'pollingInterval']"
-            :label="t('ApiGateway.DisplayName:PollingInterval')"
+            :label="L('DisplayName:PollingInterval')"
           >
             <InputNumber
               style="width: 100%"
@@ -238,7 +211,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Form, Tabs, Input, InputNumber, Select, RadioGroup } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -261,7 +234,7 @@
     },
     emits: ['change', 'register'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const appIdRef = ref('');
       const formElRef = ref<any>(null);
       const activedTabRef = ref('info');
@@ -284,7 +257,7 @@
       } = useGlobalModal({ emit, appIdRef, formElRef, modalMethods });
 
       return {
-        t,
+        L,
         modelRef,
         formTitle,
         formElRef,

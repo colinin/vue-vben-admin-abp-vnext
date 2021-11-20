@@ -1,14 +1,3 @@
-export interface Validator {
-  name: string;
-  properties: { [key: string]: string };
-}
-
-export interface ValueType {
-  name: string;
-  validator: Validator;
-  properties: { [key: string]: string };
-}
-
 export interface Provider {
   name: string;
   key: string;

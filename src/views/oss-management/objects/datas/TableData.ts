@@ -1,8 +1,8 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpOssManagement');
 const kbUnit = 1 * 1024;
 const mbUnit = kbUnit * 1024;
 const gbUnit = mbUnit * 1024;
@@ -10,7 +10,7 @@ const gbUnit = mbUnit * 1024;
 export function getDataColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpOssManagement.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 300,
@@ -20,7 +20,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:CreationDate'),
+      title: L('DisplayName:CreationDate'),
       dataIndex: 'creationDate',
       align: 'left',
       width: 160,
@@ -33,7 +33,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:LastModifiedDate'),
+      title: L('DisplayName:LastModifiedDate'),
       dataIndex: 'lastModifiedDate',
       align: 'left',
       width: 160,
@@ -46,19 +46,17 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:FileType'),
+      title: L('DisplayName:FileType'),
       dataIndex: 'isFolder',
       align: 'left',
       width: 120,
       sorter: true,
       format: (text) => {
-        return Boolean(text)
-          ? t('AbpOssManagement.DisplayName:Folder')
-          : t('AbpOssManagement.DisplayName:Standard');
+        return Boolean(text) ? L('DisplayName:Folder') : L('DisplayName:Standard');
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:Size'),
+      title: L('DisplayName:Size'),
       dataIndex: 'size',
       align: 'left',
       width: 'auto',

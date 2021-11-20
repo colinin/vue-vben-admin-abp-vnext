@@ -1,8 +1,8 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpOssManagement');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,14 +13,14 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpOssManagement.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 'auto',
       sorter: true,
     },
     {
-      title: t('AbpOssManagement.DisplayName:CreationDate'),
+      title: L('DisplayName:CreationDate'),
       dataIndex: 'creationDate',
       align: 'left',
       width: 150,
@@ -30,7 +30,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:LastModifiedDate'),
+      title: L('DisplayName:LastModifiedDate'),
       dataIndex: 'lastModifiedDate',
       align: 'left',
       width: 150,
@@ -40,7 +40,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpOssManagement.DisplayName:Size'),
+      title: L('DisplayName:Size'),
       dataIndex: 'size',
       align: 'left',
       width: 120,

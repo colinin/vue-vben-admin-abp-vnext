@@ -1,13 +1,13 @@
 import { computed } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { ChangeType } from '/@/api/auditing/model/auditLogModel';
 
 export function useAuditLog() {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpAuditLogging');
   const changeTypeColorMap = {
-    [ChangeType.Created]: { color: '#87d068', value: t('AbpAuditLogging.Created') },
-    [ChangeType.Updated]: { color: '#108ee9', value: t('AbpAuditLogging.Updated') },
-    [ChangeType.Deleted]: { color: 'red', value: t('AbpAuditLogging.Deleted') },
+    [ChangeType.Created]: { color: '#87d068', value: L('Created') },
+    [ChangeType.Updated]: { color: '#108ee9', value: L('Updated') },
+    [ChangeType.Deleted]: { color: 'red', value: L('Deleted') },
   };
   const methodColorMap: { [key: string]: string } = {
     ['GET']: 'blue',
@@ -18,18 +18,21 @@ export function useAuditLog() {
     ['PATCH']: 'pink',
   };
   const entityChangeTypeColor = computed(() => {
-    return (changeType: ChangeType) => changeTypeColorMap[changeType].color;
+    return (changeType?: ChangeType) => (changeType ? changeTypeColorMap[changeType].color : '');
   });
   const entityChangeType = computed(() => {
-    return (changeType: ChangeType) => changeTypeColorMap[changeType].value;
+    return (changeType?: ChangeType) => (changeType ? changeTypeColorMap[changeType].value : '');
   });
   const httpMethodColor = computed(() => {
-    return (method: string) => {
-      return methodColorMap[method];
+    return (method?: string) => {
+      return method ? methodColorMap[method] : '';
     };
   });
   const httpStatusCodeColor = computed(() => {
-    return (statusCode: number) => {
+    return (statusCode?: number) => {
+      if (!statusCode) {
+        return '';
+      }
       if (statusCode >= 200 && statusCode < 300) {
         return '#87d068';
       }

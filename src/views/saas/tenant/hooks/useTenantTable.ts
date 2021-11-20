@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 
 import { unref } from 'vue';
 import { Modal } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { TableActionType, useTable } from '/@/components/Table';
 import { getDataColumns } from '../datas/TableData';
 import { getSearchFormSchemas } from '../datas//ModalData';
@@ -14,10 +14,10 @@ interface UseTenantTable {
 }
 
 export function useTenantTable({ tableElRef }: UseTenantTable) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpTenantManagement');
   const [registerTable, {}] = useTable({
     rowKey: 'id',
-    title: t('AbpTenantManagement.Tenants'),
+    title: L('Tenants'),
     columns: getDataColumns(),
     api: getList,
     beforeFetch: formatPagedRequest,
@@ -33,7 +33,7 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
     formConfig: getSearchFormSchemas(),
     actionColumn: {
       width: 200,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -41,8 +41,8 @@ export function useTenantTable({ tableElRef }: UseTenantTable) {
 
   function handleDelete(record) {
     Modal.warning({
-      title: t('AbpUi.AreYouSure'),
-      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteById(record.id).then(() => {

@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 const httpStatusCodeOptions = [
   { value: 100, label: '100 - Continue' },
@@ -56,25 +56,25 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'applicationName',
         component: 'Input',
-        label: t('AbpAuditLogging.ApplicationName'),
+        label: L('ApplicationName'),
         colProps: { span: 6 },
       },
       {
         field: 'userName',
         component: 'Input',
-        label: t('AbpAuditLogging.UserName'),
+        label: L('UserName'),
         colProps: { span: 6 },
       },
       {
         field: 'httpMethod',
         component: 'Input',
-        label: t('AbpAuditLogging.HttpMethod'),
+        label: L('HttpMethod'),
         colProps: { span: 6 },
       },
       {
         field: 'httpStatusCode',
         component: 'Select',
-        label: t('AbpAuditLogging.HttpStatusCode'),
+        label: L('HttpStatusCode'),
         colProps: { span: 6 },
         componentProps: {
           options: httpStatusCodeOptions,
@@ -83,13 +83,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'url',
         component: 'Input',
-        label: t('AbpAuditLogging.RequestUrl'),
+        label: L('RequestUrl'),
         colProps: { span: 6 },
       },
       {
         field: 'minExecutionDuration',
         component: 'InputNumber',
-        label: t('AbpAuditLogging.MinExecutionDuration'),
+        label: L('MinExecutionDuration'),
         labelWidth: 180,
         colProps: { span: 9 },
         componentProps: {
@@ -101,7 +101,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'maxExecutionDuration',
         component: 'InputNumber',
-        label: t('AbpAuditLogging.MaxExecutionDuration'),
+        label: L('MaxExecutionDuration'),
         labelWidth: 180,
         colProps: { span: 9 },
         componentProps: {
@@ -113,13 +113,13 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'correlationId',
         component: 'Input',
-        label: t('AbpAuditLogging.CorrelationId'),
+        label: L('CorrelationId'),
         colProps: { span: 6 },
       },
       {
         field: 'startTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.StartTime'),
+        label: L('StartTime'),
         colProps: { span: 6 },
         componentProps: {
           style: {
@@ -130,7 +130,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'endTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.EndTime'),
+        label: L('EndTime'),
         colProps: { span: 6 },
         componentProps: {
           style: {
@@ -141,9 +141,9 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'hasException',
         component: 'Checkbox',
-        label: t('AbpAuditLogging.HasException'),
+        label: L('HasException'),
         colProps: { span: 6 },
-        renderComponentContent: t('AbpAuditLogging.HasException'),
+        renderComponentContent: L('HasException'),
       },
     ],
   };

@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { message } from 'ant-design-vue';
   import { BasicForm, FormActionType, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -25,7 +25,7 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('LocalizationManagement', 'AbpUi');
       const idRef = ref('');
       const modelRef = ref<Nullable<Resource>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -43,11 +43,9 @@
       });
       const formTitle = computed(() => {
         if (unref(modelRef)?.displayName) {
-          return t('LocalizationManagement.EditByName', [
-            unref(modelRef)?.displayName,
-          ] as Recordable);
+          return L('EditByName', [unref(modelRef)?.displayName] as Recordable);
         }
-        return t('LocalizationManagement.Resource:AddNew');
+        return L('Resource:AddNew');
       });
 
       watch(
@@ -73,7 +71,7 @@
           api
             .then(() => {
               emit('change');
-              message.success(t('AbpUi.Successful'));
+              message.success(L('Successful'));
               formEl?.resetFields();
               closeModal();
             })
@@ -84,7 +82,7 @@
       }
 
       return {
-        t,
+        L,
         formElRef,
         modelRef,
         formTitle,

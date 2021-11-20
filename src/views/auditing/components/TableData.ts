@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -13,7 +13,7 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpAuditLogging.RequestUrl'),
+      title: L('RequestUrl'),
       dataIndex: 'url',
       align: 'left',
       width: 500,
@@ -23,21 +23,21 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpAuditLogging.UserName'),
+      title: L('UserName'),
       dataIndex: 'userName',
       align: 'left',
       width: 120,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ClientIpAddress'),
+      title: L('ClientIpAddress'),
       dataIndex: 'clientIpAddress',
       align: 'left',
       width: 120,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ExecutionTime'),
+      title: L('ExecutionTime'),
       dataIndex: 'executionTime',
       align: 'left',
       width: 150,
@@ -47,28 +47,28 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpAuditLogging.ExecutionDuration'),
+      title: L('ExecutionDuration'),
       dataIndex: 'executionDuration',
       align: 'left',
       width: 100,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ApplicationName'),
+      title: L('ApplicationName'),
       dataIndex: 'applicationName',
       align: 'left',
       width: 100,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.TenantName'),
+      title: L('TenantName'),
       dataIndex: 'tenantName',
       align: 'left',
       width: 100,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.BrowserInfo'),
+      title: L('BrowserInfo'),
       dataIndex: 'browserInfo',
       align: 'left',
       width: 300,

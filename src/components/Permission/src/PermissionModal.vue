@@ -13,7 +13,7 @@
           :checked="permissionTreeCheckState.checked"
           :indeterminate="permissionTreeCheckState.indeterminate"
           @change="handleGrantAllPermission"
-          >{{ t('AbpPermissionManagement.SelectAllInAllTabs') }}</Checkbox
+          >{{ L('SelectAllInAllTabs') }}</Checkbox
         >
       </Col>
       <Divider />
@@ -29,7 +29,7 @@
                 :checked="permissionTabCheckState(permission).checked"
                 :indeterminate="permissionTabCheckState(permission).indeterminate"
                 @change="(e) => handleGrantPermissions(permission, e)"
-                >{{ t('AbpPermissionManagement.SelectAllInThisTab') }}</Checkbox
+                >{{ L('SelectAllInThisTab') }}</Checkbox
               >
               <Divider />
               <BasicTree
@@ -60,7 +60,7 @@
   import { defineComponent, ref } from 'vue';
   import { message } from 'ant-design-vue';
   import { Card, Checkbox, Col, Divider, Row, Tabs } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
   import { usePermissions } from './hooks/usePermissions';
@@ -86,7 +86,7 @@
       TabPane: Tabs.TabPane,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpPermissionManagement');
       const activeKey = ref('');
       const model = ref<PermissionProps>(defaultProps);
       const {
@@ -109,7 +109,7 @@
       });
 
       return {
-        t,
+        L,
         activeKey,
         title,
         permissionTab,
@@ -137,7 +137,7 @@
         });
         this.handleSavePermission()
           .then(() => {
-            message.success(this.t('component.permission.successful'));
+            message.success(this.L('Successful'));
             this.closeModal();
           })
           .finally(() => {

@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">新建分组</a-button>
+        <a-button type="primary" @click="handleAddNew">{{ L('Group:AddNew') }}</a-button>
       </template>
       <template #active="{ record }">
         <Switch :checked="record.isActive" disabled />
@@ -12,14 +12,14 @@
           :actions="[
             {
               auth: 'ApiGateway.RouteGroup.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'ApiGateway.RouteGroup.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -42,7 +42,7 @@
   import { Modal, Switch } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicModalForm } from '/@/components/ModalForm';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { formatPagedRequest } from '/@/utils/http/abp/helper';
   import { create, deleteByAppId, getList, update } from '/@/api/api-gateway/group';
@@ -57,20 +57,20 @@
     name: 'GroupTable',
     components: { BasicModalForm, BasicTable, Switch, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const formModel = ref<Nullable<RouteGroup>>(null);
       const formItems = getModalFormSchemas();
       const formTitle = computed(() => {
         const model = unref(formModel);
         if (model && model.id) {
-          return t('ApiGateway.Group:EditBy', [model.name] as Recordable);
+          return L('Group:EditBy', [model.name] as Recordable);
         }
-        return t('ApiGateway.Group:AddNew');
+        return L('Group:AddNew');
       });
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'id',
-        title: '路由分组',
+        title: L('Groups'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -85,14 +85,14 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
       });
 
       return {
-        t,
+        L,
         formModel,
         formItems,
         formTitle,
@@ -113,8 +113,8 @@
       },
       handleDelete(record: Recordable) {
         Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+          title: this.L('AreYouSure'),
+          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteByAppId(record.appId).then(() => {

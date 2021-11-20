@@ -18,7 +18,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { getModalFormSchemas } from '../datas//ModalData';
@@ -27,7 +27,7 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpTenantManagement');
       const loading = ref(false);
       const tenantIdRef = ref('');
       const [registerModal, { closeModal }] = useModalInner((data) => {
@@ -38,9 +38,7 @@
         showActionButtonGroup: false,
       });
       const modalTitle = computed(() => {
-        return unref(tenantIdRef)
-          ? t('AbpTenantManagement.Edit')
-          : t('AbpTenantManagement.NewTenant');
+        return unref(tenantIdRef) ? L('Edit') : L('NewTenant');
       });
 
       function handleSubmit() {

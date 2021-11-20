@@ -6,10 +6,10 @@
     <Col :span="14">
       <Card>
         <Tabs v-model="activeKey">
-          <TabPane key="members" :tab="t('AbpIdentity.Users')">
+          <TabPane key="members" :tab="L('Users')">
             <MemberTable :ou-id="ouIdRef" />
           </TabPane>
-          <TabPane key="roles" :tab="t('AbpIdentity.Roles')" :forceRender="true">
+          <TabPane key="roles" :tab="L('Roles')" :forceRender="true">
             <RoleTable :ou-id="ouIdRef" />
           </TabPane>
         </Tabs>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Card, Row, Col, Tabs } from 'ant-design-vue';
   import OrganizationUnitTree from './OrganizationUnitTree.vue';
   import MemberTable from './MemberTable.vue';
@@ -39,7 +39,7 @@
       TabPane: Tabs.TabPane,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const activeKey = ref('members');
       const ouIdRef = ref('');
 
@@ -48,7 +48,7 @@
       }
 
       return {
-        t,
+        L,
         activeKey,
         ouIdRef,
         handleSelect,

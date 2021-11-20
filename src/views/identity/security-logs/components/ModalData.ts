@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,43 +10,43 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'applicationName',
         component: 'Input',
-        label: t('AbpAuditLogging.ApplicationName'),
+        label: L('ApplicationName'),
         colProps: { span: 6 },
       },
       {
         field: 'userName',
         component: 'Input',
-        label: t('AbpAuditLogging.UserName'),
+        label: L('UserName'),
         colProps: { span: 6 },
       },
       {
         field: 'clientId',
         component: 'Input',
-        label: t('AbpAuditLogging.ClientId'),
+        label: L('ClientId'),
         colProps: { span: 6 },
       },
       {
         field: 'identity',
         component: 'Input',
-        label: t('AbpAuditLogging.Identity'),
+        label: L('Identity'),
         colProps: { span: 6 },
       },
       {
         field: 'actionName',
         component: 'Input',
-        label: t('AbpAuditLogging.ActionName'),
+        label: L('ActionName'),
         colProps: { span: 6 },
       },
       {
         field: 'correlationId',
         component: 'Input',
-        label: t('AbpAuditLogging.CorrelationId'),
+        label: L('CorrelationId'),
         colProps: { span: 6 },
       },
       {
         field: 'startTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.StartTime'),
+        label: L('StartTime'),
         colProps: { span: 6 },
         componentProps: {
           style: {
@@ -57,7 +57,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'endTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.EndTime'),
+        label: L('EndTime'),
         colProps: { span: 6 },
         componentProps: {
           style: {

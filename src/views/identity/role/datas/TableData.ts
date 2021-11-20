@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentity');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -12,7 +12,7 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.DisplayName:RoleName'),
+      title: L('DisplayName:RoleName'),
       dataIndex: 'name',
       align: 'left',
       width: 'auto',
@@ -30,14 +30,14 @@ export function getClaimColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.DisplayName:ClaimType'),
+      title: L('DisplayName:ClaimType'),
       dataIndex: 'claimType',
       align: 'left',
       width: 150,
       sortOrder: true,
     },
     {
-      title: t('AbpIdentity.DisplayName:ClaimValue'),
+      title: L('DisplayName:ClaimValue'),
       dataIndex: 'claimValue',
       align: 'left',
       width: 'auto',

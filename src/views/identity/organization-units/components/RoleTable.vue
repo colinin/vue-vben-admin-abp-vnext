@@ -7,7 +7,7 @@
         :disabled="!addRoleEnabled"
         @click="handleAddNew"
       >
-        {{ t('AbpIdentity.OrganizationUnit:AddRole') }}
+        {{ L('OrganizationUnit:AddRole') }}
       </a-button>
     </template>
     <template #action="{ record }">
@@ -17,7 +17,7 @@
           {
             auth: 'AbpIdentity.OrganizationUnits.ManageRoles',
             color: 'error',
-            label: t('AbpUi.Delete'),
+            label: L('Delete'),
             icon: 'ant-design:delete-outlined',
             onClick: handleDelete.bind(null, record),
           },
@@ -30,7 +30,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicTable, TableAction } from '/@/components/Table';
   import { useRoleTable } from '../hooks/useRoleTable';
@@ -45,7 +45,7 @@
       ouId: { type: String },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const { hasPermission } = usePermission();
       const getProps = computed(() => {
         return { ...props } as MemberProps;
@@ -68,7 +68,7 @@
       }
 
       return {
-        t,
+        L,
         addRoleEnabled,
         registerTable,
         registerModal,

@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('LocalizationManagement', 'AbpUi');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpUi.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
         defaultValue: '',
       },
@@ -30,29 +30,29 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'enable',
       component: 'Checkbox',
-      label: t('LocalizationManagement.DisplayName:Enable'),
+      label: L('DisplayName:Enable'),
       colProps: { span: 24 },
       defaultValue: true,
-      renderComponentContent: t('LocalizationManagement.DisplayName:Enable'),
+      renderComponentContent: L('DisplayName:Enable'),
     },
     {
       field: 'name',
       component: 'Input',
-      label: t('LocalizationManagement.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'displayName',
       component: 'Input',
-      label: t('LocalizationManagement.DisplayName:DisplayName'),
+      label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('LocalizationManagement.DisplayName:Description'),
+      label: L('DisplayName:Description'),
       colProps: { span: 24 },
     },
   ];

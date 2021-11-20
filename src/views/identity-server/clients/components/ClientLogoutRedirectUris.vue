@@ -1,6 +1,6 @@
 <template>
   <DynamicForm
-    :title="t('AbpIdentityServer.Client:PostLogoutRedirectUris')"
+    :title="L('Client:PostLogoutRedirectUris')"
     :schemas="schemas"
     :columns="columns"
     :data-source="modelRef.postLogoutRedirectUris"
@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { defineComponent, toRefs } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import { Client } from '/@/api/identity-server/model/clientsModel';
@@ -29,7 +29,7 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const schemas: FormSchema[] = [
         {
           field: 'postLogoutRedirectUri',
@@ -58,7 +58,7 @@
       }
 
       return {
-        t,
+        L,
         schemas,
         columns,
         handleAddNew,

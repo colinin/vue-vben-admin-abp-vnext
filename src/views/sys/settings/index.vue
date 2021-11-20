@@ -7,7 +7,7 @@
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
@@ -30,11 +30,12 @@
       const providerName = ref('G');
       const providerKey = ref<string | undefined>('');
       const hasChangeSetting = ref(false);
-      const { t } = useI18n();
       const { createMessage } = useMessage();
       const { success } = createMessage;
+      const { L } = useLocalization('AbpSettingManagement');
 
       return {
+        L,
         activeKey: ref('1'),
         abpStore,
         group,
@@ -42,7 +43,6 @@
         providerKey,
         hasChangeSetting,
         success,
-        t,
       };
     },
     mounted() {
@@ -66,7 +66,7 @@
         if (this.abpStore.getApplication.currentTenant.isAvailable) {
           setCurrentTenantSettings(settings)
             .then(() => {
-              this.success(this.t('AbpSettingManagement.SuccessfullySaved'));
+              this.success(this.L('SuccessfullySaved'));
             })
             .finally(() => {
               this.hasChangeSetting = false;
@@ -74,7 +74,7 @@
         } else {
           setGlobalSettings(settings)
             .then(() => {
-              this.success(this.t('AbpSettingManagement.SuccessfullySaved'));
+              this.success(this.L('SuccessfullySaved'));
             })
             .finally(() => {
               this.hasChangeSetting = false;

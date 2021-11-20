@@ -1,7 +1,7 @@
 import type { Ref } from 'vue';
 
 import { computed, unref, watch } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getModalFormSchemas } from '../datas/ModalData';
 import { FormActionType } from '/@/components/Form';
 import { Role } from '/@/api/identity/model/roleModel';
@@ -13,9 +13,9 @@ interface UseRoleFormContext {
 }
 
 export function useRoleModal({ roleRef, formElRef }: UseRoleFormContext) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const formTitle = computed(() => {
-    return unref(roleRef)?.id ? t('AbpIdentity.Edit') : t('AbpIdentity.NewRole');
+    return unref(roleRef)?.id ? L('Edit') : L('NewRole');
   });
   const formSchemas = computed(() => {
     return [...getModalFormSchemas()];
@@ -34,7 +34,7 @@ export function useRoleModal({ roleRef, formElRef }: UseRoleFormContext) {
     },
     {
       immediate: true,
-    }
+    },
   );
 
   return {

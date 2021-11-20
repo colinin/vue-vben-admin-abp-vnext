@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentity');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -10,7 +10,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpIdentity.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
         defaultValue: '',
       },
@@ -37,23 +37,23 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName:RoleName'),
+      label: L('DisplayName:RoleName'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'isPublic',
       component: 'Checkbox',
-      label: t('AbpIdentity.DisplayName:IsPublic'),
+      label: L('DisplayName:IsPublic'),
       colProps: { span: 24 },
-      renderComponentContent: t('AbpIdentity.DisplayName:IsPublic'),
+      renderComponentContent: L('DisplayName:IsPublic'),
     },
     {
       field: 'isDefault',
       component: 'Checkbox',
-      label: t('AbpIdentity.DisplayName:IsDefault'),
+      label: L('DisplayName:IsDefault'),
       colProps: { span: 24 },
-      renderComponentContent: t('AbpIdentity.DisplayName:IsDefault'),
+      renderComponentContent: L('DisplayName:IsDefault'),
     },
   ];
 }

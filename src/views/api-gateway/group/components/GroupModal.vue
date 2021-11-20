@@ -11,7 +11,7 @@
   import { defineComponent, computed, ref, unref } from 'vue';
 
   import { useModal } from '/@/components/Modal';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { getModalFormSchemas } from './ModalData';
   import { RouteGroup } from '/@/api/api-gateway/model/groupModel';
@@ -19,15 +19,15 @@
     name: 'GroupModal',
     components: { BasicModalForm },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const formModel = ref<Nullable<RouteGroup>>(null);
       const formItems = getModalFormSchemas();
       const formTitle = computed(() => {
         const model = unref(formModel);
         if (model && model.id) {
-          return t('ApiGateway.Group:EditBy', [model.name] as Recordable);
+          return L('Group:EditBy', [model.name] as Recordable);
         }
-        return t('ApiGateway.Group:AddNew');
+        return L('Group:AddNew');
       });
       const [registerModal, { openModal }] = useModal();
 

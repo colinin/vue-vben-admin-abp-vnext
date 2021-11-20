@@ -1,9 +1,9 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 import { getAll as getLanguages } from '/@/api/localization/languages';
 import { getAll as getResources } from '/@/api/localization/resources';
 
-const { t } = useI18n();
+const { L } = useLocalization('LocalizationManagement', 'AbpUi');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -12,7 +12,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'cultureName',
         component: 'ApiSelect',
-        label: t('LocalizationManagement.DisplayName:CultureName'),
+        label: L('DisplayName:CultureName'),
         colProps: { span: 6 },
         required: true,
         componentProps: {
@@ -25,7 +25,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'targetCultureName',
         component: 'ApiSelect',
-        label: t('LocalizationManagement.DisplayName:TargetCultureName'),
+        label: L('DisplayName:TargetCultureName'),
         colProps: { span: 6 },
         required: true,
         componentProps: {
@@ -38,7 +38,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'resourceName',
         component: 'ApiSelect',
-        label: t('LocalizationManagement.DisplayName:ResourceName'),
+        label: L('DisplayName:ResourceName'),
         colProps: { span: 6 },
         componentProps: {
           api: () => getResources(),
@@ -50,18 +50,18 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'onlyNull',
         component: 'Select',
-        label: t('LocalizationManagement.DisplayName:TargetValue'),
+        label: L('DisplayName:TargetValue'),
         colProps: { span: 6 },
         componentProps: {
           options: [
             {
-              key: t('LocalizationManagement.DisplayName:Any'),
-              label: t('LocalizationManagement.DisplayName:Any'),
+              key: L('DisplayName:Any'),
+              label: L('DisplayName:Any'),
               value: 0,
             },
             {
-              key: t('LocalizationManagement.DisplayName:OnlyNull'),
-              label: t('LocalizationManagement.DisplayName:OnlyNull'),
+              key: L('DisplayName:OnlyNull'),
+              label: L('DisplayName:OnlyNull'),
               value: 1,
             },
           ],
@@ -70,7 +70,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpUi.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
       },
     ],

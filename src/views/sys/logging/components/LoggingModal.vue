@@ -1,73 +1,68 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :width="800"
-    :height="400"
-    :title="t('AbpAuditLogging.Logging')"
-  >
+  <BasicModal @register="registerModal" :width="800" :height="400" :title="L('Logging')">
     <Form :labelCol="{ span: 4 }" :wrapperCol="{ span: 20 }" layout="horizontal" :model="modelRef">
       <Tabs v-model:activeKey="activeKey">
-        <TabPane key="basic" :tab="t('AbpAuditLogging.Operation')">
-          <FormItem :label="t('AbpAuditLogging.TimeStamp')">
+        <TabPane key="basic" :tab="L('Operation')">
+          <FormItem :label="L('TimeStamp')">
             <span>{{ formatDateVal(modelRef.timeStamp) }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.Level')">
+          <FormItem :label="L('Level')">
             <Tag :color="LogLevelColor[modelRef.level]">
               {{ LogLevelLabel[modelRef.level] }}
             </Tag>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.Message')">
+          <FormItem :label="L('Message')">
             <TextArea v-model:value="modelRef.message" readonly :rows="10" />
           </FormItem>
         </TabPane>
-        <TabPane v-if="modelRef.fields" key="fields" :tab="t('AbpAuditLogging.Fields')">
-          <FormItem :label="t('AbpAuditLogging.MachineName')">
+        <TabPane v-if="modelRef.fields" key="fields" :tab="L('Fields')">
+          <FormItem :label="L('MachineName')">
             <span>{{ modelRef.fields.machineName }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.Environment')">
+          <FormItem :label="L('Environment')">
             <span>{{ modelRef.fields.environment }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.Application')">
+          <FormItem :label="L('Application')">
             <span>{{ modelRef.fields.application }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ProcessId')">
+          <FormItem :label="L('ProcessId')">
             <span>{{ modelRef.fields.processId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ThreadId')">
+          <FormItem :label="L('ThreadId')">
             <span>{{ modelRef.fields.threadId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.Context')">
+          <FormItem :label="L('Context')">
             <span>{{ modelRef.fields.context }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ActionId')">
+          <FormItem :label="L('ActionId')">
             <span>{{ modelRef.fields.actionId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ActionName')">
+          <FormItem :label="L('ActionName')">
             <span>{{ modelRef.fields.actionName }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.RequestId')">
+          <FormItem :label="L('RequestId')">
             <span>{{ modelRef.fields.requestId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.RequestPath')">
+          <FormItem :label="L('RequestPath')">
             <span>{{ modelRef.fields.requestPath }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ConnectionId')">
+          <FormItem :label="L('ConnectionId')">
             <span>{{ modelRef.fields.connectionId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.CorrelationId')">
+          <FormItem :label="L('CorrelationId')">
             <span>{{ modelRef.fields.correlationId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.ClientId')">
+          <FormItem :label="L('ClientId')">
             <span>{{ modelRef.fields.clientId }}</span>
           </FormItem>
-          <FormItem :label="t('AbpAuditLogging.UserId')">
+          <FormItem :label="L('UserId')">
             <span>{{ modelRef.fields.userId }}</span>
           </FormItem>
         </TabPane>
         <TabPane
           v-if="modelRef.exceptions && modelRef.exceptions.length > 0"
           key="exceptions"
-          :tab="t('AbpAuditLogging.Exceptions')"
+          :tab="L('Exceptions')"
         >
           <Collapse>
             <CollapsePanel
@@ -76,22 +71,22 @@
               :header="exception.class"
               :show-arrow="false"
             >
-              <FormItem :label="t('AbpAuditLogging.Class')">
+              <FormItem :label="L('Class')">
                 <span>{{ exception.class }}</span>
               </FormItem>
-              <FormItem :label="t('AbpAuditLogging.Message')">
+              <FormItem :label="L('Message')">
                 <span>{{ exception.message }}</span>
               </FormItem>
-              <FormItem :label="t('AbpAuditLogging.Source')">
+              <FormItem :label="L('Source')">
                 <span>{{ exception.source }}</span>
               </FormItem>
-              <FormItem :label="t('AbpAuditLogging.StackTrace')">
+              <FormItem :label="L('StackTrace')">
                 <TextArea v-model:value="exception.stackTrace" readonly :rows="10" />
               </FormItem>
-              <FormItem :label="t('AbpAuditLogging.HResult')">
+              <FormItem :label="L('HResult')">
                 <span>{{ exception.hResult }}</span>
               </FormItem>
-              <FormItem :label="t('AbpAuditLogging.HelpURL')">
+              <FormItem :label="L('HelpURL')">
                 <span>{{ exception.helpURL }}</span>
               </FormItem>
             </CollapsePanel>
@@ -104,7 +99,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Collapse, Form, Tabs, Tag, Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { get } from '/@/api/logging/logging';
@@ -125,7 +120,7 @@
       TextArea: Input.TextArea,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpAuditLogging');
       const activeKey = ref('basic');
       const modelRef = ref<Log>({} as Log);
       const [registerModal] = useModalInner((model) => {
@@ -140,7 +135,7 @@
       });
 
       return {
-        t,
+        L,
         modelRef,
         activeKey,
         registerModal,

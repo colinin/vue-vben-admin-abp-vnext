@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { HashType } from '/@/api/identity-server/model/apiResourcesModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -11,7 +11,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpIdentityServer.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
       },
     ],
@@ -32,7 +32,7 @@ export function getSecretFormSchemas(): FormSchema[] {
     {
       field: 'type',
       component: 'Select',
-      label: t('AbpIdentityServer.Secret:Type'),
+      label: L('Secret:Type'),
       colProps: { span: 24 },
       required: true,
       componentProps: {
@@ -48,20 +48,20 @@ export function getSecretFormSchemas(): FormSchema[] {
     {
       field: 'value',
       component: 'Input',
-      label: t('AbpIdentityServer.Secret:Value'),
+      label: L('Secret:Value'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'description',
       component: 'Input',
-      label: t('AbpIdentityServer.Description'),
+      label: L('Description'),
       colProps: { span: 24 },
     },
     {
       field: 'expiration',
       component: 'DatePicker',
-      label: t('AbpIdentityServer.Expiration'),
+      label: L('Expiration'),
       colProps: { span: 24 },
       componentProps: {
         style: {
@@ -77,14 +77,14 @@ export function getPropertyFormSchemas(): FormSchema[] {
     {
       field: 'key',
       component: 'Input',
-      label: t('AbpIdentityServer.Propertites:Key'),
+      label: L('Propertites:Key'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'value',
       component: 'Input',
-      label: t('AbpIdentityServer.Propertites:Value'),
+      label: L('Propertites:Value'),
       colProps: { span: 24 },
       required: true,
     },

@@ -2,7 +2,7 @@ import { ComputedRef } from 'vue';
 import { Modal } from 'ant-design-vue';
 import { ref, unref, watch } from 'vue';
 import { useTable } from '/@/components/Table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { getDataColumns } from '../../role/datas/TableData';
 import { Role } from '/@/api/identity/model/roleModel';
 import { getRoleList } from '/@/api/identity/organization-units';
@@ -14,7 +14,7 @@ interface UseRoleTable {
 }
 
 export function useRoleTable({ getProps }: UseRoleTable) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const dataSource = ref([] as Role[]);
   const [registerTable] = useTable({
     rowKey: 'id',
@@ -34,7 +34,7 @@ export function useRoleTable({ getProps }: UseRoleTable) {
     rowSelection: { type: 'checkbox' },
     actionColumn: {
       width: 220,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -42,8 +42,8 @@ export function useRoleTable({ getProps }: UseRoleTable) {
 
   function handleDelete(role) {
     Modal.warning({
-      title: t('AbpIdentity.AreYouSure'),
-      content: t('AbpIdentity.OrganizationUnit:AreYouSureRemoveRole', [role.name] as Recordable),
+      title: L('AreYouSure'),
+      content: L('OrganizationUnit:AreYouSureRemoveRole', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
         removeOrganizationUnit(role.id, unref(getProps).ouId).then(() => reloadRoles());
@@ -68,7 +68,7 @@ export function useRoleTable({ getProps }: UseRoleTable) {
       if (id) {
         reloadRoles();
       }
-    }
+    },
   );
 
   return {

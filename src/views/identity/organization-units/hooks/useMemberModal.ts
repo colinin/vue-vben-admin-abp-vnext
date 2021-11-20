@@ -1,7 +1,7 @@
 import type { ComputedRef } from 'vue';
 
 import { unref } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useModal } from '/@/components/Modal';
 import { getUnaddedMemberList } from '/@/api/identity/organization-units';
 import { BasicColumn, useTable } from '/@/components/Table';
@@ -13,7 +13,7 @@ interface UseMemberModal {
 }
 
 export function useMemberModal({ getProps }: UseMemberModal) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const dataColumns: BasicColumn[] = [
     {
       title: 'id',
@@ -22,14 +22,14 @@ export function useMemberModal({ getProps }: UseMemberModal) {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.DisplayName:UserName'),
+      title: L('DisplayName:UserName'),
       dataIndex: 'userName',
       align: 'left',
       width: 280,
       sorter: true,
     },
     {
-      title: t('AbpIdentity.EmailAddress'),
+      title: L('EmailAddress'),
       dataIndex: 'email',
       align: 'left',
       width: 'auto',

@@ -1,14 +1,14 @@
 <template>
   <InputSearch
     readonly
-    :placeholder="t('AbpUiMultiTenancy.SwitchTenantHint')"
+    :placeholder="L('SwitchTenantHint')"
     size="large"
     autoComplete="off"
     @search="handleSwitchTenant"
     v-model:value="currentTenant.name"
   >
     <template #enterButton>
-      <Button> ({{ t('AbpUiMultiTenancy.Switch') }}) </Button>
+      <Button> ({{ L('Switch') }}) </Button>
     </template>
   </InputSearch>
   <BasicModal
@@ -19,11 +19,11 @@
     :canFullscreen="false"
     :showCancelBtn="false"
     @register="registerModal"
-    :title="t('AbpUiMultiTenancy.SwitchTenant')"
+    :title="L('SwitchTenant')"
     @ok="switchToTenant"
   >
     <Form layout="vertical" :model="formModelRef">
-      <FormItem :label="t('AbpUiMultiTenancy.SwitchTenantHint')">
+      <FormItem :label="L('SwitchTenantHint')">
         <BInput :allowClear="true" v-model:value="formModelRef.name" />
       </FormItem>
     </Form>
@@ -38,7 +38,7 @@
   import { Persistent } from '/@/utils/cache/persistent';
   import { findTenantByName } from '/@/api/multi-tenancy/tenants';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
@@ -53,7 +53,7 @@
       InputSearch: Input.Search,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpUiMultiTenancy');
       const { createMessage } = useMessage();
       const [registerModal, { openModal, closeModal }] = useModal();
       const currentTenant = computed(() => {
@@ -79,7 +79,7 @@
             name: result.name,
           });
           if (!result.success) {
-            createMessage.warn(t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [formModel.name]));
+            createMessage.warn(L('GivenTenantIsNotAvailable', [formModel.name]));
           }
         }
         const abpStore = useAbpStoreWithOut();
@@ -88,7 +88,7 @@
       }
 
       return {
-        t,
+        L,
         currentTenant,
         formModelRef,
         registerModal,

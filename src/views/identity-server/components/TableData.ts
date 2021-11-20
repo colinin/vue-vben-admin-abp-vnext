@@ -1,19 +1,19 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentityServer');
 
 export function getDataColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpIdentityServer.Propertites:Key'),
+      title: L('Propertites:Key'),
       dataIndex: 'key',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentityServer.Propertites:Value'),
+      title: L('Propertites:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 180,

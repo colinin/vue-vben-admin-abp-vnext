@@ -1,4 +1,5 @@
 interface IRule {
+  type?: string;
   trigger?: string;
 }
 

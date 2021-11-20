@@ -21,7 +21,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicForm, FormActionType } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { useRoleModal } from '../hooks/useRoleModal';
@@ -31,7 +30,6 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
       const submiting = ref(false);
       const roleRef = ref<Nullable<Role>>(null);
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -56,7 +54,6 @@
       }
 
       return {
-        t,
         submiting,
         formElRef,
         formTitle,

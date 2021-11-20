@@ -9,7 +9,7 @@
             {
               color: 'error',
               icon: 'ant-design:delete-outlined',
-              label: t('AbpIdentityServer.Delete'),
+              label: L('Delete'),
               onClick: handleDelete.bind(null, record),
             },
           ]"
@@ -21,8 +21,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { BasicTitle } from '/@/components/Basic';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form';
   import { BasicTable, BasicColumn, TableAction, useTable } from '/@/components/Table';
 
@@ -67,7 +67,7 @@
     },
     emits: ['new', 'delete'],
     setup(props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const modelRef = ref({});
       const [registerForm, { resetFields }] = useForm({
         model: modelRef,
@@ -75,7 +75,7 @@
         schemas: props.schemas,
         showResetButton: false,
         submitButtonOptions: {
-          text: t('AbpIdentityServer.AddNew'),
+          text: L('AddNew'),
           // icon: 'ant-design:plus-outlined',
         },
       });
@@ -93,7 +93,7 @@
         bordered: false,
         actionColumn: {
           width: 200,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -119,7 +119,7 @@
       }
 
       return {
-        t,
+        L,
         registerForm,
         registerTable,
         handleSubmit,

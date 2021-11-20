@@ -6,7 +6,7 @@
           v-if="hasPermission('AbpOssManagement.Container.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('AbpOssManagement.Containers:Create') }}</a-button
+          >{{ L('Containers:Create') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -16,7 +16,7 @@
             {
               auth: 'AbpOssManagement.Container.Delete',
               color: 'error',
-              label: t('AbpOssManagement.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -26,7 +26,7 @@
     </BasicTable>
     <BasicModal
       @register="registerModal"
-      :title="t('AbpOssManagement.Containers')"
+      :title="L('Containers')"
       :width="466"
       :min-height="66"
       @ok="handleSubmit"
@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Modal, message } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicModal, useModal } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form';
@@ -58,7 +58,7 @@
       TableAction,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
       const { hasPermission } = usePermission();
       const [registerModal, { openModal, closeModal }] = useModal();
       const [registerForm, { validate, resetFields }] = useForm({
@@ -71,7 +71,7 @@
       });
       const [registerTable, { reload }] = useTable({
         rowKey: 'name',
-        title: t('AbpOssManagement.Containers'),
+        title: L('Containers'),
         columns: getDataColumns(),
         api: getContainers,
         fetchSetting: {
@@ -93,7 +93,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 120,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -106,12 +106,12 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteContainer(record.name).then(() => {
-              message.success(t('AbpUi.Successful'));
+              message.success(L('Successful'));
               reload();
             });
           },
@@ -121,7 +121,7 @@
       function handleSubmit() {
         validate().then((input) => {
           createContainer(input.name).then(() => {
-            message.success(t('AbpUi.Successful'));
+            message.success(L('Successful'));
             closeModal();
             reload();
           });
@@ -129,7 +129,7 @@
       }
 
       return {
-        t,
+        L,
         hasPermission,
         registerTable,
         registerForm,

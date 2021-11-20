@@ -1,9 +1,9 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { valueTypeMaps } from './BasicType';
 import { DataItem } from '/@/api/platform/model/dataItemModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('AppPlatform');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -14,25 +14,25 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AppPlatform.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       fixed: 'left',
       width: 120,
       sorter: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
     },
     {
-      title: t('AppPlatform.DisplayName:DisplayName'),
+      title: L('DisplayName:DisplayName'),
       dataIndex: 'displayName',
       width: 120,
       sorter: (a: DataItem, b: DataItem) => a.displayName.localeCompare(b.displayName),
     },
     {
-      title: t('AppPlatform.DisplayName:Description'),
+      title: L('DisplayName:Description'),
       dataIndex: 'description',
       width: 150,
     },
     {
-      title: t('AppPlatform.DisplayName:ValueType'),
+      title: L('DisplayName:ValueType'),
       dataIndex: 'valueType',
       width: 100,
       format: (value) => {
@@ -40,12 +40,12 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AppPlatform.DisplayName:DefaultValue'),
+      title: L('DisplayName:DefaultValue'),
       dataIndex: 'defaultValue',
       width: 100,
     },
     {
-      title: t('AppPlatform.DisplayName:AllowBeNull'),
+      title: L('DisplayName:AllowBeNull'),
       dataIndex: 'allowBeNull',
       width: 100,
       slots: { customRender: 'allow' },

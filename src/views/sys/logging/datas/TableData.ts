@@ -1,27 +1,27 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { formatToDateTime } from '/@/utils/dateUtil';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 export function getDataColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpAuditLogging.MachineName'),
+      title: L('MachineName'),
       dataIndex: 'fields.machineName',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.Application'),
+      title: L('Application'),
       dataIndex: 'fields.application',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.TimeStamp'),
+      title: L('TimeStamp'),
       dataIndex: 'timeStamp',
       align: 'left',
       width: 'auto',
@@ -31,7 +31,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpAuditLogging.Level'),
+      title: L('Level'),
       dataIndex: 'level',
       align: 'left',
       width: 150,
@@ -41,62 +41,62 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpAuditLogging.Message'),
+      title: L('Message'),
       dataIndex: 'message',
       align: 'left',
       width: 150,
     },
     {
-      title: t('AbpAuditLogging.Environment'),
+      title: L('Environment'),
       dataIndex: 'fields.environment',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ProcessId'),
+      title: L('ProcessId'),
       dataIndex: 'fields.processId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ThreadId'),
+      title: L('ThreadId'),
       dataIndex: 'fields.threadId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.Context'),
+      title: L('Context'),
       dataIndex: 'fields.context',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.ConnectionId'),
+      title: L('ConnectionId'),
       dataIndex: 'fields.connectionId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.CorrelationId'),
+      title: L('CorrelationId'),
       dataIndex: 'fields.correlationId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.RequestId'),
+      title: L('RequestId'),
       dataIndex: 'fields.requestId',
       align: 'left',
       width: 150,
       sorter: true,
     },
     {
-      title: t('AbpAuditLogging.RequestPath'),
+      title: L('RequestPath'),
       dataIndex: 'fields.requestPath',
       align: 'left',
       width: 150,

@@ -7,7 +7,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   import { DataItem } from '/@/api/platform/model/dataItemModel';
   import { getDataItemFormSchemas } from './ModalData';
@@ -28,7 +28,7 @@
     emits: ['change', 'register'],
     setup() {
       const dataItem = ref<DataItem>();
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform');
       const schemas = getDataItemFormSchemas(dataItem.value);
 
       const [registerForm, { validate, getFieldsValue }] = useForm({
@@ -44,7 +44,7 @@
       });
 
       return {
-        t,
+        L,
         registerForm,
         register,
         dataItem,
@@ -58,9 +58,9 @@
       title() {
         return () => {
           if (this.dataItem && this.dataItem.id) {
-            return this.t('AppPlatform.Data:EditItem');
+            return this.L('Data:EditItem');
           }
-          return this.t('AppPlatform.Data:AppendItem');
+          return this.L('Data:AppendItem');
         };
       },
     },

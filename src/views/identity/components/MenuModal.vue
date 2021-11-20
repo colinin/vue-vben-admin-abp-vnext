@@ -4,16 +4,16 @@
     @visible-change="handleVisibleChange"
     :width="660"
     :height="500"
-    :title="t('AppPlatform.Menu:Manage')"
+    :title="L('Menu:Manage')"
     :show-ok-btn="menuTreeRef.length > 0"
     @ok="handleSubmit"
   >
     <Card>
       <Form :labelCol="{ span: 4 }" :wrapperCol="{ span: 18 }" layout="horizontal">
-        <FormItem :label="t('AppPlatform.DisplayName:UIFramework')">
+        <FormItem :label="L('DisplayName:UIFramework')">
           <Select v-model:value="frameworkRef" :options="optionsRef" @select="handleSelect" />
         </FormItem>
-        <FormItem :label="t('AppPlatform.DisplayName:Menus')">
+        <FormItem :label="L('DisplayName:Menus')">
           <BasicTree
             :checkable="true"
             :check-strictly="true"
@@ -31,7 +31,7 @@
 <script lang="ts">
   import { defineComponent, ref, unref, watch } from 'vue';
   import { Card, Form, Select } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTree } from '/@/components/Tree';
   import { getByName } from '/@/api/platform/dataDic';
@@ -65,7 +65,7 @@
     },
     emits: ['change', 'register'],
     setup(props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform');
       const identityRef = ref('');
       const frameworkRef = ref('');
       const menuTreeRef = ref<any[]>([]);
@@ -136,7 +136,7 @@
       }
 
       return {
-        t,
+        L,
         menuTreeRef,
         defaultCheckedRef,
         replaceFields,

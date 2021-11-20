@@ -1,7 +1,7 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { BasicColumn } from '/@/components/Table';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpTenantManagement');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -12,7 +12,7 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpTenantManagement.DisplayName:TenantName'),
+      title: L('DisplayName:TenantName'),
       dataIndex: 'name',
       align: 'left',
       width: 'auto',
@@ -24,14 +24,14 @@ export function getDataColumns(): BasicColumn[] {
 export function getConnectionStringsColumns(): BasicColumn[] {
   return [
     {
-      title: t('AbpTenantManagement.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpTenantManagement.DisplayName:Value'),
+      title: L('DisplayName:Value'),
       dataIndex: 'value',
       align: 'left',
       width: 'auto',

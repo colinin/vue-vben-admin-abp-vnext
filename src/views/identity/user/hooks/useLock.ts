@@ -1,4 +1,4 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useModal } from '/@/components/Modal';
 import { lock, unlock } from '/@/api/identity/user';
 import { FormSchema } from '/@/components/Form';
@@ -17,26 +17,27 @@ interface UseLock {
 }
 
 export function useLock({ emit }: UseLock) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const [registerLockModal, { openModal }] = useModal();
 
   const formSchemas: FormSchema[] = [
     {
       field: 'seconds',
       component: 'Input',
-      label: t('AbpIdentity.LockTime'),
+      label: L('LockTime'),
       colProps: { span: 24 },
       required: true,
     },
     {
       field: 'type',
       component: 'Select',
-      label: t('AbpIdentity.LockType'),
+      label: L('LockType'),
       colProps: { span: 24 },
       required: true,
       defaultValue: LockType.Seconds,
       componentProps: {
         options: [
+          // TODO: 本地化
           { label: '秒', value: LockType.Seconds },
           { label: '分', value: LockType.Minutes },
           { label: '时', value: LockType.Hours },

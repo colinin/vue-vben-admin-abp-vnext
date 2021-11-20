@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps, FormSchema } from '/@/components/Form';
 import { ValueType } from '/@/api/identity/model/claimModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentity');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -11,7 +11,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'filter',
         component: 'Input',
-        label: t('AbpIdentity.Search'),
+        label: L('Search'),
         colProps: { span: 24 },
         defaultValue: '',
       },
@@ -31,7 +31,7 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AbpIdentity.IdentityClaim:Name'),
+      label: L('IdentityClaim:Name'),
       colProps: { span: 24 },
       required: true,
       dynamicDisabled: ({ values }) => {
@@ -41,32 +41,32 @@ export function getModalFormSchemas(): FormSchema[] {
     {
       field: 'required',
       component: 'Checkbox',
-      label: t('AbpIdentity.IdentityClaim:Required'),
+      label: L('IdentityClaim:Required'),
       colProps: { span: 24 },
-      renderComponentContent: t('AbpIdentity.IdentityClaim:Required'),
+      renderComponentContent: L('IdentityClaim:Required'),
     },
     {
       field: 'regex',
       component: 'Input',
-      label: t('AbpIdentity.IdentityClaim:Regex'),
+      label: L('IdentityClaim:Regex'),
       colProps: { span: 24 },
     },
     {
       field: 'regexDescription',
       component: 'Input',
-      label: t('AbpIdentity.IdentityClaim:RegexDescription'),
+      label: L('IdentityClaim:RegexDescription'),
       colProps: { span: 24 },
     },
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('AbpIdentity.IdentityClaim:Description'),
+      label: L('IdentityClaim:Description'),
       colProps: { span: 24 },
     },
     {
       field: 'valueType',
       component: 'Select',
-      label: t('AbpIdentity.IdentityClaim:ValueType'),
+      label: L('IdentityClaim:ValueType'),
       colProps: { span: 24 },
       defaultValue: ValueType.String,
       componentProps: {

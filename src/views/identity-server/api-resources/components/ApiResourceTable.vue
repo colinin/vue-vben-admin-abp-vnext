@@ -8,7 +8,7 @@
         <Switch :checked="record.showInDiscoveryDocument" disabled />
       </template>
       <template #toolbar>
-        <Button type="primary" @click="handleAddNew">{{ t('AbpIdentityServer.AddNew') }}</Button>
+        <Button type="primary" @click="handleAddNew">{{ L('AddNew') }}</Button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -16,14 +16,14 @@
             {
               auth: 'AbpIdentityServer.ApiResources.Update',
               icon: 'ant-design:edit-outlined',
-              label: t('AbpIdentityServer.Resource:Edit'),
+              label: L('Resource:Edit'),
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'AbpIdentityServer.ApiResources.Delete',
               color: 'error',
               icon: 'ant-design:delete-outlined',
-              label: t('AbpIdentityServer.Resource:Delete'),
+              label: L('Resource:Delete'),
               onClick: handleDelete.bind(null, record),
             },
           ]"
@@ -37,7 +37,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Button, Modal, Switch } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { getDataColumns } from '../datas/TableData';
@@ -50,11 +50,11 @@
     name: 'ApiResourceTable',
     components: { ApiResourceModal, BasicTable, Button, Switch, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const [registerModal, { openModal, closeModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('AbpIdentityServer.DisplayName:ApiResources'),
+        title: L('DisplayName:ApiResources'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -70,7 +70,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 200,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -91,8 +91,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {
@@ -103,7 +103,7 @@
       }
 
       return {
-        t,
+        L,
         registerModal,
         registerTable,
         handleAddNew,

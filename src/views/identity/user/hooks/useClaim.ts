@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { cloneDeep } from 'lodash-es';
 import { Modal } from 'ant-design-vue';
 import { FormSchema } from '/@/components/Form';
@@ -17,7 +17,7 @@ interface UseClaim {
 }
 
 export function useClaim({ userIdRef }: UseClaim) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const formSchemas: FormSchema[] = [
     {
       field: 'id',
@@ -29,7 +29,7 @@ export function useClaim({ userIdRef }: UseClaim) {
     {
       field: 'claimType',
       component: 'ApiSelect',
-      label: t('AbpIdentity.DisplayName:ClaimType'),
+      label: L('DisplayName:ClaimType'),
       colProps: { span: 24 },
       required: true,
       componentProps: {
@@ -42,7 +42,7 @@ export function useClaim({ userIdRef }: UseClaim) {
     {
       field: 'claimValue',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName:ClaimValue'),
+      label: L('DisplayName:ClaimValue'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -52,7 +52,7 @@ export function useClaim({ userIdRef }: UseClaim) {
     {
       field: 'newClaimValue',
       component: 'Input',
-      label: t('AbpIdentity.DisplayName:ClaimValue'),
+      label: L('DisplayName:ClaimValue'),
       colProps: { span: 24 },
       required: true,
       ifShow: ({ values }) => {
@@ -67,7 +67,7 @@ export function useClaim({ userIdRef }: UseClaim) {
   });
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
-    title: t('AbpIdentity.ManageClaim'),
+    title: L('ManageClaim'),
     columns: getClaimColumns(),
     api: getClaimList,
     searchInfo: search,
@@ -82,7 +82,7 @@ export function useClaim({ userIdRef }: UseClaim) {
     rowSelection: { type: 'checkbox' },
     actionColumn: {
       width: 160,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -97,7 +97,7 @@ export function useClaim({ userIdRef }: UseClaim) {
         Object.assign(model, {
           newClaimValue: model.claimValue,
         }),
-        true
+        true,
       );
     } else {
       openModal(true, {}, true);
@@ -106,8 +106,8 @@ export function useClaim({ userIdRef }: UseClaim) {
 
   function handleDelete(claim: UserClaim) {
     Modal.warning({
-      title: t('AbpUi.AreYouSure'),
-      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [claim.claimValue] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteClaim(unref(userIdRef), claim).then(() => {
@@ -134,7 +134,7 @@ export function useClaim({ userIdRef }: UseClaim) {
           id: id,
         },
       });
-    }
+    },
   );
 
   return {

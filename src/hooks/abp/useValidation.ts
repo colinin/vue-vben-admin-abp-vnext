@@ -13,7 +13,7 @@ import {
 import { useLocalization } from './useLocalization';
 import { isEmail, isPhone } from '/@/utils/is';
 
-enum ValidationEnum {
+export enum ValidationEnum {
   DoNotMatch = "'{0}' and '{1}' do not match.",
   FieldInvalid = 'The field {0} is invalid.',
   FieldIsNotValid = '{0} is not valid.',
@@ -134,6 +134,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
     };
   }
@@ -156,6 +157,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
       validator: (_, value: string) => {
         if (!checkLength(value)) {
@@ -178,6 +180,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
       validator: (_, value: string) => {
         if (value.length < field.minimum || value.length > field.maximum) {
@@ -188,16 +191,24 @@ export function useValidation() {
     };
   }
 
-  function _createBeetWeenValidator(field: IFieldBeetWeen, required?: boolean): ValidationRule {
+  function _createBeetWeenValidator(field: IFieldBeetWeen): ValidationRule {
     const message = field.name
       ? L(ValidationEnum.FieldMustBeetWeen, _getFieldName(field), field.start, field.end)
       : L(ValidationEnum.ThisFieldMustBeBetween, field.start, field.end);
     return {
-      required: required,
       message: message,
-      min: field.start,
-      max: field.end,
       trigger: field.trigger,
+      validator: (_, value) => {
+        // beetween不在进行必输检查, 改为数字有效性检查
+        if (isNaN(value)) {
+          return Promise.reject(message);
+        }
+        if (value < field.start || value > field.end) {
+          return Promise.reject(message);
+        } else {
+          return Promise.resolve();
+        }
+      },
     };
   }
 
@@ -211,6 +222,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
       pattern: new RegExp(field.expression),
     };
@@ -223,6 +235,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
       validator: (_, value: string) => {
         if (!isEmail(value)) {
@@ -240,6 +253,7 @@ export function useValidation() {
     return {
       required: required,
       message: message,
+      type: field.type,
       trigger: field.trigger,
       validator: (_, value: string) => {
         if (!isPhone(value)) {
@@ -251,18 +265,19 @@ export function useValidation() {
   }
 
   const ruleCreator: IRuleCreator = {
-    doNotMatch(match: IFieldMatch) {
+    doNotMatch(field: IFieldMatch) {
       const message = L(
         ValidationEnum.DoNotMatch,
-        __getFieldName(match.name, match.resourceName, match.prefix),
-        __getFieldName(match.matchField, match.resourceName, match.prefix),
+        __getFieldName(field.name, field.resourceName, field.prefix),
+        __getFieldName(field.matchField, field.resourceName, field.prefix),
       );
       return _createRule({
-        required: match.required,
+        required: field.required,
         message: message,
-        trigger: match.trigger,
+        type: field.type,
+        trigger: field.trigger,
         validator: (_, value: string) => {
-          if (value !== match.matchValue) {
+          if (value !== field.matchValue) {
             return Promise.reject(message);
           }
           return Promise.resolve();
@@ -276,6 +291,7 @@ export function useValidation() {
       return _createRule({
         required: field.required,
         message: message,
+        type: field.type,
         trigger: field.trigger,
         validator: (_, value: any) => {
           if (!field.validator(value)) {
@@ -292,6 +308,7 @@ export function useValidation() {
       return _createRule({
         required: field.required,
         message: message,
+        type: field.type,
         trigger: field.trigger,
         validator: (_, value: any) => {
           if (field.validator(value)) {
@@ -350,11 +367,13 @@ export function useValidation() {
       if (field.name) {
         return _createRule({
           message: L(ValidationEnum.FieldDoNotValidCreditCardNumber, _getFieldName(field)),
+          type: field.type,
           trigger: field.trigger,
         });
       }
       return _createRule({
         message: L(ValidationEnum.ThisFieldIsNotAValidCreditCardNumber),
+        type: field.type,
         trigger: field.trigger,
       });
     },
@@ -365,11 +384,13 @@ export function useValidation() {
       if (field.name) {
         return _createRule({
           message: L(ValidationEnum.FieldDoNotValidFullyQualifiedUrl, _getFieldName(field)),
+          type: field.type,
           trigger: field.trigger,
         });
       }
       return _createRule({
         message: L(ValidationEnum.ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl),
+        type: field.type,
         trigger: field.trigger,
       });
     },
@@ -392,6 +413,7 @@ export function useValidation() {
         : L(ValidationEnum.ThisFieldMustMatchTheRegularExpression, field.value);
       return _createRule({
         message: message,
+        type: field.type,
         trigger: field.trigger,
         validator: (_, value: string) => {
           if (!field.value.includes(value)) {

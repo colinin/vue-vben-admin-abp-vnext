@@ -6,13 +6,13 @@
           v-if="hasPermission('AbpTenantManagement.Tenants.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('AbpTenantManagement.NewTenant') }}</a-button
+          >{{ L('NewTenant') }}</a-button
         >
         <a-button
           v-if="hasPermission('FeatureManagement.ManageHostFeatures')"
           type="primary"
           @click="handleManageHostFeature"
-          >{{ t('AbpTenantManagement.ManageHostFeatures') }}</a-button
+          >{{ L('ManageHostFeatures') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -20,14 +20,14 @@
           :actions="[
             {
               auth: 'AbpTenantManagement.Tenants.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'AbpTenantManagement.Tenants.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -35,12 +35,12 @@
           :dropDownActions="[
             {
               auth: 'FeatureManagement.ManageHostFeatures',
-              label: t('AbpFeatureManagement.ManageFeatures'),
+              label: L('ManageFeatures'),
               onClick: handleManageTenantFeature.bind(null, record),
             },
             {
               auth: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
-              label: t('AbpTenantManagement.ConnectionStrings'),
+              label: L('ConnectionStrings'),
               onClick: openConnectModal.bind(null, true, record),
             },
           ]"
@@ -55,7 +55,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, TableActionType } from '/@/components/Table';
@@ -70,7 +70,7 @@
     name: 'TenantTable',
     components: { BasicTable, FeatureModal, TableAction, TenantModal, TenantConnectionModal },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpTenantManagement', 'AbpFeatureManagement');
       const { hasPermission } = usePermission();
       const tableElRef = ref<Nullable<TableActionType>>(null);
       const [registerConnectModal, { openModal: openConnectModal }] = useModal();
@@ -83,7 +83,7 @@
       } = useFeatureModal();
 
       return {
-        t,
+        L,
         tableElRef,
         hasPermission,
         registerModal,

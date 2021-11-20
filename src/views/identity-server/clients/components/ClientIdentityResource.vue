@@ -4,7 +4,6 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, onMounted, toRefs } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import Resources from './Resources.vue';
   import { getAssignableIdentityResources } from '/@/api/identity-server/clients';
   import { Client } from '/@/api/identity-server/model/clientsModel';
@@ -20,7 +19,6 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
       const resources = ref<{ key: string; title: string }[]>([]);
       const targetResources = computed(() => {
         const targetScopes = resources.value.filter((item) =>
@@ -54,7 +52,6 @@
       }
 
       return {
-        t,
         resources,
         targetResources,
         handleChange,

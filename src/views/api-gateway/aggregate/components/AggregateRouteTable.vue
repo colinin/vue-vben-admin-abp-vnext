@@ -6,7 +6,7 @@
           v-if="hasPermission('ApiGateway.AggregateRoute.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('ApiGateway.AggregateRoute:AddNew') }}</a-button
+          >{{ L('AggregateRoute:AddNew') }}</a-button
         >
       </template>
       <template #keys="{ record }">
@@ -24,14 +24,14 @@
           :actions="[
             {
               auth: 'ApiGateway.AggregateRoute.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'ApiGateway.AggregateRoute.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -39,7 +39,7 @@
           :dropDownActions="[
             {
               auth: 'ApiGateway.AggregateRoute.ManageRouteConfig',
-              label: t('ApiGateway.AggregateRoute:ManageRouteConfig'),
+              label: L('AggregateRoute:ManageRouteConfig'),
               icon: 'ant-design:radius-setting-outlined',
               onClick: handleManageConfig.bind(null, record),
             },
@@ -61,7 +61,7 @@
 <script lang="ts">
   import { computed, defineComponent, ref, unref } from 'vue';
   import { cloneDeep } from 'lodash-es';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { Modal, Tag } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
@@ -81,7 +81,7 @@
     name: 'AggregateRouteTable',
     components: { AggregateRouteConfigModal, BasicModalForm, BasicTable, TableAction, Tag },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('ApiGateway');
       const { hasPermission } = usePermission();
       const routeId = ref<string>('');
       const formModel = ref<Nullable<AggregateRoute>>(null);
@@ -89,15 +89,15 @@
       const formTitle = computed(() => {
         const model = unref(formModel);
         if (model && model.reRouteId) {
-          return t('ApiGateway.AggregateRoute:EditBy', [model.name] as Recordable);
+          return L('AggregateRoute:EditBy', [model.name] as Recordable);
         }
-        return t('ApiGateway.AggregateRoute:AddNew');
+        return L('AggregateRoute:AddNew');
       });
       const [registerEditModal, { openModal: openEditModal }] = useModal();
       const [registerConfigModal, { openModal: openConfigModal }] = useModal();
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'reRouteId',
-        title: t('ApiGateway.AggregateRoutes'),
+        title: L('AggregateRoutes'),
         columns: getDataColumns(),
         api: getList,
         // beforeFetch: formatPagedRequest,
@@ -113,14 +113,14 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
       });
 
       return {
-        t,
+        L,
         routeId,
         formItems,
         formModel,
@@ -145,8 +145,8 @@
       },
       handleDelete(record) {
         Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+          title: this.L('AreYouSure'),
+          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteById(record.reRouteId).then(() => {

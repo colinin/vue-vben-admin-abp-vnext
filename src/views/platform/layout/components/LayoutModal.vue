@@ -11,7 +11,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useModalInner } from '/@/components/Modal';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { getModalFormSchemas } from './ModalData';
@@ -25,7 +25,7 @@
     },
     emits: ['change', 'register'],
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform');
       const layout = ref<Layout>({} as Layout);
       const formItems = getModalFormSchemas(layout.value);
       const [register, { closeModal }] = useModalInner((dataVal) => {
@@ -34,13 +34,13 @@
 
       const title = computed(() => {
         if (layout.value.id) {
-          return t('AppPlatform.Layout:EditByName', [layout.value.displayName] as Recordable);
+          return L('Layout:EditByName', [layout.value.displayName] as Recordable);
         }
-        return t('AppPlatform.Layout:AddNew');
+        return L('Layout:AddNew');
       });
 
       return {
-        t,
+        L,
         layout,
         register,
         closeModal,

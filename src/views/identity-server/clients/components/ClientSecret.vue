@@ -1,7 +1,7 @@
 <template>
-  <FormItem name="requireClientSecret" :label="t('AbpIdentityServer.Client:RequiredClientSecret')">
+  <FormItem name="requireClientSecret" :label="L('Client:RequiredClientSecret')">
     <Checkbox :checked="modelRef.requireClientSecret" @change="handleRequiredChange">{{
-      t('AbpIdentityServer.Client:RequiredClientSecret')
+      L('Client:RequiredClientSecret')
     }}</Checkbox>
   </FormItem>
   <DynamicForm
@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, toRefs } from 'vue';
   import { Checkbox, Form } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { FormSchema } from '/@/components/Form';
   import { BasicColumn } from '/@/components/Table';
   import { formatToDateTime } from '/@/utils/dateUtil';
@@ -37,12 +37,12 @@
       },
     },
     setup(props) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const schemas: FormSchema[] = [
         {
           field: 'type',
           component: 'Select',
-          label: t('AbpIdentityServer.Secret:Type'),
+          label: L('Secret:Type'),
           colProps: { span: 24 },
           required: true,
           componentProps: {
@@ -58,20 +58,20 @@
         {
           field: 'value',
           component: 'Input',
-          label: t('AbpIdentityServer.Secret:Value'),
+          label: L('Secret:Value'),
           colProps: { span: 24 },
           required: true,
         },
         {
           field: 'description',
           component: 'InputTextArea',
-          label: t('AbpIdentityServer.Description'),
+          label: L('Description'),
           colProps: { span: 24 },
         },
         {
           field: 'expiration',
           component: 'DatePicker',
-          label: t('AbpIdentityServer.Expiration'),
+          label: L('Expiration'),
           colProps: { span: 24 },
           componentProps: {
             style: {
@@ -83,28 +83,28 @@
       const columns: BasicColumn[] = [
         {
           dataIndex: 'type',
-          title: t('AbpIdentityServer.Secret:Type'),
+          title: L('Secret:Type'),
           align: 'left',
           width: '120',
           sorter: true,
         },
         {
           dataIndex: 'value',
-          title: t('AbpIdentityServer.Secret:Value'),
+          title: L('Secret:Value'),
           align: 'left',
           width: 'auto',
           sorter: true,
         },
         {
           dataIndex: 'description',
-          title: t('AbpIdentityServer.Description'),
+          title: L('Description'),
           align: 'left',
           width: '100',
           sorter: true,
         },
         {
           dataIndex: 'expiration',
-          title: t('AbpIdentityServer.Expiration'),
+          title: L('Expiration'),
           align: 'left',
           width: '100',
           sorter: true,
@@ -129,7 +129,7 @@
       }
 
       return {
-        t,
+        L,
         schemas,
         columns,
         handleAddNew,

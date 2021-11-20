@@ -3,7 +3,7 @@ import type { Ref } from 'vue';
 import { computed, unref, watch } from 'vue';
 import { IdentityClaimType } from '/@/api/identity/model/claimModel';
 import { FormActionType } from '/@/components/Form';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { create, update } from '/@/api/identity/claim';
 import { getModalFormSchemas } from '../datas/ModalData';
 
@@ -13,9 +13,9 @@ interface UseClaimModal {
 }
 
 export function useClaimModal({ claimRef, formElRef }: UseClaimModal) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const formTitle = computed(() => {
-    return unref(claimRef)?.id ? t('AbpIdentity.Edit') : t('AbpIdentity.IdentityClaim:New');
+    return unref(claimRef)?.id ? L('Edit') : L('IdentityClaim:New');
   });
   const formSchemas = computed(() => {
     return [...getModalFormSchemas()];
@@ -34,7 +34,7 @@ export function useClaimModal({ claimRef, formElRef }: UseClaimModal) {
     },
     {
       immediate: true,
-    }
+    },
   );
 
   return {

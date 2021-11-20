@@ -2,7 +2,7 @@
   <Transfer
     :dataSource="resources"
     :targetKeys="targetResources"
-    :titles="[t('AbpIdentityServer.Assigned'), t('AbpIdentityServer.Available')]"
+    :titles="[L('Assigned'), L('Available')]"
     :render="(item) => item.title"
     :list-style="{
       width: '465px',
@@ -14,8 +14,8 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { Transfer } from 'ant-design-vue';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   export default defineComponent({
     name: 'Resources',
@@ -30,14 +30,14 @@
     },
     emits: ['change'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
 
       function handleChange(targetKeys, direction, moveKeys) {
         emit('change', targetKeys, direction, moveKeys);
       }
 
       return {
-        t,
+        L,
         handleChange,
       };
     },

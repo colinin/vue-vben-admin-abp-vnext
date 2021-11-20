@@ -2,28 +2,24 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="t('AbpOssManagement.Objects:UploadFile')"
+    :title="L('Objects:UploadFile')"
     :width="800"
     :min-height="300"
   >
     <BasicTable @register="registerTable">
       <template #toolbar>
         <input ref="btnRef" style="display: none" />
-        <a-button type="primary" @click="handleSelect">{{
-          t('AbpOssManagement.Upload:SelectFile')
-        }}</a-button>
+        <a-button type="primary" @click="handleSelect">{{ L('Upload:SelectFile') }}</a-button>
       </template>
       <template #size="{ record }">
         <span>{{ fileSize(record.size) }}</span>
       </template>
       <template #status="{ record }">
-        <Tag v-if="record.completed" color="green">{{
-          t('AbpOssManagement.Upload:Completed')
-        }}</Tag>
+        <Tag v-if="record.completed" color="green">{{ L('Upload:Completed') }}</Tag>
         <Tooltip v-else-if="record.error" :title="record.errorMsg">
-          <Tag color="red">{{ t('AbpOssManagement.Upload:Error') }}</Tag>
+          <Tag color="red">{{ L('Upload:Error') }}</Tag>
         </Tooltip>
-        <Tag v-else-if="record.paused" color="orange">{{ t('AbpOssManagement.Upload:Pause') }}</Tag>
+        <Tag v-else-if="record.paused" color="orange">{{ L('Upload:Pause') }}</Tag>
         <span v-else>{{ record.progress }} {{ averageSpeed(record.averageSpeed) }}</span>
       </template>
       <template #action="{ record }">
@@ -54,7 +50,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref, onMounted, onUnmounted, watch } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Tag, Tooltip } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -67,7 +63,7 @@
     components: { BasicModal, BasicTable, TableAction, Tag, Tooltip },
     setup() {
       let uploader: any = null;
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpOssManagement', 'AbpUi');
       const bucket = ref('');
       const path = ref('');
       const btnRef = ref<any>();
@@ -86,14 +82,14 @@
             ifShow: false,
           },
           {
-            title: t('AbpOssManagement.DisplayName:Name'),
+            title: L('DisplayName:Name'),
             dataIndex: 'name',
             align: 'left',
             width: 300,
             sorter: true,
           },
           {
-            title: t('AbpOssManagement.DisplayName:Size'),
+            title: L('DisplayName:Size'),
             dataIndex: 'size',
             align: 'left',
             width: 100,
@@ -103,7 +99,7 @@
             },
           },
           {
-            title: t('AbpOssManagement.DisplayName:Status'),
+            title: L('DisplayName:Status'),
             dataIndex: 'status',
             align: 'left',
             width: 'auto',
@@ -124,7 +120,7 @@
         immediate: false,
         actionColumn: {
           width: 120,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -228,7 +224,7 @@
       });
 
       return {
-        t,
+        L,
         btnRef,
         fileSize,
         averageSpeed,

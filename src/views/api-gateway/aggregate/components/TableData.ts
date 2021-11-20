@@ -1,8 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { AggregateRoute } from '/@/api/api-gateway/model/aggregateModel';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-const { t } = useI18n();
+const { L } = useLocalization('ApiGateway');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -19,22 +18,21 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('ApiGateway.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 250,
-      sorter: (a: AggregateRoute, b: AggregateRoute) => a.name.localeCompare(b.name),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:UpstreamPathTemplate'),
+      title: L('DisplayName:UpstreamPathTemplate'),
       dataIndex: 'upstreamPathTemplate',
       align: 'left',
       width: 300,
-      sorter: (a: AggregateRoute, b: AggregateRoute) =>
-        a.upstreamPathTemplate.localeCompare(b.upstreamPathTemplate),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:RouteKeys'),
+      title: L('DisplayName:RouteKeys'),
       dataIndex: 'reRouteKeys',
       align: 'left',
       width: 180,
@@ -46,21 +44,20 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('ApiGateway.DisplayName:UpstreamHost'),
+      title: L('DisplayName:UpstreamHost'),
       dataIndex: 'upstreamHost',
       align: 'left',
       width: 200,
-      sorter: (a: AggregateRoute, b: AggregateRoute) =>
-        a.upstreamHost.localeCompare(b.upstreamHost),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:Aggregator'),
+      title: L('DisplayName:Aggregator'),
       dataIndex: 'aggregator',
       width: 200,
-      sorter: (a: AggregateRoute, b: AggregateRoute) => a.aggregator.localeCompare(b.aggregator),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:Priority'),
+      title: L('DisplayName:Priority'),
       dataIndex: 'priority',
       width: 100,
     },
@@ -70,25 +67,25 @@ export function getDataColumns(): BasicColumn[] {
 export function getConfigDataColumns(): BasicColumn[] {
   return [
     {
-      title: t('ApiGateway.DisplayName:RouteKey'),
+      title: L('DisplayName:RouteKey'),
       dataIndex: 'reRouteKey',
       align: 'left',
       width: 150,
-      sorter: (a: AggregateRoute, b: AggregateRoute) => a.name.localeCompare(b.name),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:Parameter'),
+      title: L('DisplayName:Parameter'),
       dataIndex: 'parameter',
       align: 'left',
       width: 150,
-      sorter: (a: AggregateRoute, b: AggregateRoute) => a.name.localeCompare(b.name),
+      sorter: true,
     },
     {
-      title: t('ApiGateway.DisplayName:JsonPath'),
+      title: L('DisplayName:JsonPath'),
       dataIndex: 'jsonPath',
       align: 'left',
       width: 200,
-      sorter: (a: AggregateRoute, b: AggregateRoute) => a.name.localeCompare(b.name),
+      sorter: true,
     },
   ];
 }

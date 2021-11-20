@@ -6,7 +6,7 @@
           v-if="hasPermission('AbpIdentity.IdentityClaimTypes.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('AbpIdentity.IdentityClaim:New') }}</a-button
+          >{{ L('IdentityClaim:New') }}</a-button
         >
       </template>
       <template #types="{ record }">
@@ -24,7 +24,7 @@
           :actions="[
             {
               auth: 'AbpIdentity.IdentityClaimTypes.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               ifShow: !record.isStatic,
               onClick: handleEdit.bind(null, record),
@@ -32,7 +32,7 @@
             {
               auth: 'AbpIdentity.IdentityClaimTypes.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               ifShow: !record.isStatic,
               onClick: handleDelete.bind(null, record),
@@ -48,7 +48,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Switch } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction } from '/@/components/Table';
@@ -64,13 +64,13 @@
       TableAction,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const { valueTypeMap, registerTable, reloadTable, handleDelete } = useClaimTable();
 
       return {
-        t,
+        L,
         hasPermission,
         valueTypeMap,
         registerTable,

@@ -1,4 +1,4 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useTable } from '/@/components/Table';
 import { deleteById, getList } from '/@/api/identity/claim';
 import { ValueType } from '/@/api/identity/model/claimModel';
@@ -8,7 +8,7 @@ import { getSearchFormSchemas } from '../datas/ModalData';
 import { Modal } from 'ant-design-vue';
 
 export function useClaimTable() {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const valueTypeMap = {
     [ValueType.String]: 'String',
     [ValueType.Int]: 'Int',
@@ -17,7 +17,7 @@ export function useClaimTable() {
   };
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
-    title: t('AbpIdentity.Roles'),
+    title: L('Roles'),
     columns: getDataColumns(),
     api: getList,
     beforeFetch: formatPagedRequest,
@@ -33,7 +33,7 @@ export function useClaimTable() {
     formConfig: getSearchFormSchemas(),
     actionColumn: {
       width: 180,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -41,8 +41,8 @@ export function useClaimTable() {
 
   function handleDelete(role) {
     Modal.warning({
-      title: t('AbpUi.AreYouSure'),
-      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [role.name] as Recordable),
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [role.name] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteById(role.id).then(() => {

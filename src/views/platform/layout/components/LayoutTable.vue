@@ -2,23 +2,21 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleAddNew">{{
-          t('AppPlatform.Layout:AddNew')
-        }}</a-button>
+        <a-button type="primary" @click="handleAddNew">{{ L('Layout:AddNew') }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
               auth: 'Platform.Layout.Update',
-              label: t('AbpUi.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'Platform.Layout.Delete',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -33,7 +31,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
 
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Modal } from 'ant-design-vue';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
@@ -50,11 +48,11 @@
       LayoutModal,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AppPlatform', 'AbpUi');
       const layoutId = ref('');
       const [registerTable, { reload: reloadTable }] = useTable({
         rowKey: 'id',
-        title: t('AppPlatform.DisplayName:Layout'),
+        title: L('DisplayName:Layout'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: formatPagedRequest,
@@ -66,7 +64,7 @@
         rowSelection: { type: 'checkbox' },
         actionColumn: {
           width: 160,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -74,7 +72,7 @@
       const [registerLayoutModal, { openModal: openLayoutModal }] = useModal();
 
       return {
-        t,
+        L,
         layoutId,
         reloadTable,
         registerTable,
@@ -91,10 +89,8 @@
       },
       handleDelete(record: Recordable) {
         Modal.warning({
-          title: this.t('AbpUi.AreYouSure'),
-          content: this.t('AbpUi.ItemWillBeDeletedMessageWithFormat', [
-            record.displayName,
-          ] as Recordable),
+          title: this.L('AreYouSure'),
+          content: this.L('ItemWillBeDeletedMessageWithFormat', [record.displayName] as Recordable),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {

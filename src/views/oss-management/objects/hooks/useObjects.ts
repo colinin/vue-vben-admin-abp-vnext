@@ -1,5 +1,5 @@
 import { ref, unref, onMounted } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { TreeDataItem } from 'ant-design-vue/es/tree/Tree';
 
 import { getContainers, getObjects } from '/@/api/oss-management/oss';
@@ -8,11 +8,11 @@ import { OssContainer } from '/@/api/oss-management/model/ossModel';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
 
 export function useObjects() {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpOssManagement');
   const containers = ref<OssContainer[]>([]);
   const rootFolder: TreeDataItem = {
     key: './',
-    title: t('AbpOssManagement.Objects:Root'),
+    title: L('Objects:Root'),
     path: '',
     children: [],
   };
@@ -37,7 +37,7 @@ export function useObjects() {
   function handleContainerChange(container) {
     rootFolder.value = {
       key: './',
-      title: t('AbpOssManagement.Objects:Root'),
+      title: L('Objects:Root'),
       path: '',
       isLeaf: false,
       children: [],

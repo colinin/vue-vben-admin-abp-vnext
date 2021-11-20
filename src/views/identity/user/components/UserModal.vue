@@ -15,37 +15,35 @@
       :wrapper-col="{ span: 18 }"
     >
       <Tabs v-model:activeKey="activedTab">
-        <TabPane key="info" :tab="t('AbpIdentity.UserInformations')">
-          <FormItem name="userName" :label="t('AbpIdentity.UserName')">
+        <TabPane key="info" :tab="L('UserInformations')">
+          <FormItem name="userName" :label="L('UserName')">
             <BInput v-model:value="userRef.userName" />
           </FormItem>
-          <FormItem v-if="!userRef.id" name="password" :label="t('AbpIdentity.Password')">
+          <FormItem v-if="!userRef.id" name="password" :label="L('Password')">
             <InputPassword v-model:value="userRef.password" />
           </FormItem>
-          <FormItem name="surname" :label="t('AbpIdentity.DisplayName:Surname')">
+          <FormItem name="surname" :label="L('DisplayName:Surname')">
             <BInput v-model:value="userRef.surname" />
           </FormItem>
-          <FormItem name="name" :label="t('AbpIdentity.DisplayName:Name')">
+          <FormItem name="name" :label="L('DisplayName:Name')">
             <BInput v-model:value="userRef.name" />
           </FormItem>
-          <FormItem name="email" :label="t('AbpIdentity.DisplayName:Email')">
+          <FormItem name="email" :label="L('DisplayName:Email')">
             <BInput v-model:value="userRef.email" />
           </FormItem>
-          <FormItem name="phoneNumber" :label="t('AbpIdentity.DisplayName:PhoneNumber')">
+          <FormItem name="phoneNumber" :label="L('DisplayName:PhoneNumber')">
             <BInput v-model:value="userRef.phoneNumber" />
           </FormItem>
-          <FormItem :label="t('AbpIdentity.LockoutEnabled')">
-            <Checkbox v-model:checked="userRef.lockoutEnabled">{{
-              t('AbpIdentity.LockoutEnabled')
-            }}</Checkbox>
+          <FormItem :label="L('LockoutEnabled')">
+            <Checkbox v-model:checked="userRef.lockoutEnabled">{{ L('LockoutEnabled') }}</Checkbox>
           </FormItem>
         </TabPane>
-        <TabPane key="role" :tab="t('AbpIdentity.Roles')">
+        <TabPane key="role" :tab="L('Roles')">
           <Transfer
             class="tree-transfer"
             :dataSource="roleDataSource"
             :targetKeys="userRef.roleNames"
-            :titles="[t('AbpIdentityServer.Assigned'), t('AbpIdentityServer.Available')]"
+            :titles="[L('Assigned'), L('Available')]"
             :render="(item) => item.title"
             :list-style="{
               width: '47%',
@@ -61,7 +59,7 @@
 
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { message, Checkbox, Input, Form, Tabs, Transfer } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
   import { FormActionType } from '/@/components/Form';
@@ -83,7 +81,7 @@
     },
     emits: ['register', 'change'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity', 'AbpIdentityServer');
       const activedTab = ref('info');
       const userRef = ref<Recordable>({});
       const formElRef = ref<Nullable<FormActionType>>(null);
@@ -101,7 +99,7 @@
         changeOkLoading(true);
         handleSubmit()
           .then((res) => {
-            message.success(t('AbpUi.Successful'));
+            message.success(L('Successful'));
             closeModal();
             emit('change', res);
           })
@@ -111,7 +109,7 @@
       }
 
       return {
-        t,
+        L,
         activedTab,
         userRef,
         formElRef,

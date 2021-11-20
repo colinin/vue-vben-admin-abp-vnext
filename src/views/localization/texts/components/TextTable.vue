@@ -6,7 +6,7 @@
           v-if="hasPermission('LocalizationManagement.Text.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ t('LocalizationManagement.Text:AddNew') }}</a-button
+          >{{ L('Text:AddNew') }}</a-button
         >
       </template>
       <template #enable="{ record }">
@@ -18,14 +18,14 @@
           :actions="[
             {
               auth: 'LocalizationManagement.Text.Update',
-              label: t('LocalizationManagement.Edit'),
+              label: L('Edit'),
               icon: 'ant-design:edit-outlined',
               onClick: handleEdit.bind(null, record),
             },
             {
               auth: 'LocalizationManagement.Text.Delete',
               color: 'error',
-              label: t('LocalizationManagement.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -40,7 +40,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Switch, Modal } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -59,12 +59,12 @@
       TextModal,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('LocalizationManagement', 'AbpUi');
       const { hasPermission } = usePermission();
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         rowKey: 'id',
-        title: t('LocalizationManagement.Texts'),
+        title: L('Texts'),
         columns: getDataColumns(),
         api: getList,
         beforeFetch: (request) => {
@@ -84,7 +84,7 @@
         formConfig: getSearchFormSchemas(),
         actionColumn: {
           width: 180,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -104,8 +104,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessage'),
+          title: L('AreYouSure'),
+          content: L('ItemWillBeDeletedMessage'),
           okCancel: true,
           onOk: () => {
             deleteById(record.id).then(() => {
@@ -116,7 +116,7 @@
       }
 
       return {
-        t,
+        L,
         hasPermission,
         registerTable,
         registerModal,

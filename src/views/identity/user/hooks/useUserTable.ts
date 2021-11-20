@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { useTable } from '/@/components/Table';
 import { deleteById, getList } from '/@/api/identity/user';
 import { formatPagedRequest } from '/@/utils/http/abp/helper';
@@ -8,10 +8,10 @@ import { getSearchFormSchemas } from '../datas/ModalData';
 import { Modal } from 'ant-design-vue';
 
 export function useUserTable() {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const [registerTable, { reload: reloadTable }] = useTable({
     rowKey: 'id',
-    title: t('AbpIdentity.Users'),
+    title: L('Users'),
     columns: getDataColumns(),
     api: getList,
     beforeFetch: formatPagedRequest,
@@ -27,7 +27,7 @@ export function useUserTable() {
     formConfig: getSearchFormSchemas(),
     actionColumn: {
       width: 220,
-      title: t('table.action'),
+      title: L('Actions'),
       dataIndex: 'action',
       slots: { customRender: 'action' },
     },
@@ -53,8 +53,8 @@ export function useUserTable() {
 
   function handleDelete(user) {
     Modal.warning({
-      title: t('AbpUi.AreYouSure'),
-      content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [user.userName] as Recordable),
+      title: L('AreYouSure'),
+      content: L('ItemWillBeDeletedMessageWithFormat', [user.userName] as Recordable),
       okCancel: true,
       onOk: () => {
         deleteById(user.id).then(() => {

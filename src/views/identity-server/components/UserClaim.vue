@@ -2,7 +2,7 @@
   <Transfer
     :dataSource="userClaims"
     :targetKeys="targetClaims"
-    :titles="[t('AbpIdentityServer.Assigned'), t('AbpIdentityServer.Available')]"
+    :titles="[L('Assigned'), L('Available')]"
     :render="(item) => item.title"
     :list-style="{
       width: '293px',
@@ -14,9 +14,9 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
   import { Transfer } from 'ant-design-vue';
   import { getActivedList } from '/@/api/identity/claim';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
 
   export default defineComponent({
     name: 'UserClaim',
@@ -26,7 +26,7 @@
     },
     emits: ['change'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const userClaims = ref<
         {
           key: string;
@@ -50,7 +50,7 @@
       }
 
       return {
-        t,
+        L,
         userClaims,
         handleChange,
       };

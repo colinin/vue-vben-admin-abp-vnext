@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpIdentity');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -12,14 +12,14 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AbpIdentity.IdentityClaim:Name'),
+      title: L('IdentityClaim:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 220,
       sorter: true,
     },
     {
-      title: t('AbpIdentity.IdentityClaim:ValueType'),
+      title: L('IdentityClaim:ValueType'),
       dataIndex: 'valueType',
       align: 'left',
       width: 150,
@@ -29,14 +29,14 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpIdentity.IdentityClaim:Regex'),
+      title: L('IdentityClaim:Regex'),
       dataIndex: 'regex',
       align: 'left',
       width: 180,
       sorter: true,
     },
     {
-      title: t('AbpIdentity.IdentityClaim:Required'),
+      title: L('IdentityClaim:Required'),
       dataIndex: 'required',
       align: 'left',
       width: 150,
@@ -46,7 +46,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpIdentity.IdentityClaim:IsStatic'),
+      title: L('IdentityClaim:IsStatic'),
       dataIndex: 'isStatic',
       align: 'left',
       width: 150,
@@ -56,7 +56,7 @@ export function getDataColumns(): BasicColumn[] {
       },
     },
     {
-      title: t('AbpIdentity.IdentityClaim:Description'),
+      title: L('IdentityClaim:Description'),
       dataIndex: 'description',
       align: 'left',
       width: 'auto',

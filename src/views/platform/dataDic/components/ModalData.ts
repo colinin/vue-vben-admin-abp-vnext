@@ -1,11 +1,11 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form/index';
 import { Data } from '/@/api/platform/model/dataModel';
 import { DataItem } from '/@/api/platform/model/dataItemModel';
 
 import { valueTypeOptions } from './BasicType';
 
-const { t } = useI18n();
+const { L } = useLocalization('AppPlatform');
 
 /**
  * 构建数据字典表单
@@ -33,7 +33,7 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
       defaultValue: data?.name,
@@ -41,7 +41,7 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
     {
       field: 'displayName',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:DisplayName'),
+      label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
       defaultValue: data?.displayName,
@@ -49,7 +49,7 @@ export function getDateFormSchemas(data?: Data): FormSchema[] {
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('AppPlatform.DisplayName:Description'),
+      label: L('DisplayName:Description'),
       colProps: { span: 24 },
       defaultValue: data?.description,
     },
@@ -74,7 +74,7 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
     {
       field: 'name',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:Name'),
+      label: L('DisplayName:Name'),
       colProps: { span: 24 },
       required: true,
       defaultValue: dataItem?.name,
@@ -83,7 +83,7 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
     {
       field: 'displayName',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:DisplayName'),
+      label: L('DisplayName:DisplayName'),
       colProps: { span: 24 },
       required: true,
       defaultValue: dataItem?.displayName,
@@ -91,7 +91,7 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
     {
       field: 'valueType',
       component: 'Select',
-      label: t('AppPlatform.DisplayName:ValueType'),
+      label: L('DisplayName:ValueType'),
       colProps: { span: 24 },
       required: true,
       defaultValue: dataItem?.valueType,
@@ -102,7 +102,7 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
     {
       field: 'defaultValue',
       component: 'Input',
-      label: t('AppPlatform.DisplayName:DefaultValue'),
+      label: L('DisplayName:DefaultValue'),
       colProps: { span: 24 },
       defaultValue: dataItem?.defaultValue,
       // dynamicRules: ({ values }) => {
@@ -116,14 +116,14 @@ export function getDataItemFormSchemas(dataItem?: DataItem): FormSchema[] {
     {
       field: 'allowBeNull',
       component: 'Checkbox',
-      label: t('AppPlatform.DisplayName:AllowBeNull'),
+      label: L('DisplayName:AllowBeNull'),
       colProps: { span: 24 },
       defaultValue: dataItem?.allowBeNull,
     },
     {
       field: 'description',
       component: 'InputTextArea',
-      label: t('AppPlatform.DisplayName:Description'),
+      label: L('DisplayName:Description'),
       colProps: { span: 24 },
       defaultValue: dataItem?.description,
     },

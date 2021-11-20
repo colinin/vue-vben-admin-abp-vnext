@@ -6,7 +6,7 @@
     :min-height="300"
     @register="registerModal"
     @ok="handleSubmit"
-    :title="t('AbpIdentityServer.Client:Clone')"
+    :title="L('Client:Clone')"
   >
     <BasicForm ref="formElRef" @register="registerForm" />
   </BasicModal>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { message } from 'ant-design-vue';
   import { BasicForm, useForm, FormActionType, FormSchema } from '/@/components/Form';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -25,110 +25,110 @@
     components: { BasicForm, BasicModal },
     emits: ['change', 'register'],
     setup(_, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentityServer');
       const clientIdRef = ref('');
       const formElRef = ref<Nullable<FormActionType>>(null);
       const formSchemas: FormSchema[] = [
         {
           field: 'clientId',
           component: 'Input',
-          label: t('AbpIdentityServer.Client:Id'),
+          label: L('Client:Id'),
           colProps: { span: 24 },
           required: true,
         },
         {
           field: 'clientName',
           component: 'Input',
-          label: t('AbpIdentityServer.Name'),
+          label: L('Name'),
           colProps: { span: 24 },
           required: true,
         },
         {
           field: 'description',
           component: 'InputTextArea',
-          label: t('AbpIdentityServer.Description'),
+          label: L('Description'),
           colProps: { span: 24 },
         },
         {
           field: 'copyAllowedGrantType',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyAllowedGrantType'),
+          label: L('Clone:CopyAllowedGrantType'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyAllowedGrantType'),
+          renderComponentContent: L('Clone:CopyAllowedGrantType'),
         },
         {
           field: 'copyRedirectUri',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyRedirectUri'),
+          label: L('Clone:CopyRedirectUri'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyRedirectUri'),
+          renderComponentContent: L('Clone:CopyRedirectUri'),
         },
         {
           field: 'copyAllowedScope',
           component: 'Checkbox',
           defaultValue: true,
-          label: t('AbpIdentityServer.Clone:CopyAllowedScope'),
+          label: L('Clone:CopyAllowedScope'),
           labelWidth: 180,
           colProps: { span: 24 },
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyAllowedScope'),
+          renderComponentContent: L('Clone:CopyAllowedScope'),
         },
         {
           field: 'copyClaim',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyClaim'),
+          label: L('Clone:CopyClaim'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyClaim'),
+          renderComponentContent: L('Clone:CopyClaim'),
         },
         {
           field: 'copySecret',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopySecret'),
+          label: L('Clone:CopySecret'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopySecret'),
+          renderComponentContent: L('Clone:CopySecret'),
         },
         {
           field: 'copyAllowedCorsOrigin',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyAllowedCorsOrigin'),
+          label: L('Clone:CopyAllowedCorsOrigin'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyAllowedCorsOrigin'),
+          renderComponentContent: L('Clone:CopyAllowedCorsOrigin'),
         },
         {
           field: 'copyPostLogoutRedirectUri',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyPostLogoutRedirectUri'),
+          label: L('Clone:CopyPostLogoutRedirectUri'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyPostLogoutRedirectUri'),
+          renderComponentContent: L('Clone:CopyPostLogoutRedirectUri'),
         },
         {
           field: 'copyProperties',
           component: 'Checkbox',
-          label: t('AbpIdentityServer.Clone:CopyProperties'),
+          label: L('Clone:CopyProperties'),
           labelWidth: 180,
           colProps: { span: 24 },
           defaultValue: true,
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyProperties'),
+          renderComponentContent: L('Clone:CopyProperties'),
         },
         {
           field: 'copyIdentityProviderRestriction',
           component: 'Checkbox',
           defaultValue: true,
-          label: t('AbpIdentityServer.Clone:CopyIdentityProviderRestriction'),
+          label: L('Clone:CopyIdentityProviderRestriction'),
           labelWidth: 180,
           colProps: { span: 24 },
-          renderComponentContent: t('AbpIdentityServer.Clone:CopyIdentityProviderRestriction'),
+          renderComponentContent: L('Clone:CopyIdentityProviderRestriction'),
         },
       ];
       const [registerForm] = useForm({
@@ -146,7 +146,7 @@
           changeOkLoading(true);
           clone(unref(clientIdRef), input)
             .then(() => {
-              message.success(t('AbpIdentityServer.Successful'));
+              message.success(L('Successful'));
               emit('change');
               closeModal();
             })
@@ -157,7 +157,7 @@
       }
 
       return {
-        t,
+        L,
         formElRef,
         registerModal,
         registerForm,

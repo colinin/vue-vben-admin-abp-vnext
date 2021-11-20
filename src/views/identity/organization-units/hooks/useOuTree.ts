@@ -1,14 +1,14 @@
 import { computed, onMounted, ref } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { Modal } from 'ant-design-vue';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormSchema } from '/@/components/Form';
 import { create, deleteById, getAll, move, update } from '/@/api/identity/organization-units';
 import { listToTree } from '/@/utils/helper/treeHelper';
 import { useModal } from '/@/components/Modal';
 
 export function useOuTree({ emit }: { emit: EmitType }) {
-  const { t } = useI18n();
+  const { L } = useLocalization('AbpIdentity');
   const organizationUnitTree = ref([]);
 
   const formSchemas: FormSchema[] = [
@@ -29,7 +29,7 @@ export function useOuTree({ emit }: { emit: EmitType }) {
     {
       field: 'displayName',
       component: 'Input',
-      label: t('AbpIdentity.OrganizationUnit:DisplayName'),
+      label: L('OrganizationUnit:DisplayName'),
       colProps: { span: 24 },
       required: true,
     },
@@ -41,14 +41,14 @@ export function useOuTree({ emit }: { emit: EmitType }) {
     return (node: any) => {
       return [
         {
-          label: t('AbpIdentity.Edit'),
+          label: L('Edit'),
           handler: () => {
             openModal(true, cloneDeep(node.$attrs), true);
           },
           icon: 'ant-design:edit-outlined',
         },
         {
-          label: t('AbpIdentity.OrganizationUnit:AddChildren'),
+          label: L('OrganizationUnit:AddChildren'),
           handler: () => {
             handleAddNew(node.$attrs.id);
             // openModal(true, { parentId: node.$attrs.id }, true);
@@ -56,13 +56,11 @@ export function useOuTree({ emit }: { emit: EmitType }) {
           icon: 'ant-design:plus-outlined',
         },
         {
-          label: t('AbpIdentity.Delete'),
+          label: L('Delete'),
           handler: () => {
             Modal.warning({
-              title: t('AbpIdentity.AreYouSure'),
-              content: t('AbpIdentity.OrganizationUnit:WillDelete', [
-                node.$attrs.displayName,
-              ] as Recordable),
+              title: L('AreYouSure'),
+              content: L('OrganizationUnit:WillDelete', [node.$attrs.displayName] as Recordable),
               okCancel: true,
               onOk: () => {
                 deleteById(node.$attrs.id).then(() => {

@@ -5,18 +5,14 @@
     :loading="loading"
     :showOkBtn="!loading"
     :showCancelBtn="!loading"
-    :title="t('AbpIdentity.OrganizationUnit:SelectRoles')"
+    :title="L('OrganizationUnit:SelectRoles')"
     :width="800"
     @visible-change="handleVisibleChange"
     @ok="handleSubmit"
   >
     <BasicTable ref="tableRef" @register="registerTable">
       <template #toolbar>
-        <InputSearch
-          :placeholder="t('AbpIdentity.Search')"
-          v-model:value="filter"
-          @search="handleSearch"
-        />
+        <InputSearch :placeholder="L('Search')" v-model:value="filter" @search="handleSearch" />
       </template>
     </BasicTable>
   </BasicModal>
@@ -24,7 +20,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Input } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, BasicColumn, useTable, TableActionType } from '/@/components/Table';
@@ -39,7 +35,7 @@
     },
     emits: ['change', 'register'],
     setup(props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const loading = ref(false);
       const filter = ref('');
       const tableRef = ref<Nullable<TableActionType>>(null);
@@ -52,7 +48,7 @@
           ifShow: false,
         },
         {
-          title: t('AbpIdentity.RoleName'),
+          title: L('RoleName'),
           dataIndex: 'name',
           align: 'left',
           width: 'auto',
@@ -114,7 +110,7 @@
       }
 
       return {
-        t,
+        L,
         filter,
         loading,
         tableRef,

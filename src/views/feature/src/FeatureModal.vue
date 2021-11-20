@@ -2,7 +2,7 @@
   <BasicModal
     v-bind="$attrs"
     @register="registerModal"
-    :title="t('AbpFeatureManagement.ManageFeatures')"
+    :title="L('ManageFeatures')"
     :width="800"
     :height="400"
     :min-height="400"
@@ -18,15 +18,17 @@
               :label="feature.displayName"
               :name="['groups', gi, 'features', fi, 'value']"
               :rules="validator(feature.valueType.validator)"
-              :help="feature.description"
+              :extra="feature.description"
             >
               <Checkbox
                 v-if="feature.valueType.name === 'ToggleStringValueType'"
                 v-model:checked="feature.value"
-              />
+                >{{ feature.displayName }}</Checkbox
+              >
               <div v-else-if="feature.valueType.name === 'FreeTextStringValueType'">
                 <InputNumber
                   v-if="feature.valueType.validator.name === 'NUMERIC'"
+                  style="width: 100%"
                   v-model:value="feature.value"
                 />
                 <Input v-else v-model:value="feature.value" />
@@ -36,10 +38,10 @@
                 v-model="feature.value"
               >
                 <Option
-                  v-for="valueItem in feature.valueType.itemSource.items"
+                  v-for="valueItem in (feature.valueType as SelectionStringValueType).itemSource.items"
                   :key="valueItem.value"
                   v-model:value="valueItem.value"
-                  :label="t(valueItem.displayText.resourceName + '.' + valueItem.displayText.name)"
+                  :label="localizer(valueItem.displayText.resourceName, valueItem.displayText.name)"
                 />
               </Select>
             </FormItem>
@@ -51,8 +53,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { computed, defineComponent, ref } from 'vue';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Form, InputNumber, Select, Tabs } from 'ant-design-vue';
   import { Input } from '/@/components/Input';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -71,7 +73,14 @@
       TabPane: Tabs.TabPane,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpFeatureManagement');
+      // TODO: 当有多个选项的时候是否有性能相关影响?
+      const localizer = computed(() => {
+        return (resourceName: string, key: string) => {
+          const { L: RL } = useLocalization(resourceName);
+          return RL(key);
+        };
+      });
       const formRel = ref(null);
       const providerName = ref('');
       const providerKey = ref(null);
@@ -87,7 +96,8 @@
       });
 
       return {
-        t,
+        L,
+        localizer,
         formRel,
         registerModal,
         featureGroup,
@@ -99,9 +109,3 @@
     },
   });
 </script>
-
-<style lang="less" scoped>
-  .ant-input-number {
-    width: 100%;
-  }
-</style>

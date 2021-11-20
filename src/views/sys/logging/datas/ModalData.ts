@@ -1,8 +1,8 @@
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { FormProps } from '/@/components/Form';
 import { LogLevel } from '/@/api/logging/model/loggingModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('AbpAuditLogging');
 
 export function getSearchFormSchemas(): Partial<FormProps> {
   return {
@@ -11,7 +11,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'startTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.StartTime'),
+        label: L('StartTime'),
         colProps: { span: 9 },
         componentProps: {
           style: {
@@ -22,7 +22,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'endTime',
         component: 'DatePicker',
-        label: t('AbpAuditLogging.EndTime'),
+        label: L('EndTime'),
         colProps: { span: 9 },
         componentProps: {
           style: {
@@ -33,7 +33,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'level',
         component: 'Select',
-        label: t('AbpAuditLogging.Level'),
+        label: L('Level'),
         colProps: { span: 6 },
         componentProps: {
           style: {
@@ -53,7 +53,7 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'hasException',
         component: 'Select',
-        label: t('AbpAuditLogging.HasException'),
+        label: L('HasException'),
         colProps: { span: 6 },
         componentProps: {
           style: {
@@ -69,37 +69,37 @@ export function getSearchFormSchemas(): Partial<FormProps> {
       {
         field: 'machineName',
         component: 'Input',
-        label: t('AbpAuditLogging.MachineName'),
+        label: L('MachineName'),
         colProps: { span: 6 },
       },
       {
         field: 'environment',
         component: 'Input',
-        label: t('AbpAuditLogging.Environment'),
+        label: L('Environment'),
         colProps: { span: 6 },
       },
       {
         field: 'application',
         component: 'Input',
-        label: t('AbpAuditLogging.Application'),
+        label: L('Application'),
         colProps: { span: 6 },
       },
       {
         field: 'requestId',
         component: 'Input',
-        label: t('AbpAuditLogging.RequestId'),
+        label: L('RequestId'),
         colProps: { span: 8 },
       },
       {
         field: 'requestPath',
         component: 'Input',
-        label: t('AbpAuditLogging.RequestPath'),
+        label: L('RequestPath'),
         colProps: { span: 8 },
       },
       {
         field: 'correlationId',
         component: 'Input',
-        label: t('AbpAuditLogging.CorrelationId'),
+        label: L('CorrelationId'),
         colProps: { span: 8 },
       },
     ],

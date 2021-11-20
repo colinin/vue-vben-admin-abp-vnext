@@ -1,8 +1,8 @@
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { useI18n } from '/@/hooks/web/useI18n';
+import { useLocalization } from '/@/hooks/abp/useLocalization';
 import { Menu } from '/@/api/platform/model/menuModel';
 
-const { t } = useI18n();
+const { L } = useLocalization('AppPlatform');
 
 export function getDataColumns(): BasicColumn[] {
   return [
@@ -25,43 +25,43 @@ export function getDataColumns(): BasicColumn[] {
       ifShow: false,
     },
     {
-      title: t('AppPlatform.DisplayName:Name'),
+      title: L('DisplayName:Name'),
       dataIndex: 'name',
       align: 'left',
       width: 150,
       sorter: (a: Menu, b: Menu) => a.name.localeCompare(b.name),
     },
     {
-      title: t('AppPlatform.DisplayName:DisplayName'),
+      title: L('DisplayName:DisplayName'),
       dataIndex: 'displayName',
       width: 180,
       sorter: (a: Menu, b: Menu) => a.displayName.localeCompare(b.displayName),
     },
     {
-      title: t('AppPlatform.DisplayName:Path'),
+      title: L('DisplayName:Path'),
       dataIndex: 'path',
       width: 180,
       sorter: (a: Menu, b: Menu) => a.path.localeCompare(b.path),
     },
     {
-      title: t('AppPlatform.DisplayName:Component'),
+      title: L('DisplayName:Component'),
       dataIndex: 'component',
       width: 180,
       sorter: (a: Menu, b: Menu) => a.component.localeCompare(b.component),
     },
     {
-      title: t('AppPlatform.DisplayName:UIFramework'),
+      title: L('DisplayName:UIFramework'),
       dataIndex: 'framework',
       width: 180,
       sorter: (a: Menu, b: Menu) => a.framework.localeCompare(b.framework),
     },
     {
-      title: t('AppPlatform.DisplayName:Description'),
+      title: L('DisplayName:Description'),
       dataIndex: 'description',
       width: 250,
     },
     {
-      title: t('AppPlatform.DisplayName:Redirect'),
+      title: L('DisplayName:Redirect'),
       dataIndex: 'redirect',
       width: 'auto',
     },

@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    :title="t('AbpTenantManagement.ConnectionStrings')"
+    :title="L('ConnectionStrings')"
     :width="800"
     :height="500"
     :showOkBtn="false"
@@ -13,7 +13,7 @@
           v-if="hasPermission('AbpTenantManagement.Tenants.Create')"
           type="primary"
           @click="handleAddNew"
-          >{{ '新建连接' }}</a-button
+          >{{ L('ConnectionStrings:AddNew') }}</a-button
         >
       </template>
       <template #action="{ record }">
@@ -22,7 +22,7 @@
             {
               auth: 'AbpTenantManagement.Tenants.ManageConnectionStrings',
               color: 'error',
-              label: t('AbpUi.Delete'),
+              label: L('Delete'),
               icon: 'ant-design:delete-outlined',
               onClick: handleDelete.bind(null, record),
             },
@@ -30,7 +30,7 @@
         />
       </template>
     </BasicTable>
-    <BasicModal @register="registerEditModal" @ok="handleSubmit">
+    <BasicModal @register="registerEditModal" :title="L('ConnectionStrings')" @ok="handleSubmit">
       <BasicForm @register="registerEditForm" />
     </BasicModal>
   </BasicModal>
@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent, ref, unref, watch } from 'vue';
   import { Modal } from 'ant-design-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
@@ -55,7 +55,7 @@
   export default defineComponent({
     components: { BasicForm, BasicModal, BasicTable, TableAction },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpTenantManagement');
       const tenantIdRef = ref('');
       const connectionsRef = ref<any[]>([]);
       const { hasPermission } = usePermission();
@@ -81,7 +81,7 @@
         canResize: false,
         actionColumn: {
           width: 120,
-          title: t('table.action'),
+          title: L('Actions'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
@@ -93,8 +93,8 @@
 
       function handleDelete(record) {
         Modal.warning({
-          title: t('AbpUi.AreYouSure'),
-          content: t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name] as Recordable),
+          title: L('AreYouSure'),
+          content: L('TenantDeletionConfirmationMessage', [record.name]),
           okCancel: true,
           onOk: () => {
             deleteConnectionString(unref(tenantIdRef), record.name).then(() => {
@@ -130,7 +130,7 @@
       );
 
       return {
-        t,
+        L,
         hasPermission,
         registerModal,
         registerEditForm,

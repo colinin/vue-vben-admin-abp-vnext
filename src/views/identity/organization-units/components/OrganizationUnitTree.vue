@@ -1,5 +1,5 @@
 <template>
-  <Card :title="t('AbpIdentity.OrganizationUnit:Tree')">
+  <Card :title="L('OrganizationUnit:Tree')">
     <template #extra>
       <a-button
         v-if="hasPermission('AbpIdentity.OrganizationUnits.Create')"
@@ -7,7 +7,7 @@
         pre-icon="ant-design:plus-outlined"
         @click="handleAddNew"
       >
-        {{ t('AbpIdentity.OrganizationUnit:AddRoot') }}
+        {{ L('OrganizationUnit:AddRoot') }}
       </a-button>
     </template>
     <BasicTree
@@ -27,7 +27,7 @@
     <BasicModalForm
       @register="registerModal"
       :form-items="formSchemas"
-      :title="t('AbpIdentity.OrganizationUnit')"
+      :title="L('OrganizationUnit')"
       :save-changes="handleSubmit"
     />
   </Card>
@@ -37,7 +37,7 @@
   import { defineComponent } from 'vue';
   import { Card } from 'ant-design-vue';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { BasicTree } from '/@/components/Tree';
   import { BasicModalForm } from '/@/components/ModalForm';
   import { useOuTree } from '../hooks/useOuTree';
@@ -47,7 +47,7 @@
     components: { BasicModalForm, BasicTree, Card },
     emits: ['change', 'select'],
     setup(_props, { emit }) {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpIdentity');
       const {
         formSchemas,
         registerModal,
@@ -61,7 +61,7 @@
       const { hasPermission } = usePermission();
 
       return {
-        t,
+        L,
         formSchemas,
         registerModal,
         organizationUnitTree,

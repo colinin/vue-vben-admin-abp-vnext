@@ -1,10 +1,5 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :width="800"
-    :height="400"
-    :title="t('AbpAuditLogging.AuditLog')"
-  >
+  <BasicModal @register="registerModal" :width="800" :height="400" :title="L('AuditLog')">
     <Form
       :colon="false"
       :labelCol="{ span: 6 }"
@@ -13,61 +8,61 @@
       :model="modelRef"
     >
       <Tabs v-model:activeKey="activeKey">
-        <TabPane key="basic" :tab="t('AbpAuditLogging.Operation')">
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.HttpStatusCode')">
+        <TabPane key="basic" :tab="L('Operation')">
+          <FormItem labelAlign="left" :label="L('HttpStatusCode')">
             <Tag :color="httpStatusCodeColor(modelRef.httpStatusCode)">
               {{ modelRef.httpStatusCode }}
             </Tag>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.HttpMethod')">
+          <FormItem labelAlign="left" :label="L('HttpMethod')">
             <Tag :color="httpMethodColor(modelRef.httpMethod)">
               {{ modelRef.httpMethod }}
             </Tag>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.RequestUrl')">
+          <FormItem labelAlign="left" :label="L('RequestUrl')">
             <span>{{ modelRef.url }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ClientIpAddress')">
+          <FormItem labelAlign="left" :label="L('ClientIpAddress')">
             <span>{{ modelRef.clientIpAddress }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ClientId')">
+          <FormItem labelAlign="left" :label="L('ClientId')">
             <span>{{ modelRef.clientId }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ClientName')">
+          <FormItem labelAlign="left" :label="L('ClientName')">
             <span>{{ modelRef.clientName }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.UserName')">
+          <FormItem labelAlign="left" :label="L('UserName')">
             <span>{{ modelRef.userName }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ExecutionTime')">
+          <FormItem labelAlign="left" :label="L('ExecutionTime')">
             <span>{{ formatDateVal(modelRef.executionTime) }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ExecutionDuration')">
+          <FormItem labelAlign="left" :label="L('ExecutionDuration')">
             <span>{{ modelRef.executionDuration }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.BrowserInfo')">
+          <FormItem labelAlign="left" :label="L('BrowserInfo')">
             <span>{{ modelRef.browserInfo }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.ApplicationName')">
+          <FormItem labelAlign="left" :label="L('ApplicationName')">
             <span>{{ modelRef.applicationName }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.CorrelationId')">
+          <FormItem labelAlign="left" :label="L('CorrelationId')">
             <span>{{ modelRef.correlationId }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.Comments')">
+          <FormItem labelAlign="left" :label="L('Comments')">
             <span>{{ modelRef.comments }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.Additional')">
+          <FormItem labelAlign="left" :label="L('Additional')">
             <span>{{ modelRef.extraProperties }}</span>
           </FormItem>
-          <FormItem labelAlign="left" :label="t('AbpAuditLogging.Exception')">
+          <FormItem labelAlign="left" :label="L('Exception')">
             <span>{{ modelRef.exceptions }}</span>
           </FormItem>
         </TabPane>
         <TabPane
-          v-if="modelRef.actions?.length > 0"
+          v-if="modelRef.actions && modelRef.actions.length > 0"
           key="opera"
-          :tab="`${t('AbpAuditLogging.InvokeMethod')}(${modelRef.actions?.length})`"
+          :tab="`${L('InvokeMethod')}(${modelRef.actions?.length})`"
         >
           <Collapse>
             <CollapsePanel
@@ -76,32 +71,32 @@
               :header="action.serviceName"
               :show-arrow="false"
             >
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.MethodName')">
+              <FormItem labelAlign="left" :label="L('MethodName')">
                 <span>{{ action.methodName }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.ExecutionTime')">
+              <FormItem labelAlign="left" :label="L('ExecutionTime')">
                 <span>{{ formatDateVal(action.executionTime) }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.ExecutionDuration')">
+              <FormItem labelAlign="left" :label="L('ExecutionDuration')">
                 <span>{{ action.executionDuration }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.Parameters')">
+              <FormItem labelAlign="left" :label="L('Parameters')">
                 <CodeEditor
                   :readonly="true"
-                  mode="application/json"
-                  :value="formatJsonVal(action.parameters)"
+                  :mode="MODE.JSON"
+                  :value="formatJsonVal(action.parameters ?? '{}')"
                 />
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.Additional')">
+              <FormItem labelAlign="left" :label="L('Additional')">
                 <span>{{ action.extraProperties }}</span>
               </FormItem>
             </CollapsePanel>
           </Collapse>
         </TabPane>
         <TabPane
-          v-if="modelRef.entityChanges?.length > 0"
+          v-if="modelRef.entityChanges && modelRef.entityChanges.length > 0"
           key="changes"
-          :tab="`${t('AbpAuditLogging.EntitiesChanged')}(${modelRef.entityChanges.length})`"
+          :tab="`${L('EntitiesChanged')}(${modelRef.entityChanges.length})`"
         >
           <Collapse>
             <CollapsePanel
@@ -110,27 +105,27 @@
               :header="entity.entityTypeFullName"
               :show-arrow="false"
             >
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.ChangeType')">
+              <FormItem labelAlign="left" :label="L('ChangeType')">
                 <Tag :color="entityChangeTypeColor(entity.changeType)">
                   {{ entityChangeType(entity.changeType) }}
                 </Tag>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.EntityId')">
+              <FormItem labelAlign="left" :label="L('EntityId')">
                 <span>{{ entity.entityId }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.TenantId')">
+              <FormItem labelAlign="left" :label="L('TenantId')">
                 <span>{{ entity.entityTenantId }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.StartTime')">
+              <FormItem labelAlign="left" :label="L('StartTime')">
                 <span>{{ formatDateVal(entity.changeTime) }}</span>
               </FormItem>
-              <FormItem labelAlign="left" :label="t('AbpAuditLogging.Additional')">
+              <FormItem labelAlign="left" :label="L('Additional')">
                 <span>{{ entity.extraProperties }}</span>
               </FormItem>
               <BasicTable
-                v-if="entity.propertyChanges.length > 0"
+                v-if="entity.propertyChanges && entity.propertyChanges.length > 0"
                 row-key="id"
-                :title="t('AbpAuditLogging.PropertyChanges')"
+                :title="L('PropertyChanges')"
                 :columns="columns"
                 :data-source="entity.propertyChanges"
                 :pagination="false"
@@ -152,11 +147,11 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, watch, unref } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Collapse, Form, Tabs, Tag } from 'ant-design-vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicTable, BasicColumn } from '/@/components/Table';
-  import { CodeEditor } from '/@/components/CodeEditor';
+  import { CodeEditor, MODE } from '/@/components/CodeEditor';
   import { useAuditLog } from '../hooks/useAuditLog';
   import { getById } from '/@/api/auditing/auditLog';
   import { AuditLog } from '/@/api/auditing/model/auditLogModel';
@@ -177,7 +172,7 @@
       TabPane: Tabs.TabPane,
     },
     setup() {
-      const { t } = useI18n();
+      const { L } = useLocalization('AbpAuditLogging');
       const activeKey = ref('basic');
       const auditLogIdRef = ref('');
       const modelRef = ref<AuditLog>({} as AuditLog);
@@ -193,28 +188,28 @@
           ifShow: false,
         },
         {
-          title: t('AbpAuditLogging.PropertyName'),
+          title: L('PropertyName'),
           dataIndex: 'propertyName',
           align: 'left',
           width: 120,
           sorter: true,
         },
         {
-          title: t('AbpAuditLogging.NewValue'),
+          title: L('NewValue'),
           dataIndex: 'newValue',
           align: 'left',
           width: 200,
           sorter: true,
         },
         {
-          title: t('AbpAuditLogging.OriginalValue'),
+          title: L('OriginalValue'),
           dataIndex: 'originalValue',
           align: 'left',
           width: 200,
           sorter: true,
         },
         {
-          title: t('AbpAuditLogging.PropertyTypeFullName'),
+          title: L('PropertyTypeFullName'),
           dataIndex: 'propertyTypeFullName',
           align: 'left',
           width: 300,
@@ -242,7 +237,8 @@
       );
 
       return {
-        t,
+        L,
+        MODE,
         columns,
         modelRef,
         activeKey,
