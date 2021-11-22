@@ -21,19 +21,20 @@ interface IFeatureChecker {
 }
 
 export function useFeatures() {
-  const fetures = computed(() => {
+  const getFeatures = computed(() => {
     const abpStore = useAbpStoreWithOut();
-    return abpStore.getApplication.features.values;
+    const fetures = abpStore.getApplication.features.values ?? {};
+    const fetureValues = Object.keys(fetures).map((key): FeatureValue => {
+      return {
+        name: key,
+        value: fetures[key],
+      };
+    });
+    return fetureValues;
   });
 
-  function get(name: string): FeatureValue | null {
-    if (fetures && fetures[name]) {
-      return {
-        name: name,
-        value: fetures[name],
-      };
-    }
-    return null;
+  function get(name: string): FeatureValue | undefined {
+    return getFeatures.value.find((feature) => name === feature.name);
   }
 
   const featureChecker: IFeatureChecker = {
