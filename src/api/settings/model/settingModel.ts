@@ -41,6 +41,7 @@ export class SettingDetail {
   defaultValue!: string;
   valueType!: ValueType;
   isEncrypted = false;
+  slot?: string;
   options = new Array<Option>();
 }
 

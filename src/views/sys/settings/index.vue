@@ -6,12 +6,12 @@
   />
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, onMounted } from 'vue';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useAbpStoreWithOut } from '/@/store/modules/abp';
 
-  import SettingForm from './SettingForm.vue';
+  import { SettingForm } from '/@/components/SettingManagement';
   import { SettingGroup } from '/@/api/settings/model/settingModel';
   import {
     getCurrentTenantSettings,
@@ -21,9 +21,7 @@
   } from '/@/api/settings/settings';
 
   export default defineComponent({
-    components: {
-      SettingForm,
-    },
+    components: { SettingForm },
     setup() {
       const group = ref<SettingGroup[]>();
       const abpStore = useAbpStoreWithOut();
@@ -34,53 +32,48 @@
       const { success } = createMessage;
       const { L } = useLocalization('AbpSettingManagement');
 
-      return {
-        L,
-        activeKey: ref('1'),
-        abpStore,
-        group,
-        providerName,
-        providerKey,
-        hasChangeSetting,
-        success,
-      };
-    },
-    mounted() {
-      if (this.abpStore.getApplication.currentTenant.isAvailable) {
-        this.providerName = 'T';
-        this.providerKey = this.abpStore.getApplication.currentTenant.id;
-        getCurrentTenantSettings().then((res) => {
-          this.group = res.items;
-        });
-      } else {
-        this.providerName = 'G';
-        this.providerKey = '';
-        getGlobalSettings().then((res) => {
-          this.group = res.items;
-        });
-      }
-    },
-    methods: {
-      handleChangeSetting(settings) {
-        this.hasChangeSetting = true;
-        if (this.abpStore.getApplication.currentTenant.isAvailable) {
+      onMounted(() => {
+        if (abpStore.getApplication.currentTenant.isAvailable) {
+          providerName.value = 'T';
+          providerKey.value = abpStore.getApplication.currentTenant.id;
+          getCurrentTenantSettings().then((res) => {
+            group.value = res.items;
+          });
+        } else {
+          providerName.value = 'G';
+          providerKey.value = '';
+          getGlobalSettings().then((res) => {
+            group.value = res.items;
+          });
+        }
+      });
+
+      function handleChangeSetting(settings) {
+        hasChangeSetting.value = true;
+        if (abpStore.getApplication.currentTenant.isAvailable) {
           setCurrentTenantSettings(settings)
             .then(() => {
-              this.success(this.L('SuccessfullySaved'));
+              success(L('SuccessfullySaved'));
             })
             .finally(() => {
-              this.hasChangeSetting = false;
+              hasChangeSetting.value = false;
             });
         } else {
           setGlobalSettings(settings)
             .then(() => {
-              this.success(this.L('SuccessfullySaved'));
+              success(L('SuccessfullySaved'));
             })
             .finally(() => {
-              this.hasChangeSetting = false;
+              hasChangeSetting.value = false;
             });
         }
-      },
+      }
+
+      return {
+        group,
+        hasChangeSetting,
+        handleChangeSetting,
+      };
     },
   });
 </script>
