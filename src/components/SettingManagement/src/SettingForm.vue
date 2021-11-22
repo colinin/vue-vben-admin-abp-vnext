@@ -16,12 +16,7 @@
               >
                 <template v-for="detail in setting.details" :key="detail.name">
                   <slot v-if="detail.slot" :name="detail.slot" :detail="detail"></slot>
-                  <FormItem
-                    v-else
-                    v-for="detail in setting.details"
-                    :key="detail.name"
-                    :label="detail.displayName"
-                  >
+                  <FormItem v-else :label="detail.displayName">
                     <!-- <Input type="text" v-model="detail.value" /> -->
                     <Password
                       v-if="detail.valueType === 0 && detail.isEncrypted"
