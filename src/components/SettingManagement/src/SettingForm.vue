@@ -15,7 +15,7 @@
                 :header="setting.displayName"
               >
                 <template v-for="detail in setting.details" :key="detail.name">
-                  <slot v-if="detail.slot" :name="detail.slot"></slot>
+                  <slot v-if="detail.slot" :name="detail.slot" :detail="detail"></slot>
                   <FormItem
                     v-else
                     v-for="detail in setting.details"
