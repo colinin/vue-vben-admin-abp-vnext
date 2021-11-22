@@ -15,7 +15,12 @@
                 :header="setting.displayName"
               >
                 <template v-for="detail in setting.details" :key="detail.name">
-                  <slot v-if="detail.slot" :name="detail.slot" :detail="detail"></slot>
+                  <slot
+                    v-if="detail.slot"
+                    :name="detail.slot"
+                    :detail="detail"
+                    :change="detail.valueType === 2 ? handleCheckChange : handleValueChange"
+                  />
                   <FormItem v-else :label="detail.displayName">
                     <!-- <Input type="text" v-model="detail.value" /> -->
                     <Password
@@ -74,7 +79,7 @@
             type="primary"
             style="width: 150px"
             postIcon="ant-design:setting-outlined"
-            :loading="hasChangeSetting"
+            :loading="saving"
             @click="handleSubmit"
           >
             {{ sumbitButtonTitle }}
@@ -94,8 +99,14 @@
   import { SettingGroup, SettingsUpdate } from '/@/api/settings/model/settingModel';
 
   const props = {
-    hasChangeSetting: { type: Boolean },
-    settingGroups: { type: Array as PropType<Array<SettingGroup>> },
+    settingGroups: {
+      type: Array as PropType<Array<SettingGroup>>,
+      required: true,
+    },
+    saveApi: {
+      type: Function as PropType<(...args: any) => Promise<any>>,
+      required: true,
+    },
     tabPosition: { type: String },
   } as const; // 对于存在必输项的props see: https://blog.csdn.net/q535999731/article/details/109578885
 
@@ -120,10 +131,11 @@
     setup(props, { emit }) {
       const { L } = useLocalization('AbpSettingManagement');
       const activeTabKey = ref(0);
+      const saving = ref(false);
       const updateSetting = ref(new SettingsUpdate());
 
       const sumbitButtonTitle = computed(() => {
-        if (props.hasChangeSetting) {
+        if (saving.value) {
           return L('Save');
         }
         return L('Save');
@@ -159,11 +171,20 @@
       }
 
       function handleSubmit() {
-        emit('change', toRaw(updateSetting.value));
+        saving.value = true;
+        props
+          .saveApi(toRaw(updateSetting.value))
+          .then(() => {
+            emit('change', toRaw(updateSetting.value));
+          })
+          .finally(() => {
+            saving.value = false;
+          });
       }
 
       return {
         L,
+        saving,
         activeTabKey,
         updateSetting,
         sumbitButtonTitle,
