@@ -92,6 +92,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, toRaw } from 'vue';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useLocalization } from '/@/hooks/abp/useLocalization';
   import { Checkbox, Tabs, Collapse, Form, Input, Select, Row, Col } from 'ant-design-vue';
   import { Input as BInput } from '/@/components/Input';
@@ -133,6 +134,8 @@
       const activeTabKey = ref(0);
       const saving = ref(false);
       const updateSetting = ref(new SettingsUpdate());
+      const { createMessage } = useMessage();
+      const { success } = createMessage;
 
       const sumbitButtonTitle = computed(() => {
         if (saving.value) {
@@ -175,6 +178,7 @@
         props
           .saveApi(toRaw(updateSetting.value))
           .then(() => {
+            success(L('SuccessfullySaved'));
             emit('change', toRaw(updateSetting.value));
           })
           .finally(() => {
