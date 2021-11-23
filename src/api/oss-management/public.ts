@@ -1,19 +1,18 @@
 import { defHttp } from '/@/utils/http/axios';
-import { FileShare, FileShareInput, MyFileShare, OssObject } from './model/ossModel';
+import { OssObject } from './model/ossModel';
 import { format } from '/@/utils/strings';
 import { AxiosResponse } from 'axios';
 import { ListResultDto } from '../model/baseModel';
 
 enum Api {
-  Upload = '/api/api/files/private/{path}/{name}',
-  Get = '/api/api/files/private/p/{path}/{name}',
-  GetList = '/api/files/private/search',
-  Share = '/api/files/private/share',
+  Upload = '/api/api/files/public/{path}/{name}',
+  Get = '/api/api/files/public/p/{path}/{name}',
+  GetList = '/api/files/public/search',
 }
 
 export const formatUrl = (url: string) => {
-  // 格式化路径为用户目录
-  return `/api/api/files/static/users/p/${url}`;
+  // 格式化路径为公共目录
+  return `/api/api/files/static/public/p/${url}`;
 };
 
 export const upload = (file: Blob, path: string, name: string) => {
@@ -34,18 +33,6 @@ export const upload = (file: Blob, path: string, name: string) => {
         reject(err);
       });
   });
-  // return defHttp.uploadFile<OssObject>(
-  //   {
-  //     url: format(Api.Upload, { path: path, name: name }),
-  //     data: { file: file },
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': ContentTypeEnum.FORM_DATA,
-  //     },
-  //   },
-  //   {
-  //     formatDate: false,
-  //   });
 };
 
 export const get = (path: string, name: string) => {
@@ -58,18 +45,5 @@ export const getList = (input: { path?: string; filter?: string; maxResultCount?
   return defHttp.get<ListResultDto<OssObject>>({
     url: Api.GetList,
     params: input,
-  });
-};
-
-export const share = (input: FileShareInput) => {
-  return defHttp.post<FileShare>({
-    url: Api.Share,
-    data: input,
-  });
-};
-
-export const getShareList = () => {
-  return defHttp.get<ListResultDto<MyFileShare>>({
-    url: Api.Share,
   });
 };
