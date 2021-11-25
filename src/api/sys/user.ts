@@ -78,7 +78,13 @@ export function loginPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+  return defHttp.get<GetUserInfoModel>(
+    { url: Api.GetUserInfo },
+    {
+      errorMessageMode: 'none',
+      apiUrl: '/connect',
+    },
+  );
 }
 
 export function getPermCode() {
